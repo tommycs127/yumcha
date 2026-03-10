@@ -224,20 +224,19 @@ class Yale(
 
             if tone.endswith("h"):
                 if nucleus == "yu":
-                    new_nucleus = nucleus + tone[:-1]
+                    nucleus += tone[:-1]
                 else:
-                    new_nucleus = nucleus[0] + tone[:-1] + nucleus[1:]
+                    nucleus = nucleus[0] + tone[:-1] + nucleus[1:]
                 if coda in ["", "i", "y", "u"]:
-                    new_coda = coda + "h"
+                    coda += "h"
                 else:
-                    new_coda = "h" + coda
+                    coda = "h" + coda
             else:
                 if nucleus == "yu":
-                    new_nucleus = nucleus + tone
+                    nucleus += tone
                 else:
-                    new_nucleus = nucleus[0] + tone + nucleus[1:]
-                new_coda = coda
-            return unicodedata.normalize("NFC", new_nucleus) + new_coda
+                    nucleus = nucleus[0] + tone + nucleus[1:]
+            return unicodedata.normalize("NFC", nucleus) + coda
 
         uncomposed_non_initial = compose_non_initial(
             nucleus=uncomposed.nucleus,
