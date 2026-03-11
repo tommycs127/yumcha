@@ -8,11 +8,11 @@
 A phonology-oriented romanization engine for Cantonese and other languages.
 
 > "Yumcha" is a play on Cantonese words. While it traditionally means "drinking tea" (<ruby>飲<rt>jam2</rt>茶<rt>caa4</rt>), it also sounds like "phonological lookup" (<ruby>音<rt>jam1</rt>查<rt>caa4</rt>).
-> Just as tea brings people together, this engine aims to bridge different Cantonese romanization and phonetic schemes!
+> Just as tea brings people together, this engine aims to bridge different romanization and phonetic schemes!
 
 ## ✨ Highlights
 
-- **Scheme-to-Scheme Conversion**: Convert seamlessly between different Cantonese romanization and phonetic schemes.
+- **Scheme-to-Scheme Conversion**: Convert seamlessly between different romanization and phonetic schemes within the same language.
 - **Scheme Parsing**: Parse strings to identify their phonological components.
 - **Zero Dependencies:** Lightweight and easy to integrate into any project.
 - **Type-hinted:** Built with modern Python type hints for better IDE support and readability.
@@ -20,7 +20,7 @@ A phonology-oriented romanization engine for Cantonese and other languages.
 
 ## 🤔 Why Yumcha?
 
-Cantonese romanization is fragmented and converting between systems often requires large handwritten mapping tables, which break down for edge cases such as ambiguous finals or tone markings.
+Cantonese romanization is fragmented and converting between systems often requires large handwritten mapping tables, which break down for edge cases such as unusual spellings and tone markings.
 
 Yumcha provides a unified API to convert these schemes without writing complex mapping logic or maintaining large mapping tables that can miss edge cases.
 
