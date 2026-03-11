@@ -2,14 +2,14 @@
 
 A phonology-oriented transliteration engine for Cantonese and beyond.
 
-> “Yumcha” is a play on words: while it traditionally means "drinking tea" (<ruby>飲<rp> (</rp><rt>jam2</rt><rp>) </rp>茶<rp> (</rp><rt>caa4</rt><rp>) </rp>), it’s also a phonetic pun for "phonological query" (<ruby>音<rp> (</rp><rt>jam1</rt><rp>) </rp>查<rp> (</rp><rt>caa4</rt><rp>) </rp>). Just as tea brings people together, this engine aims to bridge different transliteration schemes!
+> "Yumcha" is a play on words: while it traditionally means "drinking tea" (<ruby>飲<rp> (</rp><rt>jam2</rt><rp>) </rp>茶<rp> (</rp><rt>caa4</rt><rp>) </rp>), it’s also a phonetic pun for "phonological query" (<ruby>音<rp> (</rp><rt>jam1</rt><rp>) </rp>查<rp> (</rp><rt>caa4</rt><rp>) </rp>). Just as tea brings people together, this engine aims to bridge different transliteration schemes!
 
 ## Highlights
 
-- **Universal Bridge:** Uses an underlying phonological representation to convert between any two schemes seamlessly.
-- **Zero Dependencies:** Lightweight and easy to integrate.
-- **Modular & Extensible:** Define your own schemes by implementing the base classes.
-- **Type-Hinted**: For better IDE support and readability for developers.
+- **Universal Bridge:** Uses an underlying phonological representation to convert seamlessly between any two schemes within the same language.
+- **Zero Dependencies:** Lightweight and easy to integrate into any project.
+- **Modular & Extensible:** Easily add new schemes by implementing a custom parser, disambiguation stages, and composer.
+- **Type-hinted:** Built with modern Python type hints for superior IDE support and developer readability.
 
 ## How it works
 
