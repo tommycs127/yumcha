@@ -163,4 +163,4 @@ This project implements romanization and phonetic standards developed by linguis
 
 ## 📜 License
 
-Yumcha is licensed under the MIT License. See the [LICENSE] file for the full license text.
+Yumcha is licensed under the MIT License. See the [LICENSE file](LICENSE) for the full license text.
