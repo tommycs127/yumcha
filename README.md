@@ -2,13 +2,13 @@
 
 ![Python](https://badgen.net/badge/python/3.12%2B)
 [![License](https://badgen.net/badge/license/MIT/orange)](LICENSE)
-![type](https://badgen.net/badge/type/transliteration%20engine/cyan)
+![type](https://badgen.net/badge/type/Romanization%20eonverter/cyan)
 ![made-in](https://badgen.net/badge/made%20in/Hong%20Kong/cc3399)
 
-A phonology-oriented transliteration engine for Cantonese and other languages.
+A phonology-oriented romanization converter for Cantonese and other languages.
 
 > "Yumcha" is a play on Cantonese words. While it traditionally means "drinking tea" (<ruby>飲<rt>jam2</rt>茶<rt>caa4</rt>), it also sounds like "phonological lookup" (<ruby>音<rt>jam1</rt>查<rt>caa4</rt>).
-> Just as tea brings people together, this engine aims to bridge different Cantonese transliteration schemes!
+> Just as tea brings people together, this engine aims to bridge different Cantonese romanization and phonetic schemes!
 
 ## ✨ Highlights
 
