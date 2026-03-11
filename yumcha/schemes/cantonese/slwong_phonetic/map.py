@@ -47,16 +47,16 @@ INITIAL_TO_OBJECT = {
         place=CantoneseConsonantPlace.ALVEOLAR,
         manner=CantoneseConsonantManner.LATERAL_APPROXIMANT,
     ),
-    "g": lambda: CantoneseConsonant(
+    "k": lambda: CantoneseConsonant(
         place=CantoneseConsonantPlace.VELAR,
         manner=CantoneseConsonantManner.PLOSIVE,
     ),
-    "k": lambda: CantoneseConsonant(
+    "kʰ": lambda: CantoneseConsonant(
         place=CantoneseConsonantPlace.VELAR,
         manner=CantoneseConsonantManner.PLOSIVE,
         aspirated=True,
     ),
-    "ng": lambda: CantoneseConsonant(
+    "ŋ": lambda: CantoneseConsonant(
         place=CantoneseConsonantPlace.VELAR,
         manner=CantoneseConsonantManner.NASAL,
     ),
@@ -77,7 +77,7 @@ INITIAL_TO_OBJECT = {
         place=CantoneseConsonantPlace.ALVEOLAR,
         manner=CantoneseConsonantManner.FRICATIVE_SIBILANT,
     ),
-    "y": lambda: CantoneseConsonant(
+    "j": lambda: CantoneseConsonant(
         place=CantoneseConsonantPlace.PALATAL,
         manner=CantoneseConsonantManner.APPROXIMANT,
     ),
@@ -187,7 +187,7 @@ OBJECT_TO_INITIAL = {
         False,
         False,
         False,
-    ): "ng",
+    ): "ŋ",
     (
         CantoneseConsonantPlace.GLOTTAL,
         CantoneseConsonantManner.FRICATIVE_NON_SIBILANT,
@@ -227,7 +227,7 @@ OBJECT_TO_INITIAL = {
         False,
         False,
         False,
-    ): "y",
+    ): "j",
     (
         CantoneseConsonantPlace.VELAR,
         CantoneseConsonantManner.PLOSIVE,
@@ -256,28 +256,38 @@ OBJECT_TO_INITIAL = {
 }
 
 NUCLEUS_TO_OBJECT = {
-    "aa": lambda: CantoneseVowel(
+    "a": lambda: CantoneseVowel(
         closeness=VowelCloseness.OPEN,
         backness=VowelBackness.FRONT,
         rounded=False,
     ),
-    "a": lambda: CantoneseVowel(
+    "ɐ": lambda: CantoneseVowel(
         closeness=VowelCloseness.NEAR_OPEN,
         backness=VowelBackness.CENTRAL,
         rounded=False,
     ),
-    "e": lambda: CantoneseVowel(
+    "ɛ": lambda: CantoneseVowel(
         closeness=VowelCloseness.OPEN_MID,
         backness=VowelBackness.FRONT,
         rounded=False,
     ),
-    "eu": lambda: CantoneseVowel(
+    "e": lambda: CantoneseVowel(
+        closeness=VowelCloseness.CLOSE_MID,
+        backness=VowelBackness.FRONT,
+        rounded=False,
+    ),
+    "œ": lambda: CantoneseVowel(
         closeness=VowelCloseness.OPEN_MID,
         backness=VowelBackness.FRONT,
         rounded=True,
     ),
-    "o": lambda: CantoneseVowel(
+    "ɔ": lambda: CantoneseVowel(
         closeness=VowelCloseness.OPEN_MID,
+        backness=VowelBackness.BACK,
+        rounded=True,
+    ),
+    "o": lambda: CantoneseVowel(
+        closeness=VowelCloseness.CLOSE_MID,
         backness=VowelBackness.BACK,
         rounded=True,
     ),
@@ -286,7 +296,7 @@ NUCLEUS_TO_OBJECT = {
         backness=VowelBackness.FRONT,
         rounded=False,
     ),
-    "ue": lambda: CantoneseVowel(
+    "y": lambda: CantoneseVowel(
         closeness=VowelCloseness.CLOSE,
         backness=VowelBackness.FRONT,
         rounded=True,
@@ -296,12 +306,12 @@ NUCLEUS_TO_OBJECT = {
         backness=VowelBackness.BACK,
         rounded=True,
     ),
-    "m": lambda: CantoneseConsonant(
+    "m̩": lambda: CantoneseConsonant(
         place=CantoneseConsonantPlace.BILABIAL,
         manner=CantoneseConsonantManner.NASAL,
         syllabic=True,
     ),
-    "ng": lambda: CantoneseConsonant(
+    "ŋ̩": lambda: CantoneseConsonant(
         place=CantoneseConsonantPlace.VELAR,
         manner=CantoneseConsonantManner.NASAL,
         syllabic=True,
@@ -309,17 +319,17 @@ NUCLEUS_TO_OBJECT = {
 }
 
 OBJECT_TO_NUCLEUS = {
-    (VowelCloseness.OPEN, VowelBackness.FRONT, False, False): "aa",
-    (VowelCloseness.NEAR_OPEN, VowelBackness.CENTRAL, False, False): "a",
-    (VowelCloseness.OPEN_MID, VowelBackness.FRONT, False, False): "e",
+    (VowelCloseness.OPEN, VowelBackness.FRONT, False, False): "a",
+    (VowelCloseness.NEAR_OPEN, VowelBackness.CENTRAL, False, False): "ɐ",
+    (VowelCloseness.OPEN_MID, VowelBackness.FRONT, False, False): "ɛ",
     (VowelCloseness.CLOSE_MID, VowelBackness.FRONT, False, False): "e",
-    (VowelCloseness.OPEN_MID, VowelBackness.FRONT, True, False): "eu",
-    (VowelCloseness.CLOSE_MID, VowelBackness.CENTRAL, True, False): "eu",
-    (VowelCloseness.OPEN_MID, VowelBackness.BACK, True, False): "o",
+    (VowelCloseness.OPEN_MID, VowelBackness.FRONT, True, False): "œ",
+    (VowelCloseness.CLOSE_MID, VowelBackness.CENTRAL, True, False): "œ",
+    (VowelCloseness.OPEN_MID, VowelBackness.BACK, True, False): "ɔ",
     (VowelCloseness.CLOSE_MID, VowelBackness.BACK, True, False): "o",
     (VowelCloseness.CLOSE, VowelBackness.FRONT, False, False): "i",
     (VowelCloseness.NEAR_CLOSE, VowelBackness.NEAR_FRONT, False, False): "i",
-    (VowelCloseness.CLOSE, VowelBackness.FRONT, True, False): "ue",
+    (VowelCloseness.CLOSE, VowelBackness.FRONT, True, False): "y",
     (VowelCloseness.CLOSE, VowelBackness.BACK, True, False): "u",
     (VowelCloseness.NEAR_CLOSE, VowelBackness.NEAR_BACK, True, False): "u",
     (
@@ -329,7 +339,7 @@ OBJECT_TO_NUCLEUS = {
         False,
         True,
         False,
-    ): "m",
+    ): "m̩",
     (
         CantoneseConsonantPlace.VELAR,
         CantoneseConsonantManner.NASAL,
@@ -337,7 +347,7 @@ OBJECT_TO_NUCLEUS = {
         False,
         True,
         False,
-    ): "ng",
+    ): "ŋ̩",
 }
 
 CODA_TO_OBJECT = {
@@ -347,7 +357,7 @@ CODA_TO_OBJECT = {
         rounded=False,
         is_semi=True,
     ),
-    "ue": lambda: CantoneseVowel(
+    "y": lambda: CantoneseVowel(
         closeness=VowelCloseness.CLOSE,
         backness=VowelBackness.FRONT,
         rounded=True,
@@ -367,7 +377,7 @@ CODA_TO_OBJECT = {
         place=CantoneseConsonantPlace.ALVEOLAR,
         manner=CantoneseConsonantManner.NASAL,
     ),
-    "ng": lambda: CantoneseConsonant(
+    "ŋ": lambda: CantoneseConsonant(
         place=CantoneseConsonantPlace.VELAR,
         manner=CantoneseConsonantManner.NASAL,
     ),
@@ -391,7 +401,7 @@ CODA_TO_OBJECT = {
 
 OBJECT_TO_CODA = {
     (VowelCloseness.CLOSE, VowelBackness.FRONT, False, True): "i",
-    (VowelCloseness.CLOSE, VowelBackness.FRONT, True, True): "ue",
+    (VowelCloseness.CLOSE, VowelBackness.FRONT, True, True): "y",
     (VowelCloseness.CLOSE, VowelBackness.BACK, True, True): "u",
     (
         CantoneseConsonantPlace.BILABIAL,
@@ -416,7 +426,7 @@ OBJECT_TO_CODA = {
         False,
         False,
         False,
-    ): "ng",
+    ): "ŋ",
     (
         CantoneseConsonantPlace.BILABIAL,
         CantoneseConsonantManner.PLOSIVE,
@@ -445,52 +455,42 @@ OBJECT_TO_CODA = {
 }
 
 TONE_TO_OBJECT = {
-    "1": lambda: CantoneseTone(
+    "ˈ": lambda: CantoneseTone(
         register=CantoneseToneRegister.DARK,
         name=CantoneseToneName.LEVEL,
     ),
-    "2": lambda: CantoneseTone(
+    "ˊ": lambda: CantoneseTone(
         register=CantoneseToneRegister.DARK,
         name=CantoneseToneName.RISING,
     ),
-    "3": lambda: CantoneseTone(
+    "ˉ": lambda: CantoneseTone(
         register=CantoneseToneRegister.DARK,
         name=CantoneseToneName.DEPARTING,
     ),
-    "4": lambda: CantoneseTone(
+    "ˌ": lambda: CantoneseTone(
         register=CantoneseToneRegister.LIGHT,
         name=CantoneseToneName.LEVEL,
     ),
-    "5": lambda: CantoneseTone(
+    "ˏ": lambda: CantoneseTone(
         register=CantoneseToneRegister.LIGHT,
         name=CantoneseToneName.RISING,
     ),
-    "6": lambda: CantoneseTone(
+    "ˍ": lambda: CantoneseTone(
         register=CantoneseToneRegister.LIGHT,
         name=CantoneseToneName.DEPARTING,
-    ),
-    "7": lambda: CantoneseTone(
-        register=CantoneseToneRegister.DARK_UPPER,
-        name=CantoneseToneName.ENTERING,
-    ),
-    "8": lambda: CantoneseTone(
-        register=CantoneseToneRegister.DARK_LOWER,
-        name=CantoneseToneName.ENTERING,
-    ),
-    "9": lambda: CantoneseTone(
-        register=CantoneseToneRegister.LIGHT,
-        name=CantoneseToneName.ENTERING,
     ),
 }
 
 OBJECT_TO_TONE = {
-    (CantoneseToneRegister.DARK, CantoneseToneName.LEVEL, None): "1",
-    (CantoneseToneRegister.DARK, CantoneseToneName.RISING, None): "2",
-    (CantoneseToneRegister.DARK, CantoneseToneName.DEPARTING, None): "3",
-    (CantoneseToneRegister.LIGHT, CantoneseToneName.LEVEL, None): "4",
-    (CantoneseToneRegister.LIGHT, CantoneseToneName.RISING, None): "5",
-    (CantoneseToneRegister.LIGHT, CantoneseToneName.DEPARTING, None): "6",
-    (CantoneseToneRegister.DARK_UPPER, CantoneseToneName.ENTERING, None): "7",
-    (CantoneseToneRegister.DARK_LOWER, CantoneseToneName.ENTERING, None): "8",
-    (CantoneseToneRegister.LIGHT, CantoneseToneName.ENTERING, None): "9",
+    (CantoneseToneRegister.DARK, CantoneseToneName.LEVEL, None): "ˈ",
+    (CantoneseToneRegister.DARK, CantoneseToneName.LEVEL, "53"): "ˈ",
+    (CantoneseToneRegister.DARK, CantoneseToneName.RISING, None): "ˊ",
+    (CantoneseToneRegister.DARK, CantoneseToneName.DEPARTING, None): "ˉ",
+    (CantoneseToneRegister.LIGHT, CantoneseToneName.LEVEL, None): "ˌ",
+    (CantoneseToneRegister.LIGHT, CantoneseToneName.LEVEL, "21"): "ˌ",
+    (CantoneseToneRegister.LIGHT, CantoneseToneName.RISING, None): "ˏ",
+    (CantoneseToneRegister.LIGHT, CantoneseToneName.DEPARTING, None): "ˍ",
+    (CantoneseToneRegister.DARK_UPPER, CantoneseToneName.ENTERING, None): "ˈ",
+    (CantoneseToneRegister.DARK_LOWER, CantoneseToneName.ENTERING, None): "ˉ",
+    (CantoneseToneRegister.LIGHT, CantoneseToneName.ENTERING, None): "ˍ",
 }

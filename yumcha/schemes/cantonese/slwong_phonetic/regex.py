@@ -1,6 +1,6 @@
 import re
 
-from yumcha.schemes.cantonese.slwong.map import (
+from yumcha.schemes.cantonese.slwong_phonetic.map import (
     CODA_TO_OBJECT,
     INITIAL_TO_OBJECT,
     NUCLEUS_TO_OBJECT,
@@ -18,4 +18,4 @@ NUCLEUS_RE = f"({get_regex_pattern(NUCLEI)})"
 CODA_RE = f"({get_regex_pattern(CODAS)})?"
 TONE_RE = f"({get_regex_pattern(TONES)})"
 
-REGEX_PATTERN = re.compile(f"^{INITIAL_RE}{NUCLEUS_RE}{CODA_RE}{TONE_RE}$")
+REGEX_PATTERN = re.compile(f"^{TONE_RE}{INITIAL_RE}{NUCLEUS_RE}{CODA_RE}$")

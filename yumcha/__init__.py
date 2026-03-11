@@ -3,7 +3,8 @@ from yumcha.schemes.cantonese.ile import ILE
 from yumcha.schemes.cantonese.ipa import IPA as IPACantonese
 from yumcha.schemes.cantonese.jyutping import Jyutping
 from yumcha.schemes.cantonese.sidneylau import SidneyLau
-from yumcha.schemes.cantonese.slwong import SLWong
+from yumcha.schemes.cantonese.slwong_phonetic import SLWongPhonetic
+from yumcha.schemes.cantonese.slwong_roman import SLWongRoman
 from yumcha.schemes.cantonese.yale import Yale
 
 
@@ -16,7 +17,8 @@ class Yumcha(object):
                 "ipa": IPACantonese(),
                 "jyutping": Jyutping(),
                 "sidneylau": SidneyLau(),
-                "slwong": SLWong(),
+                "slwong_roman": SLWongRoman(),
+                "slwong_phonetic": SLWongPhonetic(),
                 "yale": Yale(),
             }
         }

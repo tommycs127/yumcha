@@ -13,6 +13,10 @@ class ParsedScheme:
     tone: str | None
 
 
+class RepresentationError(Exception):
+    pass
+
+
 ParsedSchemeT = TypeVar("ParsedSchemeT", bound=ParsedScheme)
 
 
