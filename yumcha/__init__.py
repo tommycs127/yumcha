@@ -1,4 +1,4 @@
-from yumcha.schemes import ParsedScheme
+from yumcha.schemes import ParsedScheme, Scheme
 from yumcha.schemes.cantonese.ile import ILE
 from yumcha.schemes.cantonese.ipa import IPA as IPACantonese
 from yumcha.schemes.cantonese.jyutping import Jyutping
@@ -10,7 +10,7 @@ from yumcha.schemes.cantonese.yale import Yale
 
 class Yumcha(object):
     @property
-    def languages(self) -> dict:
+    def languages(self) -> dict[str, dict[str, Scheme]]:
         return {
             "cantonese": {
                 "ile": ILE(),
@@ -22,6 +22,14 @@ class Yumcha(object):
                 "yale": Yale(),
             }
         }
+
+    @property
+    def available_schemes(self) -> dict[str, list[str]]:
+        return {key: list(sub_dict.keys()) for key, sub_dict in self.languages.items()}
+
+    @property
+    def menu(self) -> dict[str, list[str]]:
+        return self.available_schemes
 
     def convert(
         self, text: str, language: str, from_scheme: str, to_scheme: str
