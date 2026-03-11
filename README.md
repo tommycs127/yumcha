@@ -2,12 +2,14 @@
 
 A phonology-oriented transliteration engine for Cantonese and beyond.
 
+> “Yumcha” is a play on words: while it traditionally means "drinking tea" (<ruby>飲<rp> (</rp><rt>jam2</rt><rp>) </rp>茶<rp> (</rp><rt>caa4</rt><rp>) </rp>), it’s also a phonetic pun for "phonological query" (<ruby>音<rp> (</rp><rt>jam1</rt><rp>) </rp>查<rp> (</rp><rt>caa4</rt><rp>) </rp>). Just as tea brings people together, this engine aims to bridge different transliteration schemes!
+
 ## Highlights
 
 - **Universal Bridge:** Uses an underlying phonological representation to convert between any two schemes seamlessly.
-- **Zero Dependencies:** Light-weight and easy to integrate.
+- **Zero Dependencies:** Lightweight and easy to integrate.
 - **Modular & Extensible:** Define your own schemes by implementing the base classes.
-- **Type-Hinted**: For better IDE support and developer experience.
+- **Type-Hinted**: For better IDE support and readability for developers.
 
 ## How it works
 
@@ -33,7 +35,7 @@ yumcha = Yumcha()
 
 ### Conversion
 
-To convert Jyutping to IPA:
+Convert Jyutping to IPA:
 
 ```py
 result = yumcha.convert(
@@ -47,7 +49,7 @@ print(result)  # t͡sʰɵn˥
 
 ### Parsing
 
-To see the parsed Yale:
+Parse Yale into components:
 
 ```py
 result = yumcha.parse(
@@ -60,7 +62,7 @@ print(result)  # ParsedYale(initial='ch', nucleus='eu', coda='n', tone='̄')
 
 ## Supported schemes
 
-- Cantonese
+### Cantonese
 
 | Scheme name                               | Example  | Scheme code | Note              |
 | ----------------------------------------- | -------- | ----------- | ----------------- |
