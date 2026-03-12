@@ -47,13 +47,32 @@ class Consonant(ABC, PrettyMixin, Generic[VowelT, RimeT]):
 
     @property
     @abstractmethod
+    def identical_features(self) -> dict:
+        return {
+            "place": self.place,
+            "manner": self.manner,
+        }
+
+    @property
+    @abstractmethod
+    def identical_features_signature(self) -> tuple:
+        return (self.place, self.manner)
+
+    def identical_to(self, other) -> bool:
+        return (
+            isinstance(other, self.__class__)
+            and self.identical_features == other.identical_features
+        )
+
+    @property
+    @abstractmethod
     def RIME_CLASS(self) -> type[RimeT]:
         return Rime  # type: ignore (Base case)
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         return isinstance(other, self.__class__) and self.features == other.features
 
-    def __add__(self, other: "VowelT | None") -> RimeT:
+    def __add__(self, other: VowelT | None) -> RimeT:
         return self.RIME_CLASS(nucleus=self, coda=other)
 
     def __hash__(self):
@@ -108,19 +127,35 @@ class Vowel(PrettyMixin, Generic[ConsonantT, VowelT, RimeT]):
         }
 
     @property
-    @abstractmethod
     def features_signature(self) -> tuple:
         return (self.closeness, self.backness, self.rounded, self.is_semi)
 
     @property
-    @abstractmethod
+    def identical_features(self) -> dict:
+        return {
+            "closeness": self.closeness,
+            "backness": self.backness,
+            "rounded": self.rounded,
+        }
+
+    @property
+    def identical_features_signature(self) -> tuple:
+        return (self.closeness, self.backness, self.rounded)
+
+    def identical_to(self, other: ConsonantT | VowelT | None):
+        return (
+            isinstance(other, self.__class__)
+            and self.identical_features == other.identical_features
+        )
+
+    @property
     def RIME_CLASS(self) -> type[RimeT]:
         return Rime  # type: ignore (Base case)
 
     def __eq__(self, other):
         return isinstance(other, self.__class__) and self.features == other.features
 
-    def __add__(self, other: "ConsonantT | VowelT | None") -> RimeT:
+    def __add__(self, other: ConsonantT | VowelT | None) -> RimeT:
         return self.RIME_CLASS(nucleus=self, coda=other)
 
     def __hash__(self):

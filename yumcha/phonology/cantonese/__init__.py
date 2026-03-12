@@ -65,6 +65,24 @@ class CantoneseConsonant(Consonant["CantoneseVowel", "CantoneseRime"]):
         )
 
     @property
+    def identical_features(self) -> dict:
+        return {
+            "place": self.place,
+            "manner": self.manner,
+            "aspirated": self.aspirated,
+            "labialized": self.labialized,
+        }
+
+    @property
+    def identical_features_signature(self) -> tuple:
+        return (
+            self.place,
+            self.manner,
+            self.aspirated,
+            self.labialized,
+        )
+
+    @property
     def RIME_CLASS(self) -> type["CantoneseRime"]:
         return CantoneseRime
 
@@ -144,6 +162,12 @@ class CantoneseRime(Rime[CantoneseConsonant, CantoneseVowel, "CantoneseFinal"]):
         if isinstance(coda, CantoneseVowel) and not coda.is_semi:
             raise ValueError("Only semivowel can be assigned as coda")
 
+        if isinstance(nucleus, CantoneseConsonant) and coda is not None:
+            raise ValueError("Coda cannot appear after consonant nucleus")
+
+        if isinstance(nucleus, CantoneseVowel) and nucleus.identical_to(coda):
+            raise ValueError("Coda cannot be the same as nucleus")
+
         super().__init__(nucleus=nucleus, coda=coda)
 
     @property
@@ -171,8 +195,13 @@ class CantoneseSyllable(
     def __init__(
         self, final: CantoneseFinal, initial: CantoneseConsonant | None = None
     ):
-        if isinstance(initial, CantoneseConsonant) and initial.syllabic:
-            raise ValueError("Only non-syllabic consonant can be assigned as initial")
+        if isinstance(initial, CantoneseConsonant):
+            if initial.syllabic:
+                raise ValueError(
+                    "Only non-syllabic consonant can be assigned as initial"
+                )
+            if initial.identical_to(final.rime.nucleus):
+                raise ValueError("Nucleus cannot be the same as initial")
 
         super().__init__(final=final, initial=initial)
 

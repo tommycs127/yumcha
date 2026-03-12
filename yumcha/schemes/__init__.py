@@ -8,6 +8,7 @@ from yumcha.phonology import FinalT, ReadingT, RimeT, SyllableT
 @dataclass(frozen=True)
 class ParsedScheme:
     initial: str | None
+    medial: str | None
     nucleus: str
     coda: str | None
     tone: str | None
@@ -22,6 +23,11 @@ ParsedSchemeT = TypeVar("ParsedSchemeT", bound=ParsedScheme)
 
 class Scheme(ABC, Generic[RimeT, FinalT, SyllableT, ReadingT, ParsedSchemeT]):
     name: str
+
+    @property
+    @abstractmethod
+    def parsed_class(self) -> type[ParsedScheme]:
+        pass
 
     @abstractmethod
     def parse(self, text: str) -> ParsedSchemeT:
@@ -44,6 +50,10 @@ class Scheme(ABC, Generic[RimeT, FinalT, SyllableT, ReadingT, ParsedSchemeT]):
         handled in the disambiguation stage.
         """
         return parsed
+
+    def to_parsed(self, text: str) -> ParsedSchemeT:
+        unnormalized = self.parse(text)
+        return self.normalize_input(unnormalized)
 
     @abstractmethod
     def get_disambiguated_rime(self, parsed: ParsedSchemeT) -> RimeT:
@@ -84,10 +94,6 @@ class Scheme(ABC, Generic[RimeT, FinalT, SyllableT, ReadingT, ParsedSchemeT]):
         self.validity_check(parsed, reading)
         return reading
 
-    def to_parsed(self, text: str) -> ParsedSchemeT:
-        unnormalized = self.parse(text)
-        return self.normalize_input(unnormalized)
-
     def to_underlying(self, text: str) -> ReadingT:
         parsed = self.to_parsed(text)
         return self.to_reading(parsed)
@@ -110,3 +116,25 @@ class Scheme(ABC, Generic[RimeT, FinalT, SyllableT, ReadingT, ParsedSchemeT]):
         uncomposed = self.from_reading(reading)
         normalized = self.normalize_output(uncomposed)
         return self.compose(normalized)
+
+    def get_normalized_spelling(
+        self,
+        initial: str | None,
+        medial: str | None,
+        nucleus: str,
+        coda: str | None,
+        tone: str | None,
+    ) -> str | None:
+        try:
+            parsed = self.parsed_class(
+                initial=initial, medial=medial, nucleus=nucleus, coda=coda, tone=tone
+            )
+            parsed = self.normalize_input(parsed)  # pyright: ignore[reportArgumentType]
+            reading = self.to_reading(parsed)
+            parsed = self.from_reading(reading)
+            parsed = self.normalize_output(parsed)
+            return self.compose(parsed)
+        except RepresentationError:
+            return None
+        except ValueError:
+            return None

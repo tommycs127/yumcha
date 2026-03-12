@@ -25,6 +25,7 @@ from yumcha.schemes.cantonese.sidneylau.regex import REGEX_PATTERN
 
 class ParsedSidneyLau(ParsedScheme):
     initial: str | None
+    medial: None
     nucleus: str
     coda: str | None
     tone: str
@@ -41,6 +42,10 @@ class SidneyLau(
 ):
     name = "Sidney Lau"
 
+    @property
+    def parsed_class(self) -> type[ParsedSidneyLau]:
+        return ParsedSidneyLau
+
     def parse(self, text: str) -> ParsedSidneyLau:
         m = REGEX_PATTERN.fullmatch(text)
         if not m:
@@ -50,6 +55,7 @@ class SidneyLau(
 
         return ParsedSidneyLau(
             initial=initial if initial else None,
+            medial=None,
             nucleus=nucleus,
             coda=coda if coda else None,
             tone=tone,
@@ -69,6 +75,7 @@ class SidneyLau(
         elif parsed.nucleus == "a" and parsed.coda is None:
             return ParsedSidneyLau(
                 initial=parsed.initial,
+                medial=None,
                 nucleus="aa",
                 coda=parsed.coda,
                 tone=parsed.tone,
@@ -76,6 +83,7 @@ class SidneyLau(
         elif parsed.nucleus == "o" and parsed.coda is not None:
             return ParsedSidneyLau(
                 initial=parsed.initial,
+                medial=None,
                 nucleus="oh",
                 coda=parsed.coda,
                 tone=parsed.tone,
@@ -83,6 +91,7 @@ class SidneyLau(
         elif parsed.nucleus == "eu" and parsed.coda is not None:
             return ParsedSidneyLau(
                 initial=parsed.initial,
+                medial=None,
                 nucleus="euh",
                 coda=parsed.coda,
                 tone=parsed.tone,
@@ -167,6 +176,7 @@ class SidneyLau(
             initial=OBJECT_TO_INITIAL[
                 initial.features_signature if initial is not None else None
             ],
+            medial=None,
             nucleus=OBJECT_TO_NUCLEUS[nucleus.features_signature],
             coda=OBJECT_TO_CODA[coda.features_signature if coda is not None else None],
             tone=OBJECT_TO_TONE.get(
@@ -179,6 +189,7 @@ class SidneyLau(
         if parsed.nucleus == "aa" and parsed.coda is None:
             return ParsedSidneyLau(
                 initial=parsed.initial,
+                medial=None,
                 nucleus="a",
                 coda=parsed.coda,
                 tone=parsed.tone,
@@ -186,6 +197,7 @@ class SidneyLau(
         elif parsed.nucleus == "oh" and parsed.coda is not None:
             return ParsedSidneyLau(
                 initial=parsed.initial,
+                medial=None,
                 nucleus="o",
                 coda=parsed.coda,
                 tone=parsed.tone,
@@ -193,6 +205,7 @@ class SidneyLau(
         elif parsed.nucleus == "euh" and parsed.coda is not None:
             return ParsedSidneyLau(
                 initial=parsed.initial,
+                medial=None,
                 nucleus="eu",
                 coda=parsed.coda,
                 tone=parsed.tone,
@@ -200,6 +213,7 @@ class SidneyLau(
         elif parsed.nucleus == "o" and parsed.coda == "u":
             return ParsedSidneyLau(
                 initial=parsed.initial,
+                medial=None,
                 nucleus=parsed.nucleus,
                 coda=None,
                 tone=parsed.tone,

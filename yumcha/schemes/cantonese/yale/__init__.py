@@ -11,7 +11,7 @@ from yumcha.phonology.cantonese import (
     CantoneseToneRegister,
     CantoneseVowel,
 )
-from yumcha.schemes import ParsedScheme, Scheme
+from yumcha.schemes import ParsedScheme, RepresentationError, Scheme
 from yumcha.schemes.cantonese.yale.map import (
     CODA_TO_OBJECT,
     INITIAL_TO_OBJECT,
@@ -27,6 +27,7 @@ from yumcha.schemes.cantonese.yale.regex import REGEX_PATTERN
 
 class ParsedYale(ParsedScheme):
     initial: str | None
+    medial: None
     nucleus: str
     coda: str | None
     tone: str | None
@@ -42,6 +43,10 @@ class Yale(
     ]
 ):
     name = "Yale"
+
+    @property
+    def parsed_class(self) -> type[ParsedYale]:
+        return ParsedYale
 
     def parse(self, text: str) -> ParsedYale:
         def parse_nucleus_and_tone(text: str) -> tuple[str, str]:
@@ -81,6 +86,7 @@ class Yale(
 
             return ParsedYale(
                 initial=initial if initial else None,
+                medial=None,
                 nucleus=nucleus,
                 coda=coda if coda else None,
                 tone=tone if tone else None,
@@ -97,6 +103,7 @@ class Yale(
         elif parsed.nucleus == "a" and parsed.coda is None:
             return ParsedYale(
                 initial=parsed.initial,
+                medial=None,
                 nucleus="aa",
                 coda=None,
                 tone=parsed.tone,
@@ -105,6 +112,7 @@ class Yale(
             # Inevitable regex match result correction
             return ParsedYale(
                 initial=None,
+                medial=None,
                 nucleus="yu",
                 coda=parsed.coda,
                 tone=parsed.tone,
@@ -195,6 +203,7 @@ class Yale(
             initial=OBJECT_TO_INITIAL[
                 initial.features_signature if initial is not None else None
             ],
+            medial=None,
             nucleus=OBJECT_TO_NUCLEUS[nucleus.features_signature],
             coda=OBJECT_TO_CODA[coda.features_signature if coda is not None else None],
             tone=OBJECT_TO_TONE.get(
@@ -207,6 +216,7 @@ class Yale(
         if parsed.nucleus == "aa" and parsed.coda is None:
             return ParsedYale(
                 initial=parsed.initial,
+                medial=None,
                 nucleus="a",
                 coda=parsed.coda,
                 tone=parsed.tone,

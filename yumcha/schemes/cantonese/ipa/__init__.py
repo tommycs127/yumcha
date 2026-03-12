@@ -23,6 +23,7 @@ from yumcha.schemes.cantonese.ipa.regex import REGEX_PATTERN
 
 class ParsedIPA(ParsedScheme):
     initial: str | None
+    medial: None
     nucleus: str
     coda: str | None
     tone: str
@@ -39,6 +40,10 @@ class IPA(
 ):
     name = "IPA"
 
+    @property
+    def parsed_class(self) -> type[ParsedIPA]:
+        return ParsedIPA
+
     def parse(self, text: str) -> ParsedIPA:
         m = REGEX_PATTERN.fullmatch(text)
         if not m:
@@ -48,6 +53,7 @@ class IPA(
 
         return ParsedIPA(
             initial=initial if initial else None,
+            medial=None,
             nucleus=nucleus,
             coda=coda if coda else None,
             tone=tone,
@@ -99,6 +105,7 @@ class IPA(
             initial=OBJECT_TO_INITIAL[
                 initial.features_signature if initial is not None else None
             ],
+            medial=None,
             nucleus=OBJECT_TO_NUCLEUS[nucleus.features_signature],
             coda=OBJECT_TO_CODA[coda.features_signature if coda is not None else None],
             tone=OBJECT_TO_TONE.get(

@@ -25,6 +25,7 @@ from yumcha.schemes.cantonese.slwong_phonetic.regex import REGEX_PATTERN
 
 class ParsedSLWongPhonetic(ParsedScheme):
     initial: str | None
+    medial: None
     nucleus: str
     coda: str | None
     tone: str
@@ -41,6 +42,10 @@ class SLWongPhonetic(
 ):
     name = "S. L. Wong (Phonetic)"
 
+    @property
+    def parsed_class(self) -> type[ParsedSLWongPhonetic]:
+        return ParsedSLWongPhonetic
+
     def parse(self, text: str) -> ParsedSLWongPhonetic:
         m = REGEX_PATTERN.fullmatch(text)
         if not m:
@@ -50,6 +55,7 @@ class SLWongPhonetic(
 
         return ParsedSLWongPhonetic(
             initial=initial if initial else None,
+            medial=None,
             nucleus=nucleus,
             coda=coda if coda else None,
             tone=tone,
@@ -129,6 +135,7 @@ class SLWongPhonetic(
             initial=OBJECT_TO_INITIAL[
                 initial.features_signature if initial is not None else None
             ],
+            medial=None,
             nucleus=OBJECT_TO_NUCLEUS[nucleus.features_signature],
             coda=OBJECT_TO_CODA[coda.features_signature if coda is not None else None],
             tone=OBJECT_TO_TONE.get(

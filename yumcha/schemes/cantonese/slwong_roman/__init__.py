@@ -40,6 +40,10 @@ class SLWongRoman(
 ):
     name = "S. L. Wong (Romanization)"
 
+    @property
+    def parsed_class(self) -> type[ParsedSLWongRoman]:
+        return ParsedSLWongRoman
+
     def parse(self, text: str) -> ParsedSLWongRoman:
         m = REGEX_PATTERN.fullmatch(text)
         if not m:
@@ -49,6 +53,7 @@ class SLWongRoman(
 
         return ParsedSLWongRoman(
             initial=initial if initial else None,
+            medial=None,
             nucleus=nucleus,
             coda=coda if coda else None,
             tone=tone,
@@ -62,11 +67,16 @@ class SLWongRoman(
             )
         elif parsed.nucleus == "a" and parsed.coda is None:
             return ParsedSLWongRoman(
-                initial=parsed.initial, nucleus="aa", coda=parsed.coda, tone=parsed.tone
+                initial=parsed.initial,
+                medial=None,
+                nucleus="aa",
+                coda=parsed.coda,
+                tone=parsed.tone,
             )
         elif parsed.nucleus == "e" and parsed.coda == "ue":
             return ParsedSLWongRoman(
                 initial=parsed.initial,
+                medial=None,
                 nucleus="eu",
                 coda=parsed.coda,
                 tone=parsed.tone,
@@ -150,6 +160,7 @@ class SLWongRoman(
             initial=OBJECT_TO_INITIAL[
                 initial.features_signature if initial is not None else None
             ],
+            medial=None,
             nucleus=OBJECT_TO_NUCLEUS[nucleus.features_signature],
             coda=OBJECT_TO_CODA[coda.features_signature if coda is not None else None],
             tone=OBJECT_TO_TONE.get(
@@ -162,6 +173,7 @@ class SLWongRoman(
         if parsed.nucleus == "aa" and parsed.coda is None:
             return ParsedSLWongRoman(
                 initial=parsed.initial,
+                medial=None,
                 nucleus="a",
                 coda=parsed.coda,
                 tone=parsed.tone,
@@ -169,6 +181,7 @@ class SLWongRoman(
         elif parsed.nucleus == "eu" and parsed.coda == "ue":
             return ParsedSLWongRoman(
                 initial=parsed.initial,
+                medial=None,
                 nucleus="e",
                 coda=parsed.coda,
                 tone=parsed.tone,
