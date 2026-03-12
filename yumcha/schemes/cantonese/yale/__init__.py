@@ -11,7 +11,7 @@ from yumcha.phonology.cantonese import (
     CantoneseToneRegister,
     CantoneseVowel,
 )
-from yumcha.schemes import ParsedScheme, RepresentationError, Scheme
+from yumcha.schemes import ParsedScheme, Scheme
 from yumcha.schemes.cantonese.yale.map import (
     CODA_TO_OBJECT,
     INITIAL_TO_OBJECT,

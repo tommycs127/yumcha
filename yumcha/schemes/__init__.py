@@ -125,6 +125,11 @@ class Scheme(ABC, Generic[RimeT, FinalT, SyllableT, ReadingT, ParsedSchemeT]):
         coda: str | None,
         tone: str | None,
     ) -> str | None:
+        """
+        Return the composed spelling when it is valid, otherwise None.
+
+        This method is intended for functions that generates all possible spellings for tests.
+        """
         try:
             parsed = self.parsed_class(
                 initial=initial, medial=medial, nucleus=nucleus, coda=coda, tone=tone
