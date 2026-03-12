@@ -131,12 +131,12 @@ In such cases, Yumcha will raise `RepresentationError` to indicate that the conv
 
 - Cantonese
   - [ ] Hong Kong Government Cantonese Romanisation
-    - Parsing will not be implemented due to ambiguous spelling.
+    - Input mapping will not be implemented due to ambiguous spelling.
   - [x] Institute of Language in Education Scheme
   - [x] International Phonetic Alphabet
   - [x] Jyutping
   - [ ] Macau Government Cantonese Romanization
-    - Parsing will not be implemented due to ambiguous spelling.
+    - Input mapping will not be implemented due to ambiguous spelling.
   - [x] Sidney Lau
   - [x] S. L. Wong (Romanization)
   - [x] S. L. Wong (Phonetic)
