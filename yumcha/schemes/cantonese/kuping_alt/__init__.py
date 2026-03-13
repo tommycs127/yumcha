@@ -8,7 +8,6 @@ from yumcha.phonology.cantonese import (
     CantoneseVowel,
 )
 from yumcha.schemes.cantonese import CantoneseScheme, ParsedCantoneseScheme
-from yumcha.schemes.cantonese.kuping.tone import parse_tone
 from yumcha.schemes.cantonese.kuping_alt.map import (
     CODA_TO_OBJECT,
     INITIAL_TO_OBJECT,
@@ -20,6 +19,7 @@ from yumcha.schemes.cantonese.kuping_alt.map import (
     TONE_TO_OBJECT,
 )
 from yumcha.schemes.cantonese.kuping_alt.regex import REGEX_PATTERN
+from yumcha.schemes.cantonese.kuping_alt.tone import parse_tone
 from yumcha.schemes.typing import SchemeMap
 
 
