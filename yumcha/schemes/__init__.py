@@ -3,12 +3,15 @@ from dataclasses import dataclass
 from typing import Generic, TypeVar
 
 from yumcha.phonology import (
+    Consonant,
     ConsonantT,
     FinalT,
     ReadingT,
     RimeT,
     SyllableT,
+    Tone,
     ToneT,
+    Vowel,
     VowelT,
 )
 from yumcha.schemes.typing import SchemeMap
@@ -71,23 +74,20 @@ class Scheme(
         """
         Maps initials to their respective objects.
 
-        For the dictionary of `<component>_to_object`,
-        use `None` to represent a zero consonant (e.g., `None: lambda: None`).
-
         For the dictionary of `object_to_<component>`,
-        use `None` to represent a zero consonant (e.g., `None: None`).
+        use `None` as the key for a zero consonant (e.g., `None: "ʔ"`).
         """
         return {
-            "initial_to_object": {None: lambda: None},
-            "object_to_initial": {None: None},
-            "medial_to_object": {None: lambda: None},
-            "object_to_medial": {None: None},
-            "nucleus_to_object": {None: lambda: None},
-            "object_to_nucleus": {None: None},
-            "coda_to_object": {None: lambda: None},
-            "object_to_coda": {None: None},
-            "tone_to_object": {None: lambda: None},
-            "object_to_tone": {None: None},
+            "initial_to_object": dict(),
+            "object_to_initial": dict(),
+            "medial_to_object": dict(),
+            "object_to_medial": dict(),
+            "nucleus_to_object": dict(),
+            "object_to_nucleus": dict(),
+            "coda_to_object": dict(),
+            "object_to_coda": dict(),
+            "tone_to_object": dict(),
+            "object_to_tone": dict(),
         }
 
     @abstractmethod
@@ -217,11 +217,25 @@ class Scheme(
         coda = reading.syllable.final.rime.coda
         tone = reading.tone
 
-        key_initial = initial.features_signature if initial is not None else None
-        key_medial = medial.features_signature if medial is not None else None
-        key_nucleus = nucleus.features_signature if nucleus is not None else None
-        key_coda = coda.features_signature if coda is not None else None
-        key_tone = tone.features_signature if tone is not None else None
+        key_initial = (
+            initial.features_signature
+            if isinstance(initial, (Consonant, Vowel))
+            else None
+        )
+        key_medial = (
+            medial.features_signature
+            if isinstance(medial, (Consonant, Vowel))
+            else None
+        )
+        key_nucleus = (
+            nucleus.features_signature
+            if isinstance(nucleus, (Consonant, Vowel))
+            else None
+        )
+        key_coda = (
+            coda.features_signature if isinstance(coda, (Consonant, Vowel)) else None
+        )
+        key_tone = tone.features_signature if isinstance(nucleus, Tone) else None
 
         initial = self.MAP["object_to_initial"].get(key_initial, None)
         medial = self.MAP["object_to_medial"].get(key_medial, None)

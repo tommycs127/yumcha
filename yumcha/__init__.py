@@ -2,6 +2,7 @@ from yumcha.schemes import ParsedScheme, Scheme
 from yumcha.schemes.cantonese.ile import ILE
 from yumcha.schemes.cantonese.ipa import IPA as IPACantonese
 from yumcha.schemes.cantonese.jyutping import Jyutping
+from yumcha.schemes.cantonese.kuping_official import KupingOfficial
 from yumcha.schemes.cantonese.sidneylau import SidneyLau
 from yumcha.schemes.cantonese.slwong_phonetic import SLWongPhonetic
 from yumcha.schemes.cantonese.slwong_roman import SLWongRoman
@@ -20,6 +21,7 @@ class Yumcha(object):
                 "slwong_roman": SLWongRoman(),
                 "slwong_phonetic": SLWongPhonetic(),
                 "yale": Yale(),
+                "kuping": KupingOfficial(),
             }
         }
 
