@@ -102,15 +102,17 @@ ParsedYale(initial='ch', nucleus='eu', coda='n', tone='̄')
 
 ### Cantonese
 
-| Scheme name                               | Example  | Scheme code       | Note                                         |
-| ----------------------------------------- | -------- | ----------------- | -------------------------------------------- |
-| Institute of Language in Education Scheme | `tsoen1` | `ile`             |                                              |
-| International Phonetic Alphabet           | `t͡sʰɵn˥` | `ipa`             |                                              |
-| Jyutping                                  | `ceon1`  | `jyutping`        |                                              |
-| Sidney Lau                                | `chun1°` | `sidneylau`       |                                              |
-| S. L. Wong (Romanization)                 | `ˈtseun` | `slwong_roman`    | Numeral tone marking is **not implemented**. |
-| S. L. Wong (Phonetic)                     | `ˈtsœn`  | `slwong_phonetic` | Ditto.                                       |
-| Yale                                      | `chēun`  | `yale`            |                                              |
+| Scheme name                               | Example      | Scheme code       | Note                                         |
+| ----------------------------------------- | ------------ | ----------------- | -------------------------------------------- |
+| Institute of Language in Education Scheme | `tsoen1`     | `ile`             |                                              |
+| International Phonetic Alphabet           | `t͡sʰɵn˥`     | `ipa`             |                                              |
+| Jyutping                                  | `ceon1`      | `jyutping`        |                                              |
+| Kuping                                    | `tśeon55^1`  | `kuping`          | A romanization scheme designed by me!        |
+| Kuping (Alternative)                      | `ts'eon55^1` | `kuping_alt`      | Ditto.                                       |
+| Sidney Lau                                | `chun1°`     | `sidneylau`       |                                              |
+| S. L. Wong (Romanization)                 | `ˈtseun`     | `slwong_roman`    | Numeral tone marking is **not implemented**. |
+| S. L. Wong (Phonetic)                     | `ˈtsœn`      | `slwong_phonetic` | Ditto.                                       |
+| Yale                                      | `chēun`      | `yale`            |                                              |
 
 ## 🚫 Limitations
 
@@ -148,6 +150,7 @@ In such cases, Yumcha will raise `RepresentationError` to indicate that the conv
   - [x] Institute of Language in Education Scheme
   - [x] International Phonetic Alphabet
   - [x] Jyutping
+  - [x] Kuping
   - [ ] Macau Government Cantonese Romanization
     - Input mapping will not be implemented due to spelling ambiguities.
   - [ ] Meyer–Wempe

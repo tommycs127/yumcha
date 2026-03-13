@@ -218,9 +218,7 @@ class Scheme(
         tone = reading.tone
 
         key_initial = (
-            initial.features_signature
-            if isinstance(initial, (Consonant, Vowel))
-            else None
+            initial.features_signature if isinstance(initial, Consonant) else None
         )
         key_medial = (
             medial.features_signature
@@ -235,7 +233,7 @@ class Scheme(
         key_coda = (
             coda.features_signature if isinstance(coda, (Consonant, Vowel)) else None
         )
-        key_tone = tone.features_signature if isinstance(nucleus, Tone) else None
+        key_tone = tone.features_signature if isinstance(tone, Tone) else None
 
         initial = self.MAP["object_to_initial"].get(key_initial, None)
         medial = self.MAP["object_to_medial"].get(key_medial, None)
