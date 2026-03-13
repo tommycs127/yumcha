@@ -1,13 +1,14 @@
 from typing import Any, Callable, Mapping, TypedDict
 
 to_object_map_type = Mapping[str | None, Callable[..., Any]]
+to_object_map_type_nucleus = Mapping[str, Callable[..., Any]]
 to_string_map_type = Mapping[tuple | None, str | None]
 
 
 class SchemeMap(TypedDict):
     initial_to_object: to_object_map_type
     medial_to_object: to_object_map_type
-    nucleus_to_object: to_object_map_type
+    nucleus_to_object: to_object_map_type_nucleus
     coda_to_object: to_object_map_type
     tone_to_object: to_object_map_type
 

@@ -36,7 +36,7 @@ class Yumcha(object):
         return self.available_schemes
 
     def convert(
-        self, text: str, language: str, from_scheme: str, to_scheme: str
+        self, language: str, from_scheme: str, to_scheme: str, text: str
     ) -> str:
         if language not in self.languages:
             raise ValueError(f'Language "{language}" not found')
@@ -52,7 +52,7 @@ class Yumcha(object):
         reading = schemes[from_scheme].to_underlying(text)
         return schemes[to_scheme].from_underlying(reading)
 
-    def parse(self, text: str, language: str, scheme: str) -> ParsedScheme:
+    def parse(self, language: str, scheme: str, text: str) -> ParsedScheme:
         if language not in self.languages:
             raise ValueError(f'Language "{language}" not found')
 
@@ -62,3 +62,7 @@ class Yumcha(object):
             raise ValueError(f'Scheme "{scheme}" not found')
 
         return schemes[scheme].parse(text)
+
+    def get_all_spellings(self, language: str, scheme: str) -> list[str | None]:
+        schemes = self.languages[language]
+        return schemes[scheme].get_all_spellings()

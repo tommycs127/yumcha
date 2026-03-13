@@ -1,3 +1,5 @@
+import functools
+import itertools
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Generic, TypeVar
@@ -291,10 +293,22 @@ class Scheme(
             parsed = self.normalize_input(parsed)
             reading = self.get_reading(parsed)
             self.validity_check(parsed, reading)
-            parsed = self.get_parsed(reading)
-            parsed = self.normalize_output(parsed)
-            return self.compose(parsed)
+            return self.from_underlying(reading)
         except RepresentationError:
             return None
         except ValueError:
             return None
+
+    @functools.cached_property
+    def all_spellings(self) -> list[str | None]:
+        initials = list(self.MAP["initial_to_object"])
+        nuclei = list(self.MAP["nucleus_to_object"])
+        codas = list(self.MAP["coda_to_object"])
+        tones = list(self.MAP["tone_to_object"])
+
+        generator = itertools.product(initials, [None], nuclei, codas, tones)
+        spellings = [self.get_normalized_spelling(*_) for _ in generator]
+        return list(filter(lambda _: isinstance(_, str), spellings))
+
+    def get_all_spellings(self) -> list[str | None]:
+        return self.all_spellings

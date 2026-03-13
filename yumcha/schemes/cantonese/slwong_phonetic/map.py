@@ -11,7 +11,11 @@ from yumcha.phonology.cantonese import (
     CantoneseToneRegister,
     CantoneseVowel,
 )
-from yumcha.schemes.typing import to_object_map_type, to_string_map_type
+from yumcha.schemes.typing import (
+    to_object_map_type,
+    to_object_map_type_nucleus,
+    to_string_map_type,
+)
 
 INITIAL_TO_OBJECT: to_object_map_type = {
     "b": lambda: CantoneseConsonant(
@@ -256,7 +260,7 @@ OBJECT_TO_INITIAL: to_string_map_type = {
     None: None,
 }
 
-NUCLEUS_TO_OBJECT: to_object_map_type = {
+NUCLEUS_TO_OBJECT: to_object_map_type_nucleus = {
     "a": lambda: CantoneseVowel(
         closeness=VowelCloseness.OPEN,
         backness=VowelBackness.FRONT,

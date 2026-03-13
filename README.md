@@ -17,11 +17,11 @@ A phonology-oriented romanization engine for Cantonese and other languages.
 - **Scheme Parsing**: Parse strings to identify their phonological components.
 - **Zero Dependencies:** Lightweight and easy to integrate into any project.
 - **Type-hinted:** Built with modern Python type hints for better IDE support and readability.
-- **Modular & Extensible:** Easily add new schemes by implementing a custom parser, disambiguation stages, and composer.
+- **Modular & Extensible:** Add new schemes by implementing a custom parser, disambiguation stages, and composer.
 
 ## 🤔 Why Yumcha?
 
-Cantonese romanization is fragmented and converting between systems often requires large handwritten mapping tables, which break down for edge cases such as unusual spellings and tone markings.
+Sinitic romanization is fragmented and converting between systems often requires large handwritten mapping tables, which break down for edge cases such as unusual spellings and tone markings.
 
 Yumcha provides a unified API to convert these schemes without writing complex mapping logic or maintaining large mapping tables that can miss edge cases.
 
@@ -71,10 +71,10 @@ Convert Jyutping to IPA:
 
 ```py
 result = yumcha.convert(
-    text="ceon1",
     language="cantonese",
     from_scheme="jyutping",
     to_scheme="ipa",
+    text="ceon1",
 )
 print(result)  # t͡sʰɵn˥
 ```
@@ -85,17 +85,35 @@ Parse a Yale syllable into components:
 
 ```py
 result = yumcha.parse(
-    text="chēun",
     language="cantonese",
     scheme="yale",
+    text="chēun",
 )
 print(result)
 ```
 
 Output:
 
-```py
+```text
 ParsedYale(initial='ch', nucleus='eu', coda='n', tone='̄')
+```
+
+### Getting all valid spellings
+
+Get all valid spellings in ILE scheme:
+
+```py
+result = yumcha.get_all_spellings(
+    language="cantonese",
+    scheme="ile",
+)
+print(result)
+```
+
+Output (8,028 items):
+
+```text
+['baai1', 'baai2', 'baai3', 'baai4', 'baai5', 'baai6', ..., 'ng1', 'ng2', 'ng3', 'ng4', 'ng5', 'ng6']
 ```
 
 ## 🔤 Supported schemes
@@ -107,7 +125,7 @@ ParsedYale(initial='ch', nucleus='eu', coda='n', tone='̄')
 | Institute of Language in Education Scheme | `tsoen1`     | `ile`             |                                              |
 | International Phonetic Alphabet           | `t͡sʰɵn˥`     | `ipa`             |                                              |
 | Jyutping                                  | `ceon1`      | `jyutping`        |                                              |
-| Kuping                                    | `tśeon55^1`  | `kuping`          | A romanization scheme designed by me!        |
+| Kuping                                    | `tśeon55^1`  | `kuping`          | A romanization scheme I designed!            |
 | Kuping (Alternative)                      | `ts'eon55^1` | `kuping_alt`      | Ditto.                                       |
 | Sidney Lau                                | `chun1°`     | `sidneylau`       |                                              |
 | S. L. Wong (Romanization)                 | `ˈtseun`     | `slwong_roman`    | Numeral tone marking is **not implemented**. |
@@ -134,7 +152,7 @@ In such cases, Yumcha will raise `RepresentationError` to indicate that the conv
 
 - [x] Conversion
 - [x] Parsing
-- [ ] Listing all valid spelling combinations
+- [x] Generating all valid spellings
 
 ### Schemes
 
