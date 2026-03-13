@@ -1,5 +1,6 @@
 # 🍵 Yumcha
 
+![stage](https://badgen.net/badge/type/stage/Early%20development/red)
 ![Python](https://badgen.net/badge/python/3.12%2B)
 [![License](https://badgen.net/badge/license/MIT/orange)](LICENSE)
 ![type](https://badgen.net/badge/type/Romanization%20engine/cyan)
@@ -127,20 +128,35 @@ In such cases, Yumcha will raise `RepresentationError` to indicate that the conv
 
 ## 🛣️ Roadmap
 
+### Functionalities
+
+- [x] Conversion
+- [x] Parsing
+- [ ] Listing all valid spelling combinations
+
 ### Schemes
 
 - Cantonese
-  - [ ] Hong Kong Government Cantonese Romanisation
-    - Input mapping will not be implemented due to ambiguous spelling.
+  - [ ] Barnett–Chao
+  - Bopomofo (Zhuyin)
+    - [ ] ~~The Commission on the Unification of Pronunciation (讀音統一會) Scheme~~
+      - Will not be implemented until Unicode supports the missing character
+    - [ ] The People's Government Culture and Education Department (人民政府文教廳) Scheme
+  - [ ] Braille
+  - [ ] Hong Kong Government Cantonese Romanization
+    - Input mapping will not be implemented due to spelling ambiguities.
   - [x] Institute of Language in Education Scheme
   - [x] International Phonetic Alphabet
   - [x] Jyutping
   - [ ] Macau Government Cantonese Romanization
-    - Input mapping will not be implemented due to ambiguous spelling.
-  - [x] Sidney Lau
+    - Input mapping will not be implemented due to spelling ambiguities.
+  - [ ] Meyer–Wempe
   - [x] S. L. Wong (Romanization)
   - [x] S. L. Wong (Phonetic)
+  - [x] Sidney Lau
+  - [ ] Standard Romanisation
   - [x] Yale
+  - [ ] Yựtyựt (Vietnamese-style romanization)
 - Mandarin
   - [ ] Bopomofo (Zhuyin)
   - [ ] Gwoyeu Romatzyh
