@@ -100,7 +100,7 @@ ParsedYale(initial='ch', nucleus='eu', coda='n', tone='̄')
 
 ### Getting all legal syllables
 
-Get all legal syllables in ILE scheme:
+Get all legal syllables in the ILE scheme:
 
 ```py
 result = yumcha.get_all_legal_syllables(
