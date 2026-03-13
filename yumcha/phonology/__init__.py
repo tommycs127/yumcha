@@ -364,11 +364,3 @@ class Reading(PrettyMixin, Generic[SyllableT, ToneT]):
 
     def __hash__(self):
         return hash((self.syllable, self.tone))
-
-
-class PhonologicalRule(ABC, Generic[ReadingT]):
-    name: str
-
-    @abstractmethod
-    def apply(self, reading) -> ReadingT:
-        pass
