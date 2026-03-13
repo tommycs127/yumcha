@@ -156,7 +156,7 @@ In such cases, Yumcha will raise `RepresentationError` to indicate that the conv
   - [x] Sidney Lau
   - [ ] Standard Romanisation
   - [x] Yale
-  - [ ] Yựtyựt (Vietnamese-style romanization)
+  - [ ] Yựtyựt
 - Mandarin
   - [ ] Bopomofo (Zhuyin)
   - [ ] Gwoyeu Romatzyh
