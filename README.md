@@ -143,6 +143,7 @@ In such cases, Yumcha will raise `RepresentationError` to indicate that the conv
       - Will not be implemented until Unicode supports the missing character.
     - [ ] The People's Government Culture and Education Department (人民政府文教廳) Scheme
   - [ ] Braille
+  - [ ] Cantonese Transliteration Scheme
   - [ ] Hong Kong Government Cantonese Romanization
     - Input mapping will not be implemented due to spelling ambiguities.
   - [x] Institute of Language in Education Scheme
