@@ -11,8 +11,9 @@ from yumcha.phonology.cantonese import (
     CantoneseToneRegister,
     CantoneseVowel,
 )
+from yumcha.schemes.typing import to_object_map_type, to_string_map_type
 
-INITIAL_TO_OBJECT = {
+INITIAL_TO_OBJECT: to_object_map_type = {
     "p": lambda: CantoneseConsonant(
         place=CantoneseConsonantPlace.BILABIAL,
         manner=CantoneseConsonantManner.PLOSIVE,
@@ -99,7 +100,7 @@ INITIAL_TO_OBJECT = {
     "ʔ": lambda: None,
 }
 
-OBJECT_TO_INITIAL = {
+OBJECT_TO_INITIAL: to_string_map_type = {
     (
         CantoneseConsonantPlace.BILABIAL,
         CantoneseConsonantManner.PLOSIVE,
@@ -255,7 +256,7 @@ OBJECT_TO_INITIAL = {
     None: "ʔ",
 }
 
-NUCLEUS_TO_OBJECT = {
+NUCLEUS_TO_OBJECT: to_object_map_type = {
     "aː": lambda: CantoneseVowel(
         closeness=VowelCloseness.OPEN,
         backness=VowelBackness.FRONT,
@@ -333,7 +334,7 @@ NUCLEUS_TO_OBJECT = {
     ),
 }
 
-OBJECT_TO_NUCLEUS = {
+OBJECT_TO_NUCLEUS: to_string_map_type = {
     (VowelCloseness.OPEN, VowelBackness.FRONT, False, False): "aː",
     (VowelCloseness.NEAR_OPEN, VowelBackness.CENTRAL, False, False): "ɐ",
     (VowelCloseness.OPEN_MID, VowelBackness.FRONT, False, False): "ɛː",
@@ -365,7 +366,7 @@ OBJECT_TO_NUCLEUS = {
     ): "ŋ̩",
 }
 
-CODA_TO_OBJECT = {
+CODA_TO_OBJECT: to_object_map_type = {
     "i̯": lambda: CantoneseVowel(
         closeness=VowelCloseness.CLOSE,
         backness=VowelBackness.FRONT,
@@ -414,7 +415,7 @@ CODA_TO_OBJECT = {
     None: lambda: None,
 }
 
-OBJECT_TO_CODA = {
+OBJECT_TO_CODA: to_string_map_type = {
     (VowelCloseness.CLOSE, VowelBackness.FRONT, False, True): "i̯",
     (VowelCloseness.CLOSE, VowelBackness.FRONT, True, True): "y̯",
     (VowelCloseness.CLOSE, VowelBackness.BACK, True, True): "u̯",
@@ -469,7 +470,7 @@ OBJECT_TO_CODA = {
     None: None,
 }
 
-TONE_TO_OBJECT = {
+TONE_TO_OBJECT: to_object_map_type = {
     "˥": lambda: CantoneseTone(
         register=CantoneseToneRegister.DARK,
         name=CantoneseToneName.LEVEL,
@@ -506,7 +507,7 @@ TONE_TO_OBJECT = {
     ),
 }
 
-OBJECT_TO_TONE = {
+OBJECT_TO_TONE: to_string_map_type = {
     (CantoneseToneRegister.DARK, CantoneseToneName.LEVEL, None): "˥",
     (CantoneseToneRegister.DARK, CantoneseToneName.LEVEL, "53"): "˥˧",
     (CantoneseToneRegister.DARK, CantoneseToneName.RISING, None): "˧˥",

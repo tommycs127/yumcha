@@ -2,7 +2,20 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Generic, TypeVar
 
-from yumcha.phonology import FinalT, ReadingT, RimeT, SyllableT
+from yumcha.phonology import (
+    ConsonantT,
+    FinalT,
+    ReadingT,
+    RimeT,
+    SyllableT,
+    ToneT,
+    VowelT,
+)
+from yumcha.schemes.typing import SchemeMap
+
+
+class RepresentationError(Exception):
+    pass
 
 
 @dataclass(frozen=True)
@@ -14,23 +27,71 @@ class ParsedScheme:
     tone: str | None
 
 
-class RepresentationError(Exception):
-    pass
-
-
 ParsedSchemeT = TypeVar("ParsedSchemeT", bound=ParsedScheme)
 
 
-class Scheme(ABC, Generic[RimeT, FinalT, SyllableT, ReadingT, ParsedSchemeT]):
+class Scheme(
+    ABC,
+    Generic[
+        ConsonantT, VowelT, ToneT, RimeT, FinalT, SyllableT, ReadingT, ParsedSchemeT
+    ],
+):
     name: str
 
     @property
     @abstractmethod
-    def parsed_class(self) -> type[ParsedScheme]:
+    def RIME_CLASS(self) -> type[RimeT]:
         pass
 
+    @property
     @abstractmethod
-    def parse(self, text: str) -> ParsedSchemeT:
+    def FINAL_CLASS(self) -> type[FinalT]:
+        pass
+
+    @property
+    @abstractmethod
+    def SYLLABLE_CLASS(self) -> type[SyllableT]:
+        pass
+
+    @property
+    @abstractmethod
+    def READING_CLASS(self) -> type[ReadingT]:
+        pass
+
+    @property
+    @abstractmethod
+    def PARSED_CLASS(self) -> type[ParsedSchemeT]:
+        pass
+
+    @property
+    @abstractmethod
+    def MAP(
+        self,
+    ) -> SchemeMap:
+        """
+        Maps initials to their respective objects.
+
+        For the dictionary of `<component>_to_object`,
+        use `None` to represent a zero consonant (e.g., `None: lambda: None`).
+
+        For the dictionary of `object_to_<component>`,
+        use `None` to represent a zero consonant (e.g., `None: None`).
+        """
+        return {
+            "initial_to_object": {None: lambda: None},
+            "object_to_initial": {None: None},
+            "medial_to_object": {None: lambda: None},
+            "object_to_medial": {None: None},
+            "nucleus_to_object": {None: lambda: None},
+            "object_to_nucleus": {None: None},
+            "coda_to_object": {None: lambda: None},
+            "object_to_coda": {None: None},
+            "tone_to_object": {None: lambda: None},
+            "object_to_tone": {None: None},
+        }
+
+    @abstractmethod
+    def get_unnormalized_parsed(self, text: str) -> ParsedSchemeT:
         pass
 
     def normalize_input(self, parsed: ParsedSchemeT) -> ParsedSchemeT:
@@ -41,8 +102,8 @@ class Scheme(ABC, Generic[RimeT, FinalT, SyllableT, ReadingT, ParsedSchemeT]):
           - expanding abbreviations,
           - resolving alternate spellings that refer to the same symbol,
           - correcting scheme-specific shorthand,
-          - correcting non-ideal parsed result.
-            * only do this when the parsed result is inevitable.
+          - correcting sub-optimal parsed results.
+            * only apply this if the error is inherent to the parsing logic.
 
         It should NOT perform phonological disambiguation.
         Context-based interpretation of symbols (e.g. when a spelling
@@ -51,56 +112,133 @@ class Scheme(ABC, Generic[RimeT, FinalT, SyllableT, ReadingT, ParsedSchemeT]):
         """
         return parsed
 
-    def to_parsed(self, text: str) -> ParsedSchemeT:
-        unnormalized = self.parse(text)
+    def parse(self, text: str) -> ParsedSchemeT:
+        unnormalized = self.get_unnormalized_parsed(text)
         return self.normalize_input(unnormalized)
 
-    @abstractmethod
-    def get_disambiguated_rime(self, parsed: ParsedSchemeT) -> RimeT:
-        """
-        Resolve the nucleus and coda here.
-        """
-        pass
+    def get_unprocessed_nucleus(self, parsed: ParsedSchemeT) -> ConsonantT | VowelT:
+        return self.MAP["nucleus_to_object"][parsed.nucleus]()
 
-    @abstractmethod
-    def get_disambiguated_final(self, parsed: ParsedSchemeT) -> FinalT:
-        """
-        Resolve the medial here.
-        Get the rime by calling `self.get_disambiguated_rime()`.
-        """
-        pass
+    def get_unprocessed_coda(self, parsed: ParsedSchemeT) -> ConsonantT | VowelT | None:
+        return self.MAP["coda_to_object"][parsed.coda]() if parsed.coda else None
 
-    @abstractmethod
-    def get_disambiguated_syllable(self, parsed: ParsedSchemeT) -> SyllableT:
+    def disambiguate_rime(
+        self,
+        parsed: ParsedSchemeT,
+        nucleus: ConsonantT | VowelT,
+        coda: ConsonantT | VowelT | None,
+    ) -> tuple[ConsonantT | VowelT, ConsonantT | VowelT | None]:
         """
-        Resolve the initial here.
-        Get the final by calling `self.get_disambiguated_final()`.
+        Resolve the ambiguity of nucleus and coda here.
         """
-        pass
+        return nucleus, coda
 
-    @abstractmethod
-    def get_disambiguated_reading(self, parsed: ParsedSchemeT) -> ReadingT:
+    def get_rime(self, parsed: ParsedSchemeT) -> RimeT:
+        nucleus = self.get_unprocessed_nucleus(parsed)
+        coda = self.get_unprocessed_coda(parsed)
+        nucleus, coda = self.disambiguate_rime(parsed, nucleus, coda)
+        return self.RIME_CLASS(nucleus=nucleus, coda=coda)
+
+    def get_unprocessed_medial(self, parsed: ParsedSchemeT) -> VowelT | None:
+        return self.MAP["medial_to_object"][parsed.medial]() if parsed.medial else None
+
+    def disambiguate_final(
+        self,
+        parsed: ParsedSchemeT,
+        medial: VowelT | None,
+        rime: RimeT,
+    ) -> tuple[VowelT | None, RimeT]:
         """
-        Resolve the tone here.
-        Get the syllable by calling `self.get_disambiguated_syllable()`.
+        Resolve the ambiguity of medial and rime here.
         """
-        pass
+        return medial, rime
+
+    def get_final(self, parsed: ParsedSchemeT) -> FinalT:
+        medial = self.get_unprocessed_medial(parsed)
+        rime = self.get_rime(parsed)
+        medial, rime = self.disambiguate_final(parsed, medial, rime)
+        return self.FINAL_CLASS(medial=medial, rime=rime)
+
+    def get_unprocessed_initial(self, parsed: ParsedSchemeT) -> ConsonantT | None:
+        return (
+            self.MAP["initial_to_object"][parsed.initial]() if parsed.initial else None
+        )
+
+    def disambiguate_syllable(
+        self,
+        parsed: ParsedSchemeT,
+        initial: ConsonantT | None,
+        final: FinalT,
+    ) -> tuple[ConsonantT | None, FinalT]:
+        """
+        Resolve the ambiguity of initial and final here.
+        """
+        return initial, final
+
+    def get_syllable(self, parsed: ParsedSchemeT) -> SyllableT:
+        initial = self.get_unprocessed_initial(parsed)
+        final = self.get_final(parsed)
+        initial, final = self.disambiguate_syllable(parsed, initial, final)
+        return self.SYLLABLE_CLASS(initial=initial, final=final)
+
+    def get_unprocessed_tone(self, parsed: ParsedSchemeT) -> ToneT:
+        return self.MAP["tone_to_object"][parsed.tone]()
+
+    def disambiguate_tone(
+        self,
+        parsed: ParsedSchemeT,
+        syllable: SyllableT,
+        tone: ToneT,
+    ) -> tuple[SyllableT, ToneT]:
+        """
+        Resolve the ambiguity of syllable and tone here.
+        """
+        return syllable, tone
 
     def validity_check(self, parsed: ParsedSchemeT, reading: ReadingT) -> None:
         pass
 
-    def to_reading(self, parsed: ParsedSchemeT) -> ReadingT:
-        reading = self.get_disambiguated_reading(parsed)
+    def get_reading(self, parsed: ParsedSchemeT) -> ReadingT:
+        syllable = self.get_syllable(parsed)
+        tone = self.get_unprocessed_tone(parsed)
+        syllable, tone = self.disambiguate_tone(parsed, syllable, tone)
+        return self.READING_CLASS(syllable=syllable, tone=tone)
+
+    def to_underlying(self, text: str) -> ReadingT:
+        parsed = self.parse(text)
+        reading = self.get_reading(parsed)
         self.validity_check(parsed, reading)
         return reading
 
-    def to_underlying(self, text: str) -> ReadingT:
-        parsed = self.to_parsed(text)
-        return self.to_reading(parsed)
+    def get_parsed(self, reading: ReadingT) -> ParsedSchemeT:
+        initial = reading.syllable.initial
+        medial = reading.syllable.final.medial
+        nucleus = reading.syllable.final.rime.nucleus
+        coda = reading.syllable.final.rime.coda
+        tone = reading.tone
 
-    @abstractmethod
-    def from_reading(self, reading: ReadingT) -> ParsedSchemeT:
-        pass
+        key_initial = initial.features_signature if initial is not None else None
+        key_medial = medial.features_signature if medial is not None else None
+        key_nucleus = nucleus.features_signature if nucleus is not None else None
+        key_coda = coda.features_signature if coda is not None else None
+        key_tone = tone.features_signature if tone is not None else None
+
+        initial = self.MAP["object_to_initial"].get(key_initial, None)
+        medial = self.MAP["object_to_medial"].get(key_medial, None)
+        nucleus = self.MAP["object_to_nucleus"].get(key_nucleus, None)
+        coda = self.MAP["object_to_coda"].get(key_coda, None)
+        tone = self.MAP["object_to_tone"].get(key_tone, None)
+
+        if nucleus is None:
+            raise ValueError(f"{ReadingT.__name__} object has empty nucleus")
+
+        return self.PARSED_CLASS(
+            initial=initial,
+            medial=medial,
+            nucleus=nucleus,
+            coda=coda,
+            tone=tone,
+        )
 
     def normalize_output(self, parsed: ParsedSchemeT) -> ParsedSchemeT:
         """
@@ -113,7 +251,7 @@ class Scheme(ABC, Generic[RimeT, FinalT, SyllableT, ReadingT, ParsedSchemeT]):
         pass
 
     def from_underlying(self, reading: ReadingT) -> str:
-        uncomposed = self.from_reading(reading)
+        uncomposed = self.get_parsed(reading)
         normalized = self.normalize_output(uncomposed)
         return self.compose(normalized)
 
@@ -131,12 +269,16 @@ class Scheme(ABC, Generic[RimeT, FinalT, SyllableT, ReadingT, ParsedSchemeT]):
         This method is intended for functions that generates all possible spellings for tests.
         """
         try:
-            parsed = self.parsed_class(
-                initial=initial, medial=medial, nucleus=nucleus, coda=coda, tone=tone
+            parsed = self.PARSED_CLASS(
+                initial=initial,
+                medial=medial,
+                nucleus=nucleus,
+                coda=coda,
+                tone=tone,
             )
-            parsed = self.normalize_input(parsed)  # pyright: ignore[reportArgumentType]
-            reading = self.to_reading(parsed)
-            parsed = self.from_reading(reading)
+            parsed = self.normalize_input(parsed)
+            reading = self.get_reading(parsed)
+            parsed = self.get_parsed(reading)
             parsed = self.normalize_output(parsed)
             return self.compose(parsed)
         except RepresentationError:

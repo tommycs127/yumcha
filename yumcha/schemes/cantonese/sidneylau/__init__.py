@@ -1,15 +1,13 @@
 from yumcha.phonology import VowelBackness, VowelCloseness
 from yumcha.phonology.cantonese import (
-    CantoneseFinal,
-    CantoneseReading,
-    CantoneseRime,
+    CantoneseConsonant,
     CantoneseSyllable,
     CantoneseTone,
     CantoneseToneName,
     CantoneseToneRegister,
     CantoneseVowel,
 )
-from yumcha.schemes import ParsedScheme, Scheme
+from yumcha.schemes.cantonese import CantoneseScheme, ParsedCantoneseScheme
 from yumcha.schemes.cantonese.sidneylau.map import (
     CODA_TO_OBJECT,
     INITIAL_TO_OBJECT,
@@ -21,32 +19,36 @@ from yumcha.schemes.cantonese.sidneylau.map import (
     TONE_TO_OBJECT,
 )
 from yumcha.schemes.cantonese.sidneylau.regex import REGEX_PATTERN
+from yumcha.schemes.typing import SchemeMap
 
 
-class ParsedSidneyLau(ParsedScheme):
-    initial: str | None
-    medial: None
-    nucleus: str
-    coda: str | None
-    tone: str
+class ParsedSidneyLau(ParsedCantoneseScheme):
+    pass
 
 
-class SidneyLau(
-    Scheme[
-        CantoneseRime,
-        CantoneseFinal,
-        CantoneseSyllable,
-        CantoneseReading,
-        ParsedSidneyLau,
-    ]
-):
+class SidneyLau(CantoneseScheme):
     name = "Sidney Lau"
 
     @property
-    def parsed_class(self) -> type[ParsedSidneyLau]:
+    def PARSED_CLASS(self) -> type[ParsedSidneyLau]:
         return ParsedSidneyLau
 
-    def parse(self, text: str) -> ParsedSidneyLau:
+    @property
+    def MAP(self) -> SchemeMap:
+        return {
+            "initial_to_object": INITIAL_TO_OBJECT,
+            "object_to_initial": OBJECT_TO_INITIAL,
+            "medial_to_object": dict(),
+            "object_to_medial": dict(),
+            "nucleus_to_object": NUCLEUS_TO_OBJECT,
+            "object_to_nucleus": OBJECT_TO_NUCLEUS,
+            "coda_to_object": CODA_TO_OBJECT,
+            "object_to_coda": OBJECT_TO_CODA,
+            "tone_to_object": TONE_TO_OBJECT,
+            "object_to_tone": OBJECT_TO_TONE,
+        }
+
+    def get_unnormalized_parsed(self, text: str) -> ParsedSidneyLau:
         m = REGEX_PATTERN.fullmatch(text)
         if not m:
             raise ValueError(f"Invalid {self.name} syllable: {text}")
@@ -98,9 +100,14 @@ class SidneyLau(
             )
         return parsed
 
-    def get_disambiguated_rime(self, parsed: ParsedSidneyLau) -> CantoneseRime:
-        nucleus = NUCLEUS_TO_OBJECT[parsed.nucleus]()
-        coda = CODA_TO_OBJECT[parsed.coda]() if parsed.coda else None
+    def disambiguate_rime(
+        self,
+        parsed: ParsedSidneyLau,
+        nucleus: CantoneseConsonant | CantoneseVowel,
+        coda: CantoneseConsonant | CantoneseVowel | None,
+    ) -> tuple[
+        CantoneseConsonant | CantoneseVowel, CantoneseConsonant | CantoneseVowel | None
+    ]:
         if parsed.nucleus == "e" and parsed.coda == "i":
             nucleus = CantoneseVowel(
                 closeness=VowelCloseness.CLOSE_MID,
@@ -133,20 +140,14 @@ class SidneyLau(
                 rounded=True,
                 is_semi=True,
             )
-        return CantoneseRime(nucleus=nucleus, coda=coda)
+        return nucleus, coda
 
-    def get_disambiguated_final(self, parsed: ParsedSidneyLau) -> CantoneseFinal:
-        rime = self.get_disambiguated_rime(parsed)
-        return CantoneseFinal(rime=rime, medial=None)
-
-    def get_disambiguated_syllable(self, parsed: ParsedSidneyLau) -> CantoneseSyllable:
-        final = self.get_disambiguated_final(parsed)
-        initial = INITIAL_TO_OBJECT[parsed.initial]() if parsed.initial else None
-        return CantoneseSyllable(final=final, initial=initial)
-
-    def get_disambiguated_reading(self, parsed: ParsedSidneyLau) -> CantoneseReading:
-        syllable = self.get_disambiguated_syllable(parsed)
-        tone = TONE_TO_OBJECT[parsed.tone]()
+    def disambiguate_tone(
+        self,
+        parsed: ParsedSidneyLau,
+        syllable: CantoneseSyllable,
+        tone: CantoneseTone,
+    ) -> tuple[CantoneseSyllable, CantoneseTone]:
         if parsed.tone == "1" and parsed.coda in ["p", "t", "k"]:
             tone = CantoneseTone(
                 register=CantoneseToneRegister.DARK_UPPER,
@@ -165,25 +166,7 @@ class SidneyLau(
                 name=CantoneseToneName.ENTERING,
                 letters=tone.letters,
             )
-        return CantoneseReading(syllable=syllable, tone=tone)
-
-    def from_reading(self, reading: CantoneseReading) -> ParsedSidneyLau:
-        initial = reading.syllable.initial
-        nucleus = reading.syllable.final.rime.nucleus
-        coda = reading.syllable.final.rime.coda
-        tone = reading.tone
-        return ParsedSidneyLau(
-            initial=OBJECT_TO_INITIAL[
-                initial.features_signature if initial is not None else None
-            ],
-            medial=None,
-            nucleus=OBJECT_TO_NUCLEUS[nucleus.features_signature],
-            coda=OBJECT_TO_CODA[coda.features_signature if coda is not None else None],
-            tone=OBJECT_TO_TONE.get(
-                tone.features_signature,
-                OBJECT_TO_TONE[tone.phonological_signature],
-            ),
-        )
+        return syllable, tone
 
     def normalize_output(self, parsed: ParsedSidneyLau) -> ParsedSidneyLau:
         if parsed.nucleus == "aa" and parsed.coda is None:
@@ -226,6 +209,6 @@ class SidneyLau(
                 uncomposed.initial if uncomposed.initial else "",
                 uncomposed.nucleus,
                 uncomposed.coda if uncomposed.coda else "",
-                uncomposed.tone,
+                uncomposed.tone if uncomposed.tone else "",
             ]
         )

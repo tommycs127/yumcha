@@ -1,13 +1,10 @@
 from yumcha.phonology.cantonese import (
-    CantoneseFinal,
-    CantoneseReading,
-    CantoneseRime,
     CantoneseSyllable,
     CantoneseTone,
     CantoneseToneName,
     CantoneseToneRegister,
 )
-from yumcha.schemes import ParsedScheme, Scheme
+from yumcha.schemes.cantonese import CantoneseScheme, ParsedCantoneseScheme
 from yumcha.schemes.cantonese.ipa.map import (
     CODA_TO_OBJECT,
     INITIAL_TO_OBJECT,
@@ -19,32 +16,36 @@ from yumcha.schemes.cantonese.ipa.map import (
     TONE_TO_OBJECT,
 )
 from yumcha.schemes.cantonese.ipa.regex import REGEX_PATTERN
+from yumcha.schemes.typing import SchemeMap
 
 
-class ParsedIPA(ParsedScheme):
-    initial: str | None
-    medial: None
-    nucleus: str
-    coda: str | None
-    tone: str
+class ParsedIPA(ParsedCantoneseScheme):
+    pass
 
 
-class IPA(
-    Scheme[
-        CantoneseRime,
-        CantoneseFinal,
-        CantoneseSyllable,
-        CantoneseReading,
-        ParsedIPA,
-    ]
-):
+class IPA(CantoneseScheme):
     name = "IPA"
 
     @property
-    def parsed_class(self) -> type[ParsedIPA]:
+    def PARSED_CLASS(self) -> type[ParsedIPA]:
         return ParsedIPA
 
-    def parse(self, text: str) -> ParsedIPA:
+    @property
+    def MAP(self) -> SchemeMap:
+        return {
+            "initial_to_object": INITIAL_TO_OBJECT,
+            "object_to_initial": OBJECT_TO_INITIAL,
+            "medial_to_object": dict(),
+            "object_to_medial": dict(),
+            "nucleus_to_object": NUCLEUS_TO_OBJECT,
+            "object_to_nucleus": OBJECT_TO_NUCLEUS,
+            "coda_to_object": CODA_TO_OBJECT,
+            "object_to_coda": OBJECT_TO_CODA,
+            "tone_to_object": TONE_TO_OBJECT,
+            "object_to_tone": OBJECT_TO_TONE,
+        }
+
+    def get_unnormalized_parsed(self, text: str) -> ParsedIPA:
         m = REGEX_PATTERN.fullmatch(text)
         if not m:
             raise ValueError(f"Invalid {self.name} syllable: {text}")
@@ -59,23 +60,12 @@ class IPA(
             tone=tone,
         )
 
-    def get_disambiguated_rime(self, parsed: ParsedIPA) -> CantoneseRime:
-        nucleus = NUCLEUS_TO_OBJECT[parsed.nucleus]()
-        coda = CODA_TO_OBJECT[parsed.coda]() if parsed.coda else None
-        return CantoneseRime(nucleus=nucleus, coda=coda)
-
-    def get_disambiguated_final(self, parsed: ParsedIPA) -> CantoneseFinal:
-        rime = self.get_disambiguated_rime(parsed)
-        return CantoneseFinal(rime=rime, medial=None)
-
-    def get_disambiguated_syllable(self, parsed: ParsedIPA) -> CantoneseSyllable:
-        final = self.get_disambiguated_final(parsed)
-        initial = INITIAL_TO_OBJECT[parsed.initial]() if parsed.initial else None
-        return CantoneseSyllable(final=final, initial=initial)
-
-    def get_disambiguated_reading(self, parsed: ParsedIPA) -> CantoneseReading:
-        syllable = self.get_disambiguated_syllable(parsed)
-        tone = TONE_TO_OBJECT[parsed.tone]()
+    def disambiguate_tone(
+        self,
+        parsed: ParsedIPA,
+        syllable: CantoneseSyllable,
+        tone: CantoneseTone,
+    ) -> tuple[CantoneseSyllable, CantoneseTone]:
         if parsed.tone == "˥" and parsed.coda in ["p̚", "t̚", "k̚"]:
             tone = CantoneseTone(
                 register=CantoneseToneRegister.DARK_UPPER,
@@ -94,25 +84,7 @@ class IPA(
                 name=CantoneseToneName.ENTERING,
                 letters=tone.letters,
             )
-        return CantoneseReading(syllable=syllable, tone=tone)
-
-    def from_reading(self, reading: CantoneseReading) -> ParsedIPA:
-        initial = reading.syllable.initial
-        nucleus = reading.syllable.final.rime.nucleus
-        coda = reading.syllable.final.rime.coda
-        tone = reading.tone
-        return ParsedIPA(
-            initial=OBJECT_TO_INITIAL[
-                initial.features_signature if initial is not None else None
-            ],
-            medial=None,
-            nucleus=OBJECT_TO_NUCLEUS[nucleus.features_signature],
-            coda=OBJECT_TO_CODA[coda.features_signature if coda is not None else None],
-            tone=OBJECT_TO_TONE.get(
-                tone.features_signature,
-                OBJECT_TO_TONE[tone.phonological_signature],
-            ),
-        )
+        return syllable, tone
 
     def compose(self, uncomposed: ParsedIPA) -> str:
         return "".join(
@@ -120,6 +92,6 @@ class IPA(
                 uncomposed.initial if uncomposed.initial else "",
                 uncomposed.nucleus,
                 uncomposed.coda if uncomposed.coda else "",
-                uncomposed.tone,
+                uncomposed.tone if uncomposed.tone else "",
             ]
         )

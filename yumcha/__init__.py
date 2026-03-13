@@ -57,4 +57,4 @@ class Yumcha(object):
         if scheme not in schemes:
             raise ValueError(f'Scheme "{scheme}" not found')
 
-        return schemes[scheme].to_parsed(text)
+        return schemes[scheme].parse(text)

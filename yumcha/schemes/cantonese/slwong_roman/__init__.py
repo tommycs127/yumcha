@@ -1,14 +1,12 @@
 from yumcha.phonology import VowelBackness, VowelCloseness
 from yumcha.phonology.cantonese import (
     CantoneseConsonant,
-    CantoneseFinal,
     CantoneseReading,
-    CantoneseRime,
-    CantoneseSyllable,
     CantoneseToneName,
     CantoneseVowel,
 )
-from yumcha.schemes import ParsedScheme, RepresentationError, Scheme
+from yumcha.schemes import RepresentationError
+from yumcha.schemes.cantonese import CantoneseScheme, ParsedCantoneseScheme
 from yumcha.schemes.cantonese.slwong_roman.map import (
     CODA_TO_OBJECT,
     INITIAL_TO_OBJECT,
@@ -20,31 +18,36 @@ from yumcha.schemes.cantonese.slwong_roman.map import (
     TONE_TO_OBJECT,
 )
 from yumcha.schemes.cantonese.slwong_roman.regex import REGEX_PATTERN
+from yumcha.schemes.typing import SchemeMap
 
 
-class ParsedSLWongRoman(ParsedScheme):
-    initial: str | None
-    nucleus: str
-    coda: str | None
-    tone: str
+class ParsedSLWongRoman(ParsedCantoneseScheme):
+    pass
 
 
-class SLWongRoman(
-    Scheme[
-        CantoneseRime,
-        CantoneseFinal,
-        CantoneseSyllable,
-        CantoneseReading,
-        ParsedSLWongRoman,
-    ]
-):
+class SLWongRoman(CantoneseScheme):
     name = "S. L. Wong (Romanization)"
 
     @property
-    def parsed_class(self) -> type[ParsedSLWongRoman]:
+    def PARSED_CLASS(self) -> type[ParsedSLWongRoman]:
         return ParsedSLWongRoman
 
-    def parse(self, text: str) -> ParsedSLWongRoman:
+    @property
+    def MAP(self) -> SchemeMap:
+        return {
+            "initial_to_object": INITIAL_TO_OBJECT,
+            "object_to_initial": OBJECT_TO_INITIAL,
+            "medial_to_object": dict(),
+            "object_to_medial": dict(),
+            "nucleus_to_object": NUCLEUS_TO_OBJECT,
+            "object_to_nucleus": OBJECT_TO_NUCLEUS,
+            "coda_to_object": CODA_TO_OBJECT,
+            "object_to_coda": OBJECT_TO_CODA,
+            "tone_to_object": TONE_TO_OBJECT,
+            "object_to_tone": OBJECT_TO_TONE,
+        }
+
+    def get_unnormalized_parsed(self, text: str) -> ParsedSLWongRoman:
         m = REGEX_PATTERN.fullmatch(text)
         if not m:
             raise ValueError(f"Invalid SLWong syllable: {text}")
@@ -88,9 +91,14 @@ class SLWongRoman(
             )
         return parsed
 
-    def get_disambiguated_rime(self, parsed: ParsedSLWongRoman) -> CantoneseRime:
-        nucleus = NUCLEUS_TO_OBJECT[parsed.nucleus]()
-        coda = CODA_TO_OBJECT[parsed.coda]() if parsed.coda else None
+    def disambiguate_rime(
+        self,
+        parsed: ParsedSLWongRoman,
+        nucleus: CantoneseConsonant | CantoneseVowel,
+        coda: CantoneseConsonant | CantoneseVowel | None,
+    ) -> tuple[
+        CantoneseConsonant | CantoneseVowel, CantoneseConsonant | CantoneseVowel | None
+    ]:
         if parsed.nucleus == "e" and parsed.coda == "i":
             nucleus = CantoneseVowel(
                 closeness=VowelCloseness.CLOSE_MID,
@@ -121,23 +129,7 @@ class SLWongRoman(
                 backness=VowelBackness.CENTRAL,
                 rounded=True,
             )
-        return CantoneseRime(nucleus=nucleus, coda=coda)
-
-    def get_disambiguated_final(self, parsed: ParsedSLWongRoman) -> CantoneseFinal:
-        rime = self.get_disambiguated_rime(parsed)
-        return CantoneseFinal(rime=rime, medial=None)
-
-    def get_disambiguated_syllable(
-        self, parsed: ParsedSLWongRoman
-    ) -> CantoneseSyllable:
-        final = self.get_disambiguated_final(parsed)
-        initial = INITIAL_TO_OBJECT[parsed.initial]() if parsed.initial else None
-        return CantoneseSyllable(final=final, initial=initial)
-
-    def get_disambiguated_reading(self, parsed: ParsedSLWongRoman) -> CantoneseReading:
-        syllable = self.get_disambiguated_syllable(parsed)
-        tone = TONE_TO_OBJECT[parsed.tone]()
-        return CantoneseReading(syllable=syllable, tone=tone)
+        return nucleus, coda
 
     def validity_check(
         self, parsed: ParsedSLWongRoman, reading: CantoneseReading
@@ -150,24 +142,6 @@ class SLWongRoman(
                 f"Invalid {self.name} syllable: {self.compose(parsed)}"
                 "Coda does not match tone name"
             )
-
-    def from_reading(self, reading: CantoneseReading) -> ParsedSLWongRoman:
-        initial = reading.syllable.initial
-        nucleus = reading.syllable.final.rime.nucleus
-        coda = reading.syllable.final.rime.coda
-        tone = reading.tone
-        return ParsedSLWongRoman(
-            initial=OBJECT_TO_INITIAL[
-                initial.features_signature if initial is not None else None
-            ],
-            medial=None,
-            nucleus=OBJECT_TO_NUCLEUS[nucleus.features_signature],
-            coda=OBJECT_TO_CODA[coda.features_signature if coda is not None else None],
-            tone=OBJECT_TO_TONE.get(
-                tone.features_signature,
-                OBJECT_TO_TONE[tone.phonological_signature],
-            ),
-        )
 
     def normalize_output(self, parsed: ParsedSLWongRoman) -> ParsedSLWongRoman:
         if parsed.nucleus == "aa" and parsed.coda is None:
@@ -197,7 +171,7 @@ class SLWongRoman(
     def compose(self, uncomposed: ParsedSLWongRoman) -> str:
         return "".join(
             [
-                uncomposed.tone,
+                uncomposed.tone if uncomposed.tone else "",
                 uncomposed.initial if uncomposed.initial else "",
                 uncomposed.nucleus,
                 uncomposed.coda if uncomposed.coda else "",
