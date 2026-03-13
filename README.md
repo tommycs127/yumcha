@@ -138,10 +138,9 @@ In such cases, Yumcha will raise `RepresentationError` to indicate that the conv
 
 - Cantonese
   - [ ] Barnett–Chao
-  - Bopomofo (Zhuyin)
-    - [ ] ~~The Commission on the Unification of Pronunciation (讀音統一會) Scheme~~
-      - Will not be implemented until Unicode supports the missing character.
-    - [ ] The People's Government Culture and Education Department (人民政府文教廳) Scheme
+  - [ ] ~~Bopomofo (Zhuyin) of the Commission on the Unification of Pronunciation Scheme~~
+    - Will not be implemented until Unicode supports the missing character.
+  - [ ] Bopomofo (Zhuyin) of the People's Government Culture and Education Department Scheme
   - [ ] Braille
   - [ ] Cantonese Transliteration Scheme
   - [ ] Hong Kong Government Cantonese Romanization
