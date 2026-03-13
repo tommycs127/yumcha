@@ -136,7 +136,7 @@ Output (8,028 items):
 
 ### No Tone Sandhi
 
-Tone sandhi depends on linguistic context and is therefore difficult to implement.
+Tone sandhi depends on linguistic context (e.g., phonological environment and semantic shifts) and is therefore out of scope for this project.
 
 ### Limitations of certain schemes
 
