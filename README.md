@@ -138,6 +138,8 @@ Output (8,028 items):
 
 Tone sandhi depends on linguistic context (e.g., phonological environment and semantic shifts) and is therefore out of scope for this project.
 
+While some schemes include specialized markers for tone sandhi—such as the Sidney Lau scheme, which uses `1°` for the high-flat tone and `1` for the high-falling tone—Yumcha treats these as having the same tone register and name. Consequently, precise information regarding these tonal distinctions may be lost during the scheme-to-scheme conversion.
+
 ### Limitations of certain schemes
 
 Some schemes are designed in a way that loses certain phonological distinctions.
