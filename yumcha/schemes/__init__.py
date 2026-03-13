@@ -290,6 +290,7 @@ class Scheme(
             )
             parsed = self.normalize_input(parsed)
             reading = self.get_reading(parsed)
+            self.validity_check(parsed, reading)
             parsed = self.get_parsed(reading)
             parsed = self.normalize_output(parsed)
             return self.compose(parsed)

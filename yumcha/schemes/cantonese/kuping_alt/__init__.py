@@ -8,6 +8,7 @@ from yumcha.phonology.cantonese import (
     CantoneseVowel,
 )
 from yumcha.schemes.cantonese import CantoneseScheme, ParsedCantoneseScheme
+from yumcha.schemes.cantonese.kuping.tone import parse_tone
 from yumcha.schemes.cantonese.kuping_alt.map import (
     CODA_TO_OBJECT,
     INITIAL_TO_OBJECT,
@@ -83,7 +84,7 @@ class KupingAlternative(CantoneseScheme):
             medial=None,
             nucleus=nucleus,
             coda=coda if coda else None,
-            tone=f"{tone_letters};{tone_category}",
+            tone=f"{tone_letters}{tone_category}",
         )
 
     def normalize_input(
@@ -91,7 +92,8 @@ class KupingAlternative(CantoneseScheme):
     ) -> ParsedKupingAlternative:
         if not isinstance(parsed.tone, str):
             raise ValueError("Tone is not str")
-        tone_letters, tone_category = parsed.tone.split(";")
+        tone_letters, tone_category = parse_tone(parsed.tone)
+        tone_letters = tone_letters or ""
 
         if not tone_category:
             coda_category = (
@@ -99,11 +101,13 @@ class KupingAlternative(CantoneseScheme):
                 if parsed.coda and parsed.coda[-1] in ["p", "t", "k"]
                 else "unchecked"
             )
-            tone_category = self.TONE_FROM_LETTER[coda_category].get(tone_letters, None)
-            if tone_category is None:
+            if not tone_letters:
                 raise ValueError(
                     f"Invalid {self.name} syllable: {self.compose(parsed)}"
                 )
+            tone_category = self.TONE_FROM_LETTER[coda_category][tone_letters]
+        else:
+            tone_letters = ""
 
         return ParsedKupingAlternative(
             initial=parsed.initial,
@@ -116,7 +120,7 @@ class KupingAlternative(CantoneseScheme):
     def get_unprocessed_tone(self, parsed: ParsedKupingAlternative) -> CantoneseTone:
         if not isinstance(parsed.tone, str):
             raise ValueError("Tone is not str")
-        tone_letters, tone_category = parsed.tone[:-2], parsed.tone[-2:]
+        tone_letters, tone_category = parse_tone(parsed.tone)
         return self.MAP["tone_to_object"][tone_category](tone_letters)
 
     def disambiguate_rime(
@@ -168,7 +172,7 @@ class KupingAlternative(CantoneseScheme):
     ) -> tuple[CantoneseSyllable, CantoneseTone]:
         if not isinstance(parsed.tone, str):
             raise ValueError("Tone is not str")
-        tone_letters, tone_category = (parsed.tone[:-2] or None), parsed.tone[-2:]
+        tone_letters, tone_category = parse_tone(parsed.tone)
         tone = TONE_TO_OBJECT[tone_category](tone_letters)
         return syllable, tone
 
