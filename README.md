@@ -61,8 +61,8 @@ print(yumcha.available_schemes)  # Or use `yumcha.menu` as a shorthand.
 
 Output:
 
-```py
-{'cantonese': ['ile', 'ipa', 'jyutping', 'sidneylau', 'slwong_roman', 'slwong_phonetic', 'yale']}
+```text
+{'cantonese': ['ile', 'ipa', 'jyutping', 'kuping', 'kuping_alt', 'sidneylau', 'slwong_roman', 'slwong_phonetic', 'yale']}
 ```
 
 ### Conversion
