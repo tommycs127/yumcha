@@ -1,6 +1,6 @@
 # 🍵 Yumcha
 
-![stage](https://badgen.net/badge/stage/Early%20development/red)
+![status](https://badgen.net/badge/status/Early%20development/red)
 ![Python](https://badgen.net/badge/python/3.12%2B)
 [![License](https://badgen.net/badge/license/MIT/orange)](LICENSE)
 ![type](https://badgen.net/badge/type/Romanization%20engine/cyan)
