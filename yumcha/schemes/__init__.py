@@ -300,7 +300,7 @@ class Scheme(
             return None
 
     @functools.cached_property
-    def all_spellings(self) -> list[str | None]:
+    def all_legal_syllable(self) -> list[str | None]:
         initials = list(self.MAP["initial_to_object"])
         nuclei = list(self.MAP["nucleus_to_object"])
         codas = list(self.MAP["coda_to_object"])
@@ -310,5 +310,5 @@ class Scheme(
         spellings = [self.get_normalized_spelling(*_) for _ in generator]
         return list(filter(lambda _: isinstance(_, str), spellings))
 
-    def get_all_spellings(self) -> list[str | None]:
-        return self.all_spellings
+    def get_all_legal_syllables(self) -> list[str | None]:
+        return self.all_legal_syllable

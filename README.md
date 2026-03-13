@@ -98,12 +98,12 @@ Output:
 ParsedYale(initial='ch', nucleus='eu', coda='n', tone='̄')
 ```
 
-### Getting all valid spellings
+### Getting all legal syllables
 
-Get all valid spellings in ILE scheme:
+Get all legal syllables in ILE scheme:
 
 ```py
-result = yumcha.get_all_spellings(
+result = yumcha.get_all_legal_syllables(
     language="cantonese",
     scheme="ile",
 )
@@ -154,7 +154,7 @@ In such cases, Yumcha will raise `RepresentationError` to indicate that the conv
 
 - [x] Conversion
 - [x] Parsing
-- [x] Generating all valid spellings
+- [x] Generating all legal syllables
 
 ### Schemes
 

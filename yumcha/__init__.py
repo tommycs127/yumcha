@@ -63,6 +63,6 @@ class Yumcha(object):
 
         return schemes[scheme].parse(text)
 
-    def get_all_spellings(self, language: str, scheme: str) -> list[str | None]:
+    def get_all_legal_syllables(self, language: str, scheme: str) -> list[str | None]:
         schemes = self.languages[language]
-        return schemes[scheme].get_all_spellings()
+        return schemes[scheme].get_all_legal_syllables()
