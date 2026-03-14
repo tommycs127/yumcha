@@ -15,7 +15,7 @@ A phonology-oriented romanization engine for Cantonese and other languages.
 
 - **Scheme-to-Scheme Conversion**: Convert seamlessly between different romanization and phonetic schemes within the same language.
 - **Scheme Parsing**: Parse strings to identify their phonological components.
-- **Zero Dependencies:** Lightweight and easy to integrate into any project.
+- **Zero Third-Party Dependencies:** Lightweight and easy to integrate into any project.
 - **Type-hinted:** Built with modern Python type hints for better IDE support and readability.
 - **Modular & Extensible:** Add new schemes by implementing a custom parser, disambiguation stages, and composer.
 
