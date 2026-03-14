@@ -15,6 +15,7 @@ A phonology-oriented romanization engine for Cantonese and other languages.
 
 - **Scheme-to-Scheme Conversion**: Convert seamlessly between different romanization and phonetic schemes within the same language.
 - **Scheme Parsing**: Parse strings to identify their phonological components.
+- **Syllable Set Generation**: Get all legal syllables of a scheme.
 - **Zero Third-Party Dependencies:** Lightweight and easy to integrate into any project.
 - **Type-hinted:** Built with modern Python type hints for better IDE support and readability.
 - **Modular & Extensible:** Add new schemes by implementing a custom parser, disambiguation stages, and composer.
@@ -120,17 +121,17 @@ Output (8,028 items):
 
 ### Cantonese
 
-| Scheme name                               | Example      | Scheme code       | Note                                         |
-| ----------------------------------------- | ------------ | ----------------- | -------------------------------------------- |
-| Institute of Language in Education Scheme | `tsoen1`     | `ile`             |                                              |
-| International Phonetic Alphabet           | `t͡sʰɵn˥`     | `ipa`             |                                              |
-| Jyutping                                  | `ceon1`      | `jyutping`        |                                              |
-| Kuping                                    | `tśeon55^1`  | `kuping`          | A romanization scheme I designed!            |
-| Kuping (Alternative)                      | `ts'eon55^1` | `kuping_alt`      | Ditto.                                       |
-| Sidney Lau                                | `chun1°`     | `sidneylau`       |                                              |
+| Scheme name                               | Example      | Scheme code       | Note                                                  |
+| ----------------------------------------- | ------------ | ----------------- | ----------------------------------------------------- |
+| Institute of Language in Education Scheme | `tsoen1`     | `ile`             |                                                       |
+| International Phonetic Alphabet           | `t͡sʰɵn˥`     | `ipa`             |                                                       |
+| Jyutping                                  | `ceon1`      | `jyutping`        |                                                       |
+| Kuping                                    | `tśeon55^1`  | `kuping`          | A romanization scheme I designed!                     |
+| Kuping (Alternative)                      | `ts'eon55^1` | `kuping_alt`      | Ditto.                                                |
+| Sidney Lau                                | `chun1°`     | `sidneylau`       |                                                       |
 | S. L. Wong (Romanization)                 | `ˈtseun`     | `slwong_roman`    | Conventional numeral tone marking is not implemented. |
-| S. L. Wong (Phonetic)                     | `ˈtsœn`      | `slwong_phonetic` | Ditto.                                       |
-| Yale                                      | `chēun`      | `yale`            |                                              |
+| S. L. Wong (Phonetic)                     | `ˈtsœn`      | `slwong_phonetic` | Ditto.                                                |
+| Yale                                      | `chēun`      | `yale`            |                                                       |
 
 ## 🚫 Limitations
 
