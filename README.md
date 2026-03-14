@@ -128,7 +128,7 @@ Output (8,028 items):
 | Kuping                                    | `tśeon55^1`  | `kuping`          | A romanization scheme I designed!            |
 | Kuping (Alternative)                      | `ts'eon55^1` | `kuping_alt`      | Ditto.                                       |
 | Sidney Lau                                | `chun1°`     | `sidneylau`       |                                              |
-| S. L. Wong (Romanization)                 | `ˈtseun`     | `slwong_roman`    | Numeral tone marking is **not implemented**. |
+| S. L. Wong (Romanization)                 | `ˈtseun`     | `slwong_roman`    | Conventional numeral tone marking is not implemented. |
 | S. L. Wong (Phonetic)                     | `ˈtsœn`      | `slwong_phonetic` | Ditto.                                       |
 | Yale                                      | `chēun`      | `yale`            |                                              |
 
@@ -142,7 +142,7 @@ Tone sandhi depends on linguistic context (e.g., phonological environment) and i
 
 #### Tone Information Loss during Conversion
 
-Some schemes include specialized markers for tone sandhi—such as the Sidney Lau scheme, which uses `1°` for the high-flat tone and `1` for the high-falling tone—Yumcha treats these as having the same tone register and name. Consequently, precise information regarding these tonal distinctions may be lost during the scheme-to-scheme conversion.
+Some schemes include specialized markers for different tone contour—such as the Sidney Lau scheme, which uses `1°` for the high-flat tone and `1` for the high-falling tone—Yumcha treats these as having the same tone register and name. Consequently, precise information regarding these tonal distinctions may be lost during the scheme-to-scheme conversion.
 
 #### Unrepresentable Syllables
 
