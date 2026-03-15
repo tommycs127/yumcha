@@ -97,9 +97,6 @@ class CantoneseConsonant(
     def to_tree(self) -> dict:
         return {self.__class__.__name__: self.__dict__}
 
-    def __repr__(self) -> str:
-        return f"<{self.__class__.__name__}>"
-
 
 @dataclass(kw_only=True)
 class CantoneseVowel(Vowel[CantoneseConsonant, "CantoneseVowel", "CantoneseRime"]):
