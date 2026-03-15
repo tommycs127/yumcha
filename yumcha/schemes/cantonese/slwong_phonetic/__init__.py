@@ -3,7 +3,7 @@ from yumcha.phonology.cantonese import (
     CantoneseConsonant,
     CantoneseSyllable,
     CantoneseTone,
-    CantoneseToneName,
+    CantoneseToneCategory,
     CantoneseToneRegister,
     CantoneseVowel,
 )
@@ -106,19 +106,19 @@ class SLWongPhonetic(CantoneseScheme):
         if parsed.tone == "ˈ" and parsed.coda in ["p", "t", "k"]:
             tone = CantoneseTone(
                 register=CantoneseToneRegister.DARK_UPPER,
-                name=CantoneseToneName.ENTERING,
+                category=CantoneseToneCategory.ENTERING,
                 letters=tone.letters,
             )
         elif parsed.tone == "ˉ" and parsed.coda in ["p", "t", "k"]:
             tone = CantoneseTone(
                 register=CantoneseToneRegister.DARK_LOWER,
-                name=CantoneseToneName.ENTERING,
+                category=CantoneseToneCategory.ENTERING,
                 letters=tone.letters,
             )
         elif parsed.tone == "ˍ" and parsed.coda in ["p", "t", "k"]:
             tone = CantoneseTone(
                 register=CantoneseToneRegister.LIGHT,
-                name=CantoneseToneName.ENTERING,
+                category=CantoneseToneCategory.ENTERING,
                 letters=tone.letters,
             )
         return syllable, tone

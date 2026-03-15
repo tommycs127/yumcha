@@ -7,7 +7,7 @@ from yumcha.phonology.cantonese import (
     CantoneseConsonantManner,
     CantoneseConsonantPlace,
     CantoneseTone,
-    CantoneseToneName,
+    CantoneseToneCategory,
     CantoneseToneRegister,
     CantoneseVowel,
 )
@@ -452,40 +452,40 @@ OBJECT_TO_CODA: to_string_map_type = {
 TONE_TO_OBJECT: to_object_map_type = {
     "ˈ": lambda: CantoneseTone(
         register=CantoneseToneRegister.DARK,
-        name=CantoneseToneName.LEVEL,
+        category=CantoneseToneCategory.LEVEL,
     ),
     "ˊ": lambda: CantoneseTone(
         register=CantoneseToneRegister.DARK,
-        name=CantoneseToneName.RISING,
+        category=CantoneseToneCategory.RISING,
     ),
     "ˉ": lambda: CantoneseTone(
         register=CantoneseToneRegister.DARK,
-        name=CantoneseToneName.DEPARTING,
+        category=CantoneseToneCategory.DEPARTING,
     ),
     "ˌ": lambda: CantoneseTone(
         register=CantoneseToneRegister.LIGHT,
-        name=CantoneseToneName.LEVEL,
+        category=CantoneseToneCategory.LEVEL,
     ),
     "ˏ": lambda: CantoneseTone(
         register=CantoneseToneRegister.LIGHT,
-        name=CantoneseToneName.RISING,
+        category=CantoneseToneCategory.RISING,
     ),
     "ˍ": lambda: CantoneseTone(
         register=CantoneseToneRegister.LIGHT,
-        name=CantoneseToneName.DEPARTING,
+        category=CantoneseToneCategory.DEPARTING,
     ),
 }
 
 OBJECT_TO_TONE: to_string_map_type = {
-    (CantoneseToneRegister.DARK, CantoneseToneName.LEVEL, None): "ˈ",
-    (CantoneseToneRegister.DARK, CantoneseToneName.LEVEL, "53"): "ˈ",
-    (CantoneseToneRegister.DARK, CantoneseToneName.RISING, None): "ˊ",
-    (CantoneseToneRegister.DARK, CantoneseToneName.DEPARTING, None): "ˉ",
-    (CantoneseToneRegister.LIGHT, CantoneseToneName.LEVEL, None): "ˌ",
-    (CantoneseToneRegister.LIGHT, CantoneseToneName.LEVEL, "21"): "ˌ",
-    (CantoneseToneRegister.LIGHT, CantoneseToneName.RISING, None): "ˏ",
-    (CantoneseToneRegister.LIGHT, CantoneseToneName.DEPARTING, None): "ˍ",
-    (CantoneseToneRegister.DARK_UPPER, CantoneseToneName.ENTERING, None): "ˈ",
-    (CantoneseToneRegister.DARK_LOWER, CantoneseToneName.ENTERING, None): "ˉ",
-    (CantoneseToneRegister.LIGHT, CantoneseToneName.ENTERING, None): "ˍ",
+    (CantoneseToneRegister.DARK, CantoneseToneCategory.LEVEL, None): "ˈ",
+    (CantoneseToneRegister.DARK, CantoneseToneCategory.LEVEL, "53"): "ˈ",
+    (CantoneseToneRegister.DARK, CantoneseToneCategory.RISING, None): "ˊ",
+    (CantoneseToneRegister.DARK, CantoneseToneCategory.DEPARTING, None): "ˉ",
+    (CantoneseToneRegister.LIGHT, CantoneseToneCategory.LEVEL, None): "ˌ",
+    (CantoneseToneRegister.LIGHT, CantoneseToneCategory.LEVEL, "21"): "ˌ",
+    (CantoneseToneRegister.LIGHT, CantoneseToneCategory.RISING, None): "ˏ",
+    (CantoneseToneRegister.LIGHT, CantoneseToneCategory.DEPARTING, None): "ˍ",
+    (CantoneseToneRegister.DARK_UPPER, CantoneseToneCategory.ENTERING, None): "ˈ",
+    (CantoneseToneRegister.DARK_LOWER, CantoneseToneCategory.ENTERING, None): "ˉ",
+    (CantoneseToneRegister.LIGHT, CantoneseToneCategory.ENTERING, None): "ˍ",
 }

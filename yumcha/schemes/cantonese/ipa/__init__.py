@@ -1,7 +1,7 @@
 from yumcha.phonology.cantonese import (
     CantoneseSyllable,
     CantoneseTone,
-    CantoneseToneName,
+    CantoneseToneCategory,
     CantoneseToneRegister,
 )
 from yumcha.schemes.cantonese import CantoneseScheme, ParsedCantoneseScheme
@@ -69,20 +69,17 @@ class IPA(CantoneseScheme):
         if parsed.tone == "˥" and parsed.coda in ["p̚", "t̚", "k̚"]:
             tone = CantoneseTone(
                 register=CantoneseToneRegister.DARK_UPPER,
-                name=CantoneseToneName.ENTERING,
-                letters=tone.letters,
+                category=CantoneseToneCategory.ENTERING,
             )
         elif parsed.tone == "˧" and parsed.coda in ["p̚", "t̚", "k̚"]:
             tone = CantoneseTone(
                 register=CantoneseToneRegister.DARK_LOWER,
-                name=CantoneseToneName.ENTERING,
-                letters=tone.letters,
+                category=CantoneseToneCategory.ENTERING,
             )
         elif parsed.tone == "˨" and parsed.coda in ["p̚", "t̚", "k̚"]:
             tone = CantoneseTone(
                 register=CantoneseToneRegister.LIGHT,
-                name=CantoneseToneName.ENTERING,
-                letters=tone.letters,
+                category=CantoneseToneCategory.ENTERING,
             )
         return syllable, tone
 

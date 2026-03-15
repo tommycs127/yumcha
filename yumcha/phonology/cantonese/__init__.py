@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+
 from yumcha.phonology import (
     Consonant,
     ConsonantManner,
@@ -7,7 +9,7 @@ from yumcha.phonology import (
     Rime,
     Syllable,
     Tone,
-    ToneName,
+    ToneCategory,
     ToneRegister,
     Vowel,
 )
@@ -32,15 +34,21 @@ class CantoneseConsonantManner(ConsonantManner):
     LATERAL_APPROXIMANT = 7
 
 
-class CantoneseConsonant(Consonant["CantoneseVowel", "CantoneseRime"]):
-    def __init__(
-        self, place: CantoneseConsonantPlace, manner: CantoneseConsonantManner, **kwargs
-    ):
-        super().__init__(place=place, manner=manner)
-        self.aspirated = kwargs.get("aspirated", False)
-        self.labialized = kwargs.get("labialized", False)
-        self.syllabic = kwargs.get("syllabic", False)  # For [m̩], [ŋ̩]
-        self.checked = kwargs.get("checked", False)  # For [p̚], [t̚], [k̚]
+@dataclass(kw_only=True)
+class CantoneseConsonant(
+    Consonant[
+        CantoneseConsonantPlace,
+        CantoneseConsonantManner,
+        "CantoneseVowel",
+        "CantoneseRime",
+    ]
+):
+    place: CantoneseConsonantPlace
+    manner: CantoneseConsonantManner
+    aspirated: bool = False
+    labialized: bool = False
+    syllabic: bool = False  # For [m̩], [ŋ̩]
+    checked: bool = False  # For [p̚], [t̚], [k̚]
 
     @property
     def features(self) -> dict:
@@ -93,6 +101,7 @@ class CantoneseConsonant(Consonant["CantoneseVowel", "CantoneseRime"]):
         return f"<{self.__class__.__name__}>"
 
 
+@dataclass(kw_only=True)
 class CantoneseVowel(Vowel[CantoneseConsonant, "CantoneseVowel", "CantoneseRime"]):
     @property
     def RIME_CLASS(self) -> type["CantoneseRime"]:
@@ -117,7 +126,7 @@ class CantoneseToneRegister(ToneRegister):
         }
 
 
-class CantoneseToneName(ToneName):
+class CantoneseToneCategory(ToneCategory):
     UNKNOWN = 0
     LEVEL = 1
     RISING = 2
@@ -127,83 +136,86 @@ class CantoneseToneName(ToneName):
     @classmethod
     def base(cls) -> dict:
         return {
-            CantoneseToneName.UNKNOWN: "Unknown",
-            CantoneseToneName.LEVEL: "Level",
-            CantoneseToneName.RISING: "Rising",
-            CantoneseToneName.DEPARTING: "Departing",
-            CantoneseToneName.ENTERING: "Entering",
+            CantoneseToneCategory.UNKNOWN: "Unknown",
+            CantoneseToneCategory.LEVEL: "Level",
+            CantoneseToneCategory.RISING: "Rising",
+            CantoneseToneCategory.DEPARTING: "Departing",
+            CantoneseToneCategory.ENTERING: "Entering",
         }
 
 
-class CantoneseTone(Tone[CantoneseToneRegister, CantoneseToneName]):
+@dataclass(kw_only=True)
+class CantoneseTone(Tone[CantoneseToneRegister, CantoneseToneCategory]):
     pass
 
 
+@dataclass(kw_only=True)
 class CantoneseRime(Rime[CantoneseConsonant, CantoneseVowel, "CantoneseFinal"]):
-    def __init__(
-        self,
-        nucleus: CantoneseConsonant | CantoneseVowel,
-        coda: CantoneseConsonant | CantoneseVowel | None = None,
-    ):
-        if isinstance(nucleus, CantoneseConsonant):
-            if not nucleus.syllabic:
+    nucleus: CantoneseConsonant | CantoneseVowel
+    coda: CantoneseConsonant | CantoneseVowel | None = None
+
+    def __post_init__(self):
+        if isinstance(self.nucleus, CantoneseConsonant):
+            if not self.nucleus.syllabic:
                 raise ValueError("Only syllabic consonant can be assigned as nucleus")
-            if nucleus.checked:
+            if self.nucleus.checked:
                 raise ValueError(
                     "Only non-checked consonant can be assigned as nucleus"
                 )
 
-        if isinstance(nucleus, CantoneseVowel) and nucleus.is_semi:
+        if isinstance(self.nucleus, CantoneseVowel) and self.nucleus.is_semi:
             raise ValueError("Only non-semivowel can be assigned as nucleus")
 
-        if isinstance(coda, CantoneseConsonant) and coda.syllabic:
+        if isinstance(self.coda, CantoneseConsonant) and self.coda.syllabic:
             raise ValueError("Only non-syllabic consonant can be assigned as coda")
 
-        if isinstance(coda, CantoneseVowel) and not coda.is_semi:
+        if isinstance(self.coda, CantoneseVowel) and not self.coda.is_semi:
             raise ValueError("Only semivowel can be assigned as coda")
 
-        if isinstance(nucleus, CantoneseConsonant) and coda is not None:
+        if isinstance(self.nucleus, CantoneseConsonant) and self.coda is not None:
             raise ValueError("Coda cannot appear after consonant nucleus")
 
-        if isinstance(nucleus, CantoneseVowel) and nucleus.identical_to(coda):
+        if isinstance(self.nucleus, CantoneseVowel) and self.nucleus.identical_to(
+            self.coda
+        ):
             raise ValueError("Coda cannot be the same as nucleus")
-
-        super().__init__(nucleus=nucleus, coda=coda)
 
     @property
     def FINAL_CLASS(self) -> type["CantoneseFinal"]:
         return CantoneseFinal
 
 
+@dataclass(kw_only=True)
 class CantoneseFinal(
     Final[CantoneseConsonant, CantoneseVowel, CantoneseRime, "CantoneseSyllable"]
 ):
-    def __init__(self, rime: CantoneseRime, medial: CantoneseVowel | None = None):
-        if isinstance(medial, CantoneseVowel) and not medial.is_semi:
-            raise ValueError("Only semivowel can be assigned as medial")
+    rime: CantoneseRime
+    medial: CantoneseVowel | None = None
 
-        super().__init__(rime=rime, medial=medial)
+    def __post_init__(self):
+        if isinstance(self.medial, CantoneseVowel) and not self.medial.is_semi:
+            raise ValueError("Only semivowel can be assigned as medial")
 
     @property
     def SYLLABLE_CLASS(self) -> type["CantoneseSyllable"]:
         return CantoneseSyllable
 
 
+@dataclass(kw_only=True, init=False)
 class CantoneseSyllable(
     Syllable[CantoneseConsonant, CantoneseTone, CantoneseFinal, "CantoneseReading"]
 ):
-    def __init__(
-        self, final: CantoneseFinal, initial: CantoneseConsonant | None = None
-    ):
-        if isinstance(initial, CantoneseConsonant):
-            if initial.syllabic:
+    final: CantoneseFinal
+    initial: CantoneseConsonant | None = None
+
+    def __post_init__(self):
+        if isinstance(self.initial, CantoneseConsonant):
+            if self.initial.syllabic:
                 raise ValueError(
                     "Only non-syllabic consonant can be assigned as initial"
                 )
-            if initial.identical_to(final.rime.nucleus):
+            if self.initial.identical_to(self.final.rime.nucleus):
                 raise ValueError("Nucleus cannot be the same as initial")
-
-        super().__init__(final=final, initial=initial)
 
     @property
     def TONE_CLASS(self) -> type[CantoneseTone]:
@@ -214,13 +226,15 @@ class CantoneseSyllable(
         return CantoneseReading
 
 
+@dataclass(kw_only=True)
 class CantoneseReading(Reading[CantoneseSyllable, CantoneseTone]):
-    def __init__(self, syllable: CantoneseSyllable, tone: CantoneseTone):
-        self.syllable = syllable
-        self.tone = tone
+    syllable: CantoneseSyllable
+    tone: CantoneseTone
 
-        if isinstance(syllable.final.rime.coda, CantoneseConsonant) and (
-            syllable.final.rime.coda.checked ^ (tone.name == CantoneseToneName.ENTERING)
+    def __post_init__(self):
+        if isinstance(self.syllable.final.rime.coda, CantoneseConsonant) and (
+            self.syllable.final.rime.coda.checked
+            ^ (self.tone.category == CantoneseToneCategory.ENTERING)
         ):
             raise ValueError(
                 "Unsupported coda-tone combination (hint: tone sandhi is not supported)"

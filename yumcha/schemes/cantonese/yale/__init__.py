@@ -5,7 +5,7 @@ from yumcha.phonology.cantonese import (
     CantoneseConsonant,
     CantoneseSyllable,
     CantoneseTone,
-    CantoneseToneName,
+    CantoneseToneCategory,
     CantoneseToneRegister,
     CantoneseVowel,
 )
@@ -178,19 +178,19 @@ class Yale(CantoneseScheme):
         if parsed.tone in [chr(0x304), chr(0x300)] and parsed.coda in ["p", "t", "k"]:
             tone = CantoneseTone(
                 register=CantoneseToneRegister.DARK_UPPER,
-                name=CantoneseToneName.ENTERING,
+                category=CantoneseToneCategory.ENTERING,
                 letters=tone.letters,
             )
         elif parsed.tone is None and parsed.coda in ["p", "t", "k"]:
             tone = CantoneseTone(
                 register=CantoneseToneRegister.DARK_LOWER,
-                name=CantoneseToneName.ENTERING,
+                category=CantoneseToneCategory.ENTERING,
                 letters=tone.letters,
             )
         elif parsed.tone == "h" and parsed.coda in ["p", "t", "k"]:
             tone = CantoneseTone(
                 register=CantoneseToneRegister.LIGHT,
-                name=CantoneseToneName.ENTERING,
+                category=CantoneseToneCategory.ENTERING,
                 letters=tone.letters,
             )
         return syllable, tone

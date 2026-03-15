@@ -7,7 +7,7 @@ from yumcha.phonology.cantonese import (
     CantoneseConsonantManner,
     CantoneseConsonantPlace,
     CantoneseTone,
-    CantoneseToneName,
+    CantoneseToneCategory,
     CantoneseToneRegister,
     CantoneseVowel,
 )
@@ -452,50 +452,50 @@ OBJECT_TO_CODA: to_string_map_type = {
 TONE_TO_OBJECT: to_object_map_type = {
     "1": lambda: CantoneseTone(
         register=CantoneseToneRegister.DARK,
-        name=CantoneseToneName.LEVEL,
+        category=CantoneseToneCategory.LEVEL,
     ),
     "2": lambda: CantoneseTone(
         register=CantoneseToneRegister.DARK,
-        name=CantoneseToneName.RISING,
+        category=CantoneseToneCategory.RISING,
     ),
     "3": lambda: CantoneseTone(
         register=CantoneseToneRegister.DARK,
-        name=CantoneseToneName.DEPARTING,
+        category=CantoneseToneCategory.DEPARTING,
     ),
     "4": lambda: CantoneseTone(
         register=CantoneseToneRegister.LIGHT,
-        name=CantoneseToneName.LEVEL,
+        category=CantoneseToneCategory.LEVEL,
     ),
     "5": lambda: CantoneseTone(
         register=CantoneseToneRegister.LIGHT,
-        name=CantoneseToneName.RISING,
+        category=CantoneseToneCategory.RISING,
     ),
     "6": lambda: CantoneseTone(
         register=CantoneseToneRegister.LIGHT,
-        name=CantoneseToneName.DEPARTING,
+        category=CantoneseToneCategory.DEPARTING,
     ),
     "7": lambda: CantoneseTone(
         register=CantoneseToneRegister.DARK_UPPER,
-        name=CantoneseToneName.ENTERING,
+        category=CantoneseToneCategory.ENTERING,
     ),
     "8": lambda: CantoneseTone(
         register=CantoneseToneRegister.DARK_LOWER,
-        name=CantoneseToneName.ENTERING,
+        category=CantoneseToneCategory.ENTERING,
     ),
     "9": lambda: CantoneseTone(
         register=CantoneseToneRegister.LIGHT,
-        name=CantoneseToneName.ENTERING,
+        category=CantoneseToneCategory.ENTERING,
     ),
 }
 
 OBJECT_TO_TONE: to_string_map_type = {
-    (CantoneseToneRegister.DARK, CantoneseToneName.LEVEL, None): "1",
-    (CantoneseToneRegister.DARK, CantoneseToneName.RISING, None): "2",
-    (CantoneseToneRegister.DARK, CantoneseToneName.DEPARTING, None): "3",
-    (CantoneseToneRegister.LIGHT, CantoneseToneName.LEVEL, None): "4",
-    (CantoneseToneRegister.LIGHT, CantoneseToneName.RISING, None): "5",
-    (CantoneseToneRegister.LIGHT, CantoneseToneName.DEPARTING, None): "6",
-    (CantoneseToneRegister.DARK_UPPER, CantoneseToneName.ENTERING, None): "7",
-    (CantoneseToneRegister.DARK_LOWER, CantoneseToneName.ENTERING, None): "8",
-    (CantoneseToneRegister.LIGHT, CantoneseToneName.ENTERING, None): "9",
+    (CantoneseToneRegister.DARK, CantoneseToneCategory.LEVEL, None): "1",
+    (CantoneseToneRegister.DARK, CantoneseToneCategory.RISING, None): "2",
+    (CantoneseToneRegister.DARK, CantoneseToneCategory.DEPARTING, None): "3",
+    (CantoneseToneRegister.LIGHT, CantoneseToneCategory.LEVEL, None): "4",
+    (CantoneseToneRegister.LIGHT, CantoneseToneCategory.RISING, None): "5",
+    (CantoneseToneRegister.LIGHT, CantoneseToneCategory.DEPARTING, None): "6",
+    (CantoneseToneRegister.DARK_UPPER, CantoneseToneCategory.ENTERING, None): "7",
+    (CantoneseToneRegister.DARK_LOWER, CantoneseToneCategory.ENTERING, None): "8",
+    (CantoneseToneRegister.LIGHT, CantoneseToneCategory.ENTERING, None): "9",
 }

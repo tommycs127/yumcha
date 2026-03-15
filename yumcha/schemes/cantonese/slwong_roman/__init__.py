@@ -2,7 +2,10 @@ from yumcha.phonology import VowelBackness, VowelCloseness
 from yumcha.phonology.cantonese import (
     CantoneseConsonant,
     CantoneseReading,
-    CantoneseToneName,
+    CantoneseSyllable,
+    CantoneseTone,
+    CantoneseToneCategory,
+    CantoneseToneRegister,
     CantoneseVowel,
 )
 from yumcha.schemes import RepresentationError
@@ -131,17 +134,31 @@ class SLWongRoman(CantoneseScheme):
             )
         return nucleus, coda
 
-    def validity_check(
-        self, parsed: ParsedSLWongRoman, reading: CantoneseReading
-    ) -> None:
-        coda = reading.syllable.final.rime.coda
-        coda_is_checked = isinstance(coda, CantoneseConsonant) and coda.checked
-        tone_is_entering = reading.tone.name == CantoneseToneName.ENTERING
-        if coda_is_checked ^ tone_is_entering:
-            raise ValueError(
-                f"Invalid {self.name} syllable: {self.compose(parsed)}"
-                "Coda does not match tone name"
+    def disambiguate_tone(
+        self,
+        parsed: ParsedSLWongRoman,
+        syllable: CantoneseSyllable,
+        tone: CantoneseTone,
+    ) -> tuple[CantoneseSyllable, CantoneseTone]:
+        if parsed.tone == "ˈ" and parsed.coda in ["p", "t", "k"]:
+            tone = CantoneseTone(
+                register=CantoneseToneRegister.DARK_UPPER,
+                category=CantoneseToneCategory.ENTERING,
+                letters=tone.letters,
             )
+        elif parsed.tone == "ˉ" and parsed.coda in ["p", "t", "k"]:
+            tone = CantoneseTone(
+                register=CantoneseToneRegister.DARK_LOWER,
+                category=CantoneseToneCategory.ENTERING,
+                letters=tone.letters,
+            )
+        elif parsed.tone == "ˍ" and parsed.coda in ["p", "t", "k"]:
+            tone = CantoneseTone(
+                register=CantoneseToneRegister.LIGHT,
+                category=CantoneseToneCategory.ENTERING,
+                letters=tone.letters,
+            )
+        return syllable, tone
 
     def normalize_output(self, parsed: ParsedSLWongRoman) -> ParsedSLWongRoman:
         if parsed.nucleus == "aa" and parsed.coda is None:
@@ -162,7 +179,7 @@ class SLWongRoman(CantoneseScheme):
             )
         elif parsed.nucleus == "e" and parsed.coda == "u":
             raise RepresentationError(
-                f"The reading {{nucleus={parsed.nucleus}, coda={parsed.coda}}} "
+                f"The rime {{nucleus={parsed.nucleus}, coda={parsed.coda}}} "
                 f"cannot be represented in the {self.name} scheme."
             )
 

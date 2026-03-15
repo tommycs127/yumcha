@@ -1,14 +1,15 @@
 from abc import ABC, abstractmethod
+from dataclasses import dataclass
 from enum import Enum
 from typing import Generic, TypeVar
 
-from yumcha.phonology.mixins import PrettyMixin
+from yumcha.phonology.mixins import TreeMixin
 
 ConsonantT = TypeVar("ConsonantT", bound="Consonant")
 VowelT = TypeVar("VowelT", bound="Vowel")
 ToneT = TypeVar("ToneT", bound="Tone")
 ToneRegisterT = TypeVar("ToneRegisterT", bound="ToneRegister")
-ToneNameT = TypeVar("ToneNameT", bound="ToneName")
+ToneCategoryT = TypeVar("ToneCategoryT", bound="ToneCategory")
 RimeT = TypeVar("RimeT", bound="Rime")
 FinalT = TypeVar("FinalT", bound="Final")
 SyllableT = TypeVar("SyllableT", bound="Syllable")
@@ -23,14 +24,16 @@ class ConsonantManner(Enum):
     pass
 
 
-class Consonant(ABC, PrettyMixin, Generic[VowelT, RimeT]):
-    def __init__(
-        self,
-        place: ConsonantPlace,
-        manner: ConsonantManner,
-    ):
-        self.place = place
-        self.manner = manner
+ConsonantPlaceT = TypeVar("ConsonantPlaceT", bound="ConsonantPlace")
+ConsonantMannerT = TypeVar("ConsonantMannerT", bound="ConsonantManner")
+
+
+@dataclass(kw_only=True)
+class Consonant(
+    ABC, TreeMixin, Generic[ConsonantPlaceT, ConsonantMannerT, VowelT, RimeT]
+):
+    place: ConsonantPlaceT
+    manner: ConsonantMannerT
 
     @property
     @abstractmethod
@@ -82,7 +85,7 @@ class Consonant(ABC, PrettyMixin, Generic[VowelT, RimeT]):
         return {self.__class__.__name__: self.__dict__}
 
     def __repr__(self) -> str:
-        return f"<{self.__class__.__name__}>"
+        return f"{self.__class__.__name__}(place={self.place!r},manner={self.manner!r})"
 
 
 class VowelCloseness(Enum):
@@ -103,18 +106,12 @@ class VowelBackness(Enum):
     BACK = 5
 
 
-class Vowel(PrettyMixin, Generic[ConsonantT, VowelT, RimeT]):
-    def __init__(
-        self,
-        closeness: VowelCloseness,
-        backness: VowelBackness,
-        rounded: bool,
-        is_semi: bool = False,
-    ):
-        self.closeness = closeness
-        self.backness = backness
-        self.rounded = rounded
-        self.is_semi = is_semi
+@dataclass(kw_only=True)
+class Vowel(TreeMixin, Generic[ConsonantT, VowelT, RimeT]):
+    closeness: VowelCloseness
+    backness: VowelBackness
+    rounded: bool
+    is_semi: bool = False
 
     @property
     @abstractmethod
@@ -165,40 +162,38 @@ class Vowel(PrettyMixin, Generic[ConsonantT, VowelT, RimeT]):
         return {self.__class__.__name__: self.__dict__}
 
     def __repr__(self) -> str:
-        return f"<{self.__class__.__name__}>"
+        return f"{self.__class__.__name__}"
 
 
 class ToneRegister(Enum):
     pass
 
 
-class ToneName(Enum):
+class ToneCategory(Enum):
     pass
 
 
-class Tone(ABC, PrettyMixin, Generic[ToneRegisterT, ToneNameT]):
-    def __init__(
-        self,
-        register: ToneRegisterT,
-        name: ToneNameT,
-        letters: str | None = None,
-    ):
-        """
-        Assign letters ONLY when multiple tones share the same register and name.
-        """
-        self.register = register
-        self.name = name
-        self.letters = letters
+@dataclass(kw_only=True)
+class Tone(ABC, TreeMixin, Generic[ToneRegisterT, ToneCategoryT]):
+    register: ToneRegisterT
+    category: ToneCategoryT
+    letters: str | None = None
+    # Assign letters only when multiple tones share the same register and category.
+    # Treat the Tone object with the letters of None as the "default".
 
     @property
     def features(self) -> dict:
-        return {"register": self.register, "name": self.name, "letters": self.letters}
+        return {
+            "register": self.register,
+            "category": self.category,
+            "letters": self.letters,
+        }
 
     @property
     def features_signature(self) -> tuple:
         return (
             self.register,
-            self.name,
+            self.category,
             self.letters,
         )
 
@@ -206,15 +201,12 @@ class Tone(ABC, PrettyMixin, Generic[ToneRegisterT, ToneNameT]):
     def phonological_signature(self) -> tuple:
         return (
             self.register,
-            self.name,
+            self.category,
             None,
         )
 
     def to_tree(self) -> dict:
         return {self.__class__.__name__: self.features}
-
-    def __repr__(self) -> str:
-        return f"<{self.__class__.__name__}>"
 
     def __eq__(self, other):
         if not isinstance(other, Tone):
@@ -230,12 +222,10 @@ class Tone(ABC, PrettyMixin, Generic[ToneRegisterT, ToneNameT]):
         return hash(self.phonological_signature)
 
 
-class Rime(ABC, PrettyMixin, Generic[ConsonantT, VowelT, FinalT]):
-    def __init__(
-        self, nucleus: ConsonantT | VowelT, coda: ConsonantT | VowelT | None = None
-    ):
-        self.nucleus = nucleus
-        self.coda = coda
+@dataclass(kw_only=True)
+class Rime(ABC, TreeMixin, Generic[ConsonantT, VowelT, FinalT]):
+    nucleus: ConsonantT | VowelT
+    coda: ConsonantT | VowelT | None = None
 
     @property
     @abstractmethod
@@ -255,9 +245,6 @@ class Rime(ABC, PrettyMixin, Generic[ConsonantT, VowelT, FinalT]):
             ),
         }
 
-    def __repr__(self) -> str:
-        return f"<{self.__class__.__name__}>"
-
     def __eq__(self, other):
         if not isinstance(other, Rime):
             return False
@@ -267,10 +254,10 @@ class Rime(ABC, PrettyMixin, Generic[ConsonantT, VowelT, FinalT]):
         return hash((self.nucleus, self.coda))
 
 
-class Final(ABC, PrettyMixin, Generic[ConsonantT, VowelT, RimeT, SyllableT]):
-    def __init__(self, rime: RimeT, medial: VowelT | None = None):
-        self.rime = rime
-        self.medial = medial
+@dataclass(kw_only=True)
+class Final(ABC, TreeMixin, Generic[ConsonantT, VowelT, RimeT, SyllableT]):
+    rime: RimeT
+    medial: VowelT | None = None
 
     @property
     @abstractmethod
@@ -288,9 +275,6 @@ class Final(ABC, PrettyMixin, Generic[ConsonantT, VowelT, RimeT, SyllableT]):
             "rime": self.rime.to_tree(),
         }
 
-    def __repr__(self) -> str:
-        return f"<{self.__class__.__name__}>"
-
     def __eq__(self, other):
         if not isinstance(other, Final):
             return False
@@ -300,10 +284,10 @@ class Final(ABC, PrettyMixin, Generic[ConsonantT, VowelT, RimeT, SyllableT]):
         return hash((self.medial, self.rime))
 
 
-class Syllable(ABC, PrettyMixin, Generic[ConsonantT, ToneT, FinalT, ReadingT]):
-    def __init__(self, final: FinalT, initial: ConsonantT | None = None):
-        self.final = final
-        self.initial = initial
+@dataclass(kw_only=True)
+class Syllable(ABC, TreeMixin, Generic[ConsonantT, ToneT, FinalT, ReadingT]):
+    final: FinalT
+    initial: ConsonantT | None = None
 
     @property
     @abstractmethod
@@ -331,9 +315,6 @@ class Syllable(ABC, PrettyMixin, Generic[ConsonantT, ToneT, FinalT, ReadingT]):
             "final": self.final.to_tree(),
         }
 
-    def __repr__(self) -> str:
-        return f"<{self.__class__.__name__}>"
-
     def __eq__(self, other):
         if not isinstance(other, Syllable):
             return False
@@ -343,19 +324,16 @@ class Syllable(ABC, PrettyMixin, Generic[ConsonantT, ToneT, FinalT, ReadingT]):
         return hash((self.initial, self.final))
 
 
-class Reading(PrettyMixin, Generic[SyllableT, ToneT]):
-    def __init__(self, syllable: SyllableT, tone: ToneT):
-        self.syllable = syllable
-        self.tone = tone
+@dataclass(kw_only=True)
+class Reading(TreeMixin, Generic[SyllableT, ToneT]):
+    syllable: SyllableT
+    tone: ToneT
 
     def to_tree(self) -> dict:
         return {
             "syllable": self.syllable.to_tree(),
             "tone": self.tone.to_tree(),
         }
-
-    def __repr__(self) -> str:
-        return f"<{self.__class__.__name__}>"
 
     def __eq__(self, other):
         if not isinstance(other, Reading):

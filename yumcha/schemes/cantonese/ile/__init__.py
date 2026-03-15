@@ -2,7 +2,7 @@ from yumcha.phonology import VowelBackness, VowelCloseness
 from yumcha.phonology.cantonese import (
     CantoneseConsonant,
     CantoneseReading,
-    CantoneseToneName,
+    CantoneseToneCategory,
     CantoneseVowel,
 )
 from yumcha.schemes.cantonese import CantoneseScheme, ParsedCantoneseScheme
@@ -111,7 +111,7 @@ class ILE(CantoneseScheme):
     def validity_check(self, parsed: ParsedILE, reading: CantoneseReading) -> None:
         coda = reading.syllable.final.rime.coda
         coda_is_checked = isinstance(coda, CantoneseConsonant) and coda.checked
-        tone_is_entering = reading.tone.name == CantoneseToneName.ENTERING
+        tone_is_entering = reading.tone.category == CantoneseToneCategory.ENTERING
         if coda_is_checked ^ tone_is_entering:
             raise ValueError(
                 f'Invalid {self.name} syllable "{self.compose(parsed)}": '

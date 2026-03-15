@@ -237,6 +237,21 @@ class Scheme(
         )
         key_tone = tone.features_signature if isinstance(tone, Tone) else None
 
+        def check_representability(map_key, object_key, object_):
+            def get_error_msg(type_, object_):
+                return f"The {self.name} scheme does not have a symbol to represent the {type_} {object_}."
+
+            if self.MAP[map_key] and object_key not in self.MAP[map_key]:
+                raise RepresentationError(
+                    get_error_msg(map_key.replce("object_to_", ""), object_)
+                )
+
+        check_representability("object_to_initial", key_initial, initial)
+        check_representability("object_to_medial", key_medial, medial)
+        check_representability("object_to_nucleus", key_nucleus, nucleus)
+        check_representability("object_to_coda", key_coda, coda)
+        check_representability("object_to_tone", key_tone, tone)
+
         initial = self.MAP["object_to_initial"].get(key_initial, None)
         medial = self.MAP["object_to_medial"].get(key_medial, None)
         nucleus = self.MAP["object_to_nucleus"].get(key_nucleus, None)

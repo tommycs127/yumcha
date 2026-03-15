@@ -3,7 +3,7 @@ from yumcha.phonology.cantonese import (
     CantoneseConsonant,
     CantoneseSyllable,
     CantoneseTone,
-    CantoneseToneName,
+    CantoneseToneCategory,
     CantoneseToneRegister,
     CantoneseVowel,
 )
@@ -151,20 +151,17 @@ class SidneyLau(CantoneseScheme):
         if parsed.tone == "1" and parsed.coda in ["p", "t", "k"]:
             tone = CantoneseTone(
                 register=CantoneseToneRegister.DARK_UPPER,
-                name=CantoneseToneName.ENTERING,
-                letters=tone.letters,
+                category=CantoneseToneCategory.ENTERING,
             )
         elif parsed.tone == "3" and parsed.coda in ["p", "t", "k"]:
             tone = CantoneseTone(
                 register=CantoneseToneRegister.DARK_LOWER,
-                name=CantoneseToneName.ENTERING,
-                letters=tone.letters,
+                category=CantoneseToneCategory.ENTERING,
             )
         elif parsed.tone == "6" and parsed.coda in ["p", "t", "k"]:
             tone = CantoneseTone(
                 register=CantoneseToneRegister.LIGHT,
-                name=CantoneseToneName.ENTERING,
-                letters=tone.letters,
+                category=CantoneseToneCategory.ENTERING,
             )
         return syllable, tone
 
