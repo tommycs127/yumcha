@@ -1,6 +1,6 @@
 # 🍵 Yumcha
 
-![status](https://badgen.net/badge/status/Early%20development/red)
+![status](https://badgen.net/badge/status/Alpha%20development/red)
 ![Python](https://badgen.net/badge/python/3.12%2B)
 [![License](https://badgen.net/badge/license/MIT/orange)](LICENSE)
 ![type](https://badgen.net/badge/type/Romanization%20engine/cyan)
@@ -10,6 +10,12 @@ A phonology-oriented romanization engine for Cantonese and other languages.
 
 > "Yumcha" is a play on Cantonese words. While it traditionally means "drinking tea" (<ruby>飲<rt>jam2</rt>茶<rt>caa4</rt>), it also sounds like "phonological lookup" (<ruby>音<rt>jam1</rt>查<rt>caa4</rt>).
 > Just as tea brings people together, this engine aims to bridge different romanization and phonetic schemes!
+
+## ⚠️ Warning: Alpha Development
+
+This project is in its **early stages** and undergoing active development. The API and functionality are **highly unstable** and subject to breaking changes without notice.
+
+**Do not use this in production environments.**
 
 ## ✨ Highlights
 
