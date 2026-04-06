@@ -36,7 +36,7 @@ Yumcha provides a unified API to convert these schemes without requiring the use
 
 Yumcha first parses text into an intermediate phonological representation that explicitly identifies components such as the **initial**, **medial**, **nucleus**, **coda**, and **tone**.
 
-Once the syllable is represented in this structured form, it can be re-composed into any supported romanization or phonetic scheme.
+Once the syllable is organized into this structured form, it can be mapped to its IPA representation and subsequently converted into any other supported romanization or phonetic scheme.
 
 ## 📋 Requirements
 
