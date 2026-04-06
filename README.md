@@ -8,7 +8,7 @@
 
 A phonology-oriented romanization engine for Cantonese and other languages.
 
-> "Yumcha" is a play on Cantonese words. While it traditionally means "drinking tea" (<ruby>飲<rt>jam2</rt>茶<rt>caa4</rt>), it also sounds like "phonological lookup" (<ruby>音<rt>jam1</rt>查<rt>caa4</rt>).
+> "Yumcha" is a play on Cantonese words. While it traditionally means "drinking tea" (<ruby>飲<rt>jam2</rt>茶<rt>caa4</rt>), it also sounds like a "phonological lookup" (<ruby>音<rt>jam1</rt>查<rt>caa4</rt>).
 > Just as tea brings people together, this engine aims to bridge different romanization and phonetic schemes!
 
 ## ⚠️ Warning: Alpha Development
@@ -30,7 +30,7 @@ This project is in its **early stages** and undergoing active development. The A
 
 Sinitic romanization is fragmented and converting between systems often requires large handwritten mapping tables, which break down for edge cases such as unusual spellings and tone markings.
 
-Yumcha provides a unified API to convert these schemes without writing complex mapping logic or maintaining large mapping tables that can miss edge cases.
+Yumcha provides a unified API to convert these schemes without requiring the user to write complex mapping logic or maintaining large mapping tables that can miss edge cases.
 
 ## ⚙️ How it works
 
@@ -52,75 +52,138 @@ pip install git+https://github.com/tommycs127/yumcha.git
 
 ## 🚀 Usage
 
-Import the `Yumcha` class from `yumcha` and initialize it:
+Import the `Yumcha` class from `yumcha` and initialize it with `Language` classes:
 
 ```py
 from yumcha import Yumcha
 
-yumcha = Yumcha()
+# Use the bundled languages provided by the library...
+from yumcha.languages import Cantonese
+
+# ...or define your own custom subclasses!
+# from my_languages import MyLanguage
+
+languages = [
+    Cantonese(),
+]
+
+yumcha = Yumcha(languages)
 ```
 
 ### Check available schemes
 
 ```py
-print(yumcha.available_schemes)  # Or use `yumcha.menu` as a shorthand.
+print(yumcha.menu)
 ```
 
 Output:
 
 ```text
-{'cantonese': ['ile', 'ipa', 'jyutping', 'kuping', 'kuping_alt', 'sidneylau', 'slwong_roman', 'slwong_phonetic', 'yale']}
+{'cantonese': ['ile', 'jyutping', 'kuping', 'kuping_alt', 'sidneylau', 'slwong_phonetic', 'slwong_roman', 'yale']}
 ```
 
 ### Conversion
 
-Convert Jyutping to IPA:
+Convert a Jyutping syllable to ILE:
 
 ```py
-result = yumcha.convert(
-    language="cantonese",
-    from_scheme="jyutping",
-    to_scheme="ipa",
-    text="ceon1",
+converted = y.convert(
+    language_name="cantonese",
+    from_scheme_name="jyutping",
+    to_scheme_name="ile",
+    text="seot1",
 )
-print(result)  # t͡sʰɵn˥
+print(converted)  # soet7
 ```
 
 ### Parsing
 
+#### Scheme representation
+
 Parse a Yale syllable into components:
 
 ```py
-result = yumcha.parse(
-    language="cantonese",
-    scheme="yale",
+parsed = yumcha.parse(
+    language_name="cantonese",
+    scheme_name="yale",
     text="chēun",
 )
-print(result)
+print(repr(parsed))
 ```
 
 Output:
 
 ```text
-ParsedYale(initial='ch', nucleus='eu', coda='n', tone='̄')
+YaleRepresentation(
+    initial='ch',
+    nucleus_before_tone='e',
+    tone='̄',
+    nucleus_after_tone='u',
+    coda_vowel='',
+    tone_h='',
+    coda_consonant='n'
+)
 ```
 
-### Getting all legal syllables
+#### IPA from scheme representation
 
-Get all legal syllables in the ILE scheme:
+Parse a Yale syllable into components and retrieve its IPA representation:
 
 ```py
-result = yumcha.get_all_legal_syllables(
-    language="cantonese",
-    scheme="ile",
+parsed_ipa = yumcha.parse_to_ipa(
+    language_name="cantonese",
+    scheme_name="yale",
+    text="chēun",
 )
-print(result)
+print(repr(parsed_ipa))
 ```
 
-Output (8,028 items):
+Output:
 
 ```text
-['baai1', 'baai2', 'baai3', 'baai4', 'baai5', 'baai6', ..., 'ng1', 'ng2', 'ng3', 'ng4', 'ng5', 'ng6']
+CantoneseIPARepresentation(
+    initial='t͡sʰ',
+    nucleus='ɵ',
+    coda='n',
+    tone='˥'
+)
+```
+
+Please note that any subclass inheriting from the `Representation` class is **not** a `str` object. To get a string, simply wrap the object in `str()`:
+
+```py
+parsed_ipa_str = str(parsed_ipa)
+print(parsed_ipa_str)  # t͡sʰɵn˥
+```
+
+### Getting all valid syllables
+
+Get all valid syllables in the ILE scheme:
+
+```py
+all_syllables = yumcha.get_all_syllables(
+    language_name="cantonese",
+    scheme_name="ile",
+)
+print(all_syllables)
+```
+
+Output (11,400 items):
+
+```text
+[ILERepresentation(initial='', nucleus='a', coda='', tone='1'),
+ ILERepresentation(initial='', nucleus='a', coda='', tone='2'),
+ ILERepresentation(initial='', nucleus='a', coda='', tone='3'),
+ ILERepresentation(initial='', nucleus='a', coda='', tone='4'),
+ ILERepresentation(initial='', nucleus='a', coda='', tone='5'),
+ ILERepresentation(initial='', nucleus='a', coda='', tone='6'),
+ ...
+ ILERepresentation(initial='w', nucleus='y', coda='u', tone='1'),
+ ILERepresentation(initial='w', nucleus='y', coda='u', tone='2'),
+ ILERepresentation(initial='w', nucleus='y', coda='u', tone='3'),
+ ILERepresentation(initial='w', nucleus='y', coda='u', tone='4'),
+ ILERepresentation(initial='w', nucleus='y', coda='u', tone='5'),
+ ILERepresentation(initial='w', nucleus='y', coda='u', tone='6')]
 ```
 
 ## 🔤 Supported schemes
@@ -130,7 +193,6 @@ Output (8,028 items):
 | Scheme name                               | Example      | Scheme code       | Note                                                  |
 | ----------------------------------------- | ------------ | ----------------- | ----------------------------------------------------- |
 | Institute of Language in Education Scheme | `tsoen1`     | `ile`             |                                                       |
-| International Phonetic Alphabet           | `t͡sʰɵn˥`     | `ipa`             |                                                       |
 | Jyutping                                  | `ceon1`      | `jyutping`        |                                                       |
 | Kuping                                    | `tśeon55^1`  | `kuping`          | A romanization scheme I designed!                     |
 | Kuping (Alternative)                      | `ts'eon55^1` | `kuping_alt`      | Ditto.                                                |
@@ -149,23 +211,29 @@ Tone sandhi depends on linguistic context (e.g., phonological environment) and i
 
 #### Tone Information Loss during Conversion
 
-Some schemes include specialized markers for different tone contour—such as the Sidney Lau scheme, which uses `1°` for the high-flat tone and `1` for the high-falling tone—Yumcha treats these as having the same tone register and name. Consequently, precise information regarding these tonal distinctions may be lost during the scheme-to-scheme conversion.
+Some schemes include specialized markers for different tone contours—such as the Sidney Lau scheme, which uses `1°` for the high-flat tone and `1` for the high-falling tone—Yumcha treats these as having the same tone register and name. Consequently, precise information regarding these tonal distinctions may be lost during the scheme-to-scheme conversion.
 
 #### Unrepresentable Syllables
 
 Some schemes are designed in a way that loses certain phonological distinctions.
 
-For example, the S. L. Wong Romanization scheme uses `eu` for `yː`, which means it cannot represent `ɛːu̯`. Therefore, converting an input such as `deu6` (in Jyutping) to the S. L. Wong Romanization scheme has no valid output.
+For example, the S. L. Wong Romanization scheme uses `e` for `[ɛː]` and `u` for `[u̯]`, but it uses `eu` for `[yː]`. This prevents the scheme from being able to represent `[ɛːu̯]`. Therefore, converting an input such as `deu6` (in Jyutping) to the S. L. Wong scheme results in no valid output.
 
-In such cases, Yumcha will raise `RepresentationError` to indicate that the conversion is impossible.
+Such limitations must be explicitly defined in the `validate()` method of any subclass inheriting from the `Representation` class.
 
 ## 🛣️ Roadmap
+
+### Documentations
+
+- [x] README.md
+- [ ] Tutorial on adding custom languages
+- [ ] Tutorial on adding custom schemes
 
 ### Functionalities
 
 - [x] Conversion
 - [x] Parsing
-- [x] Generating all legal syllables
+- [x] Generating all valid syllables
 
 ### Schemes
 

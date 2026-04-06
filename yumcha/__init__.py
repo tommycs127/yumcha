@@ -1,68 +1,86 @@
-from yumcha.schemes import ParsedScheme, Scheme
-from yumcha.schemes.cantonese.ile import ILE
-from yumcha.schemes.cantonese.ipa import IPA as IPACantonese
-from yumcha.schemes.cantonese.jyutping import Jyutping
-from yumcha.schemes.cantonese.kuping import Kuping
-from yumcha.schemes.cantonese.kuping_alt import KupingAlternative
-from yumcha.schemes.cantonese.sidneylau import SidneyLau
-from yumcha.schemes.cantonese.slwong_phonetic import SLWongPhonetic
-from yumcha.schemes.cantonese.slwong_roman import SLWongRoman
-from yumcha.schemes.cantonese.yale import Yale
+from typing import Iterable, Sequence
+
+from .language import Language
+from .language.scheme.representation import Representation
 
 
-class Yumcha(object):
-    @property
-    def languages(self) -> dict[str, dict[str, Scheme]]:
-        return {
-            "cantonese": {
-                "ile": ILE(),
-                "ipa": IPACantonese(),
-                "jyutping": Jyutping(),
-                "kuping": Kuping(),
-                "kuping_alt": KupingAlternative(),
-                "sidneylau": SidneyLau(),
-                "slwong_roman": SLWongRoman(),
-                "slwong_phonetic": SLWongPhonetic(),
-                "yale": Yale(),
-            }
-        }
+class Yumcha:
+    languages: Sequence[Language] = []
+
+    def __init__(self, languages: Sequence[Language]) -> None:
+        if not isinstance(languages, list):
+            raise TypeError("not list")
+
+        self.languages = languages.copy()
+
+        if len(self.languages) != len(self.dictionary):
+            raise ValueError("language names must be unique (case-insensitive)")
 
     @property
-    def available_schemes(self) -> dict[str, list[str]]:
-        return {key: list(sub_dict.keys()) for key, sub_dict in self.languages.items()}
+    def dictionary(self) -> dict[str, Language]:
+        return {lang.name.lower(): lang for lang in self.languages}
+
+    def get(self, language_name: str) -> Language:
+        return self.dictionary[language_name]
 
     @property
     def menu(self) -> dict[str, list[str]]:
-        return self.available_schemes
+        return {lang_k: lang_v.menu for lang_k, lang_v in self.dictionary.items()}
+
+    def iterate_all_syllables(
+        self, language_name: str, scheme_name: str
+    ) -> Iterable[Representation]:
+        language = self.get(language_name=language_name)
+        scheme = language.get(scheme_name=scheme_name)
+        return scheme.iterate_all_syllables()
+
+    def get_all_syllables(
+        self, language_name: str, scheme_name: str
+    ) -> list[Representation]:
+        language = self.get(language_name=language_name)
+        scheme = language.get(scheme_name=scheme_name)
+        return scheme.get_all_syllables()
+
+    def parse(self, language_name: str, scheme_name: str, text: str) -> Representation:
+        language = self.get(language_name=language_name)
+        scheme = language.get(scheme_name=scheme_name)
+        return scheme.parse(text=text)
+
+    def parse_ipa(
+        self, language_name: str, scheme_name: str, text: str
+    ) -> Representation:
+        language = self.get(language_name=language_name)
+        scheme = language.get(scheme_name=scheme_name)
+        return scheme.parse_ipa(text=text)
+
+    def parse_to_ipa(
+        self, language_name: str, scheme_name: str, text: str
+    ) -> Representation:
+        language = self.get(language_name=language_name)
+        scheme = language.get(scheme_name=scheme_name)
+        parsed = scheme.parse(text=text)
+        return scheme.to_ipa(parsed=parsed)
+
+    def parse_from_ipa(
+        self, language_name: str, scheme_name: str, text: str
+    ) -> Representation:
+        language = self.get(language_name=language_name)
+        scheme = language.get(scheme_name=scheme_name)
+        parsed_ipa = scheme.parse_ipa(text=text)
+        return scheme.from_ipa(parsed=parsed_ipa)
 
     def convert(
-        self, language: str, from_scheme: str, to_scheme: str, text: str
+        self,
+        language_name: str,
+        from_scheme_name: str,
+        to_scheme_name: str,
+        text: str,
+        as_str: bool = True,
     ) -> str:
-        if language not in self.languages:
-            raise ValueError(f'Language "{language}" not found')
-
-        schemes = self.languages[language]
-
-        if from_scheme not in schemes:
-            raise ValueError(f'Scheme "{from_scheme}" not found')
-        if to_scheme not in schemes:
-            raise ValueError(f'Scheme "{to_scheme}" not found')
-
-        text = text.lower().strip()
-        reading = schemes[from_scheme].to_underlying(text)
-        return schemes[to_scheme].from_underlying(reading)
-
-    def parse(self, language: str, scheme: str, text: str) -> ParsedScheme:
-        if language not in self.languages:
-            raise ValueError(f'Language "{language}" not found')
-
-        schemes = self.languages[language]
-
-        if scheme not in schemes:
-            raise ValueError(f'Scheme "{scheme}" not found')
-
-        return schemes[scheme].parse(text)
-
-    def get_all_legal_syllables(self, language: str, scheme: str) -> list[str | None]:
-        schemes = self.languages[language]
-        return schemes[scheme].get_all_legal_syllables()
+        language = self.get(language_name=language_name)
+        from_scheme = language.get(scheme_name=from_scheme_name)
+        to_scheme = language.get(scheme_name=to_scheme_name)
+        parsed = from_scheme.parse(text=text)
+        parsed_ipa = from_scheme.to_ipa(parsed=parsed)
+        to_scheme_repr = to_scheme.from_ipa(parsed=parsed_ipa)
+        return str(to_scheme_repr) if as_str else to_scheme_repr
