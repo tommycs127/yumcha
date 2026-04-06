@@ -1,0 +1,35 @@
+from dataclasses import dataclass
+
+from yumcha.language.scheme.representation import Representation, ValidationError
+
+
+@dataclass(frozen=True)
+class CantoneseIPARepresentation(Representation):
+    REQUIRED = ("nucleus", "tone")
+    initial: str
+    nucleus: str
+    coda: str
+    tone: str
+
+    def validate(self) -> None:
+        invaild_nucleus_coda_comb = {
+            "iː": "i̯",
+            "uː": "y̯",
+            "yː": "u̯",
+        }
+
+        if (
+            self.nucleus in invaild_nucleus_coda_comb
+            and self.coda == invaild_nucleus_coda_comb[self.nucleus]
+        ):
+            raise ValidationError(
+                f"nucleus '{self.nucleus}' cannot be with coda '{self.coda}'"
+            )
+
+        syllabic_consonants = ("m̩", "ŋ̩")
+
+        if self.nucleus in syllabic_consonants and self.coda is not None:
+            raise ValidationError(
+                f"syllabic consonant nucleus '{self.nucleus}' "
+                f"cannot be with coda '{self.coda}'"
+            )
