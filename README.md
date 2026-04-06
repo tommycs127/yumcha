@@ -186,6 +186,8 @@ Output (11,400 items):
  ILERepresentation(initial='w', nucleus='y', coda='u', tone='6')]
 ```
 
+Please note that this list includes all theoretically valid syllables. While many are rare in common usage, they remain phonologically possible and pronounceable.
+
 ## 🔤 Supported schemes
 
 ### Cantonese
