@@ -20,11 +20,11 @@ This project is in its **early stages** and undergoing active development. The A
 ## ✨ Highlights
 
 - **Scheme-to-Scheme Conversion**: Convert seamlessly between different romanization and phonetic schemes within the same language.
-- **Scheme Parsing**: Parse strings to identify their phonological components.
-- **Syllable Set Generation**: Get all legal syllables of a scheme.
+- **Scheme Parsing**: Parse strings to identify their phonological components and their IPA representations.
+- **Syllable Set Generation**: Get all valid syllables of a scheme.
 - **Zero Third-Party Dependencies:** Lightweight and easy to integrate into any project.
-- **Type-hinted:** Built with modern Python type hints for better IDE support and readability.
-- **Modular & Extensible:** Add new schemes by implementing a custom parser, disambiguation stages, and composer.
+- **Type-hinted**: Built with modern Python 3.12+ type hints for better IDE support and readability.
+- **Modular & Extensible**: Add new schemes by simply defining the representation structure, validation rules, and an IPA-to-symbol map!
 
 ## 🤔 Why Yumcha?
 
