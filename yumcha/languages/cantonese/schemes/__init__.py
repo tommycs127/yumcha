@@ -3,6 +3,7 @@ from .jyutping import Jyutping as Jyutping
 from .kuping import Kuping as Kuping
 from .kuping_alt import KupingAlternative as KupingAlternative
 from .meyer_wempe import MeyerWempe as MeyerWempe
+from .rao import Rao as Rao
 from .sidneylau import SidneyLau as SidneyLau
 from .slwong_phonetic import SLWongPhonetic as SLWongPhonetic
 from .slwong_roman import SLWongRoman as SLWongRoman
