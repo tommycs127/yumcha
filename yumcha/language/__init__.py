@@ -1,7 +1,6 @@
 import itertools
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from functools import cache
 from operator import itemgetter
 from typing import Generic, Iterable, get_args
 

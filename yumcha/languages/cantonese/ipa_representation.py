@@ -43,7 +43,7 @@ class CantoneseIPARepresentation(Representation):
 
         syllabic_consonants = ("m̩", "ŋ̩")
 
-        if self.nucleus in syllabic_consonants and self.coda is not None:
+        if self.nucleus in syllabic_consonants and self.coda:
             raise ValidationError(
                 f"syllabic consonant nucleus '{self.nucleus}' "
                 f"cannot be with coda '{self.coda}'"
