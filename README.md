@@ -166,22 +166,22 @@ all_syllables = yumcha.get_all_syllables(
 print(all_syllables)
 ```
 
-Output (29,240 items):
+Output (12,600 items):
 
 ```text
-[SidneyLauRepresentation(initial='', nucleus='a', coda='', tone='1'),
- SidneyLauRepresentation(initial='', nucleus='a', coda='', tone='1*'),
- SidneyLauRepresentation(initial='', nucleus='a', coda='', tone='1°'),
- SidneyLauRepresentation(initial='', nucleus='a', coda='', tone='2'),
- SidneyLauRepresentation(initial='', nucleus='a', coda='', tone='2°'),
- SidneyLauRepresentation(initial='', nucleus='a', coda='', tone='3'),
+[SidneyLauRepresentation(initial='f', nucleus='aa', coda='', tone='1°'),
+ SidneyLauRepresentation(initial='f', nucleus='aa', coda='', tone='1'),
+ SidneyLauRepresentation(initial='f', nucleus='aa', coda='', tone='3'),
+ SidneyLauRepresentation(initial='f', nucleus='aa', coda='', tone='2'),
+ SidneyLauRepresentation(initial='f', nucleus='aa', coda='', tone='6'),
+ SidneyLauRepresentation(initial='f', nucleus='aa', coda='', tone='4'),
  ...,
- SidneyLauRepresentation(initial='z', nucleus='ue', coda='u', tone='5'),
- SidneyLauRepresentation(initial='z', nucleus='ue', coda='u', tone='5*'),
- SidneyLauRepresentation(initial='z', nucleus='ue', coda='u', tone='5°'),
- SidneyLauRepresentation(initial='z', nucleus='ue', coda='u', tone='6'),
- SidneyLauRepresentation(initial='z', nucleus='ue', coda='u', tone='6*'),
- SidneyLauRepresentation(initial='z', nucleus='ue', coda='u', tone='6°')]
+ SidneyLauRepresentation(initial='', nucleus='u', coda='ng', tone='1'),
+ SidneyLauRepresentation(initial='', nucleus='u', coda='ng', tone='3'),
+ SidneyLauRepresentation(initial='', nucleus='u', coda='ng', tone='2'),
+ SidneyLauRepresentation(initial='', nucleus='u', coda='ng', tone='6'),
+ SidneyLauRepresentation(initial='', nucleus='u', coda='ng', tone='4'),
+ SidneyLauRepresentation(initial='', nucleus='u', coda='ng', tone='5')]
 ```
 
 > [!NOTE]

@@ -175,18 +175,15 @@ class Scheme(ABC, Generic[RepresentationT, IPARepresentationT]):
             RepresentationT: An instance of the representation class
             if it passes validation.
         """
-        fmap = self.feature_map.inverse
+
+        fmap = self.feature_map
         symbol_sets: list[list[str]] = [
             sorted(set(fmap.get_key_columns(idx))) for idx in range(fmap.key_arity)
         ]
         for combo in itertools.product(*symbol_sets):
             try:
-                representation = self.representation_class.from_features(combo)
-
-                # Validate if the syllable is phonologically sound
-                self.to_ipa(representation)
-
-                yield representation
+                ipa_representation = self.ipa_representation_class.from_features(combo)
+                yield self.from_ipa(ipa_representation)
             except ValidationError:
                 pass
             except ValueError:
