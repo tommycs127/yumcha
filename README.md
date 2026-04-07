@@ -146,12 +146,13 @@ CantoneseIPARepresentation(
 )
 ```
 
-Please note that any subclass inheriting from the `Representation` class is **not** a `str` object. To get a string, simply wrap the object in `str()`:
-
-```py
-parsed_ipa_str = str(parsed_ipa)
-print(parsed_ipa_str)  # t͡sʰɵn˥
-```
+> [!NOTE]
+> Parsing methods **do not return a `str` object**, but an instance of a `Representation` subclass. To get a string, simply wrap the object in `str()`:
+>
+> ```py
+> parsed_ipa_str = str(parsed_ipa)
+> print(parsed_ipa_str)  # t͡sʰɵn˥
+> ```
 
 ### Getting all valid syllables
 
