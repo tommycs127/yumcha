@@ -170,7 +170,7 @@ print(all_syllables)
 
 Output (29,240 items):
 
-_Note: This count represents the current output of the generation engine. As validation rules and syllable constraints are updated during development, this number will fluctuate."_
+_Note: This count represents the current output of the generation engine. As validation rules and syllable constraints are updated during development, this number will fluctuate._
 
 ```text
 [SidneyLauRepresentation(initial='', nucleus='a', coda='', tone='1'),
