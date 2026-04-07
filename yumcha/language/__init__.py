@@ -16,9 +16,7 @@ class Language(ABC, Generic[SchemeT, IPARepresentationT]):
     def __post_init__(self) -> None:
         self.__discover()
         self._dictionary = {obj.name.lower(): obj for obj in self._schemes}
-
         self.__validate()
-        self.validate()
 
     def __discover(self) -> None:
         # 1. Identify the specific Scheme class from the Generic alias
@@ -77,6 +75,8 @@ class Language(ABC, Generic[SchemeT, IPARepresentationT]):
                         f"Remove {scheme.feature_map.key_labels[idx]} "
                         f"{tuple(sorted(overloaded_set))}"
                     )
+
+        self.validate()
 
     def validate(self) -> None:
         pass
