@@ -12,7 +12,6 @@ from .scheme.representation import IPARepresentationT, ValidationError
 @dataclass
 class Language(ABC, Generic[SchemeT, IPARepresentationT]):
     _schemes: list[SchemeT] = field(default_factory=list, init=False)
-    _dictionary: dict[str, SchemeT] = field(default_factory=dict, init=False)
 
     def __post_init__(self) -> None:
         self.__discover()
