@@ -105,6 +105,7 @@ Output:
 ```text
 {
     'cantonese': [
+        'braille',
         'ile',
         'jyutping',
         'kuping',
@@ -279,6 +280,7 @@ The closer this value is to `1`, the more phonologically complete the scheme's d
 
 | Scheme name                                           | Example      | Scheme code       | Note                                                  |
 | ----------------------------------------------------- | ------------ | ----------------- | ----------------------------------------------------- |
+| Braille                                               | `⠭⠎⠀`        | `braille`         |                                                       |
 | Institute of Language in Education Scheme             | `tsoen1`     | `ile`             |                                                       |
 | Jyutping                                              | `ceon1`      | `jyutping`        |                                                       |
 | Kuping                                                | `tśeon55^1`  | `kuping`          | A romanization scheme I designed!                     |
@@ -330,13 +332,13 @@ For example, the S. L. Wong Romanization scheme uses `e` for `[ɛː]` and `u` fo
 
 #### Cantonese
 
-![](https://us-central1-progress-markdown.cloudfunctions.net/progress/10?&label=10/15&min=0&max=15)
+![](https://us-central1-progress-markdown.cloudfunctions.net/progress/11?&label=11/15&min=0&max=15)
 
 - [ ] Barnett–Chao
 - [ ] ~~Bopomofo (Zhuyin) by the Commission on the Unification of Pronunciation~~
   - Will not be implemented until Unicode supports the missing characters.
 - [ ] Bopomofo (Zhuyin) by the People's Government Culture and Education Department
-- [ ] Braille
+- [x] Braille
 - [x] Cantonese Transliteration Scheme (Rao's Romanization)
 - [x] Institute of Language in Education Scheme
 - [x] International Phonetic Alphabet

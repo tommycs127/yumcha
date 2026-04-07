@@ -1,3 +1,4 @@
+from .braille import Braille as Braille
 from .ile import ILE as ILE
 from .jyutping import Jyutping as Jyutping
 from .kuping import Kuping as Kuping
