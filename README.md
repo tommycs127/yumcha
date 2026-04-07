@@ -299,39 +299,50 @@ For example, the S. L. Wong Romanization scheme uses `e` for `[ɛː]` and `u` fo
 
 ### Schemes
 
-- Cantonese ![](https://us-central1-progress-markdown.cloudfunctions.net/progress/9?&label=9/16&min=0&max=16)
-  - [ ] Barnett–Chao
-  - [ ] ~~Bopomofo (Zhuyin) by the Commission on the Unification of Pronunciation~~
-    - Will not be implemented until Unicode supports the missing characters.
-  - [ ] Bopomofo (Zhuyin) by the People's Government Culture and Education Department
-  - [ ] Braille
-  - [ ] Cantonese Transliteration Scheme (Rao's Romanization)
-  - [x] Institute of Language in Education Scheme
-  - [x] International Phonetic Alphabet
-  - [x] Jyutping
-  - [x] Kuping
-  - [x] Meyer–Wempe
-  - [x] S. L. Wong (Romanization)
-  - [x] S. L. Wong (Phonetic)
-  - [x] Sidney Lau
-  - [ ] Standard Romanisation
-  - [x] Yale
-  - [ ] Yựtyựt
-- Mandarin ![](https://us-central1-progress-markdown.cloudfunctions.net/progress/0?&label=0/8&min=0&max=8)
-  - [ ] Bopomofo (Zhuyin)
-  - [ ] Gwoyeu Romatzyh
-  - [ ] Hanyu Pinyin
-  - [ ] International Phonetic Alphabet
-  - [ ] Palladius
-  - [ ] Tongyong Pinyin
-  - [ ] Wade–Giles
-  - [ ] Yale
-- Hokkien ![](https://us-central1-progress-markdown.cloudfunctions.net/progress/0?&label=0/5&min=0&max=5)
-  - [ ] International Phonetic Alphabet
-  - [ ] Pe̍h-ōe-jī
-  - [ ] Phofsit Daibuun
-  - [ ] Taiwanese Language Phonetic Alphabet
-  - [ ] Tâi-lô
+#### Cantonese
+
+![](https://us-central1-progress-markdown.cloudfunctions.net/progress/9?&label=9/15&min=0&max=15)
+
+- [ ] Barnett–Chao
+- [ ] ~~Bopomofo (Zhuyin) by the Commission on the Unification of Pronunciation~~
+  - Will not be implemented until Unicode supports the missing characters.
+- [ ] Bopomofo (Zhuyin) by the People's Government Culture and Education Department
+- [ ] Braille
+- [ ] Cantonese Transliteration Scheme (Rao's Romanization)
+- [x] Institute of Language in Education Scheme
+- [x] International Phonetic Alphabet
+- [x] Jyutping
+- [x] Kuping
+- [x] Meyer–Wempe
+- [x] S. L. Wong (Romanization)
+- [x] S. L. Wong (Phonetic)
+- [x] Sidney Lau
+- [ ] Standard Romanisation
+- [x] Yale
+- [ ] Yựtyựt
+
+#### Mandarin
+
+![](https://us-central1-progress-markdown.cloudfunctions.net/progress/0?&label=0/8&min=0&max=8)
+
+- [ ] Bopomofo (Zhuyin)
+- [ ] Gwoyeu Romatzyh
+- [ ] Hanyu Pinyin
+- [ ] International Phonetic Alphabet
+- [ ] Palladius
+- [ ] Tongyong Pinyin
+- [ ] Wade–Giles
+- [ ] Yale
+
+#### Hokkien
+
+![](https://us-central1-progress-markdown.cloudfunctions.net/progress/0?&label=0/5&min=0&max=5)
+
+- [ ] International Phonetic Alphabet
+- [ ] Pe̍h-ōe-jī
+- [ ] Phofsit Daibuun
+- [ ] Taiwanese Language Phonetic Alphabet
+- [ ] Tâi-lô
 
 ## 🙏 Acknowledgments
 
