@@ -16,6 +16,7 @@ class Language(ABC, Generic[SchemeT, IPARepresentationT]):
     def __post_init__(self) -> None:
         self.__discover()
         self.__validate()
+        self.validate()
 
     def __discover(self) -> None:
         # 1. Identify the specific Scheme class from the Generic alias
@@ -75,6 +76,9 @@ class Language(ABC, Generic[SchemeT, IPARepresentationT]):
                         f"{tuple(sorted(overloaded_set))}"
                     )
 
+    def validate(self) -> None:
+        pass
+
     @property
     def name(self) -> str:
         return self.__class__.__name__
@@ -126,6 +130,8 @@ class Language(ABC, Generic[SchemeT, IPARepresentationT]):
             try:
                 yield self.ipa_representation_class.from_features(combo)
             except ValidationError:
+                pass
+            except ValueError:
                 pass
 
     def get_all_syllables(self) -> list[IPARepresentationT]:

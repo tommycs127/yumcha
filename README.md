@@ -163,29 +163,29 @@ Get all valid syllables in the ILE scheme:
 ```py
 all_syllables = yumcha.get_all_syllables(
     language_name="cantonese",
-    scheme_name="ile",
+    scheme_name="sidneylau",
 )
 print(all_syllables)
 ```
 
-Output (11,400 items):
+Output (29,240 items):
 
 _Note: This count represents the current output of the generation engine. As validation rules and syllable constraints are updated during development, this number will fluctuate."_
 
 ```text
-[ILERepresentation(initial='', nucleus='a', coda='', tone='1'),
- ILERepresentation(initial='', nucleus='a', coda='', tone='2'),
- ILERepresentation(initial='', nucleus='a', coda='', tone='3'),
- ILERepresentation(initial='', nucleus='a', coda='', tone='4'),
- ILERepresentation(initial='', nucleus='a', coda='', tone='5'),
- ILERepresentation(initial='', nucleus='a', coda='', tone='6'),
- ...
- ILERepresentation(initial='w', nucleus='y', coda='u', tone='1'),
- ILERepresentation(initial='w', nucleus='y', coda='u', tone='2'),
- ILERepresentation(initial='w', nucleus='y', coda='u', tone='3'),
- ILERepresentation(initial='w', nucleus='y', coda='u', tone='4'),
- ILERepresentation(initial='w', nucleus='y', coda='u', tone='5'),
- ILERepresentation(initial='w', nucleus='y', coda='u', tone='6')]
+[SidneyLauRepresentation(initial='', nucleus='a', coda='', tone='1'),
+ SidneyLauRepresentation(initial='', nucleus='a', coda='', tone='1*'),
+ SidneyLauRepresentation(initial='', nucleus='a', coda='', tone='1°'),
+ SidneyLauRepresentation(initial='', nucleus='a', coda='', tone='2'),
+ SidneyLauRepresentation(initial='', nucleus='a', coda='', tone='2°'),
+ SidneyLauRepresentation(initial='', nucleus='a', coda='', tone='3'),
+ ...,
+ SidneyLauRepresentation(initial='z', nucleus='ue', coda='u', tone='5'),
+ SidneyLauRepresentation(initial='z', nucleus='ue', coda='u', tone='5*'),
+ SidneyLauRepresentation(initial='z', nucleus='ue', coda='u', tone='5°'),
+ SidneyLauRepresentation(initial='z', nucleus='ue', coda='u', tone='6'),
+ SidneyLauRepresentation(initial='z', nucleus='ue', coda='u', tone='6*'),
+ SidneyLauRepresentation(initial='z', nucleus='ue', coda='u', tone='6°')]
 ```
 
 Please note that this list includes all theoretically valid syllables. While many are rare in common usage, they remain phonologically possible and pronounceable.

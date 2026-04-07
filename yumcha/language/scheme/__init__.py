@@ -181,8 +181,15 @@ class Scheme(ABC, Generic[RepresentationT, IPARepresentationT]):
         ]
         for combo in itertools.product(*symbol_sets):
             try:
-                yield self.representation_class.from_features(combo)
+                representation = self.representation_class.from_features(combo)
+
+                # Validate if the syllable is phonologically sound
+                self.to_ipa(representation)
+
+                yield representation
             except ValidationError:
+                pass
+            except ValueError:
                 pass
 
     def get_all_syllables(self) -> list[RepresentationT]:

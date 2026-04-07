@@ -32,7 +32,7 @@ class Yumcha:
     ) -> Iterable[Representation]:
         language = self.get(language_name=language_name)
         scheme = language.get(scheme_name=scheme_name)
-        return scheme.iterate_all_syllables()
+        yield from scheme.iterate_all_syllables()
 
     def get_all_syllables(
         self, language_name: str, scheme_name: str

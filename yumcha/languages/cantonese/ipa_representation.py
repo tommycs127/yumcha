@@ -12,10 +12,25 @@ class CantoneseIPARepresentation(Representation):
     tone: str
 
     def validate(self) -> None:
+        invalid_initial_nucleus_comb = {
+            "m": "m̩",
+            "ŋ": "ŋ̩",
+        }
+
+        if (
+            self.initial in invalid_initial_nucleus_comb
+            and self.nucleus == invalid_initial_nucleus_comb[self.initial]
+        ):
+            raise ValidationError(
+                f"initial '{self.initial}' cannot be with nucleus '{self.nucleus}'"
+            )
+
         invaild_nucleus_coda_comb = {
             "iː": "i̯",
-            "uː": "y̯",
-            "yː": "u̯",
+            "uː": "u̯",
+            "yː": "y̯",
+            "m̩": "m",
+            "ŋ̩": "ŋ",
         }
 
         if (

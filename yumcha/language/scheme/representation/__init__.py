@@ -3,6 +3,8 @@ from dataclasses import astuple, dataclass, fields
 from functools import cache
 from typing import ClassVar, Self, TypeVar
 
+MISSING = object()
+
 
 class ValidationError(Exception):
     pass
@@ -13,6 +15,13 @@ class Representation:
     REQUIRED: ClassVar[tuple[()] | tuple[str, ...]] = tuple()
 
     def __post_init__(self) -> None:
+        for required_field in self.REQUIRED:
+            value = getattr(self, required_field, MISSING)
+            if value is MISSING:
+                raise ValidationError(
+                    f"invalid value for field '{required_field}'. Expected a str object, got '{value}'"
+                )
+
         self.validate()
 
     def validate(self) -> None:
@@ -33,9 +42,8 @@ class Representation:
 
     @cache
     def get_string(self, raw: bool = False) -> str:
-        uncomposed_text = "".join(
-            getattr(self, field.name) or "" for field in fields(self)
-        )
+        field_names = self.get_field_names()
+        uncomposed_text = "".join(getattr(self, name) or "" for name in field_names)
         if raw:
             return uncomposed_text
         return unicodedata.normalize("NFC", uncomposed_text)
