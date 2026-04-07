@@ -51,6 +51,15 @@ class Yumcha:
             scheme = language.get(scheme_name=scheme_name)
             return scheme.get_all_syllables()
 
+    def get_coverage(self, language_name: str, scheme_name: str) -> float:
+        langauge_all_syllables_count = len(
+            self.get_all_syllables(language_name=language_name)
+        )
+        scheme_all_syllables_count = len(
+            self.get_all_syllables(language_name=language_name, scheme_name=scheme_name)
+        )
+        return scheme_all_syllables_count / langauge_all_syllables_count
+
     def parse(self, language_name: str, scheme_name: str, text: str) -> Representation:
         language = self.get(language_name=language_name)
         scheme = language.get(scheme_name=scheme_name)

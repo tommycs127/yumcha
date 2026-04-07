@@ -228,6 +228,23 @@ Output (10,780 items):
  SidneyLauRepresentation(initial='', nucleus='u', coda='ng', tone='5')]
 ```
 
+### Getting the coverage of a scheme
+
+> [!NOTE]
+> This function is implemented by generating all valid syllables. Refer to the notes in the [Getting all valid syllables](#getting-all-valid-syllables) section for details.
+
+Calculate the phonological coverage of the Meyer–Wempe scheme:
+
+```py
+coverage = yumcha.get_coverage(
+    language_name="cantonese",
+    scheme_name="meyer_wempe",
+)
+print(coverage)  # 0.5014623172103487
+```
+
+The closer this value is to `1`, the more phonologically complete the scheme's design is.
+
 ## 🔤 Supported schemes
 
 ### Cantonese
@@ -263,7 +280,7 @@ Some schemes are designed in a way that loses certain phonological distinctions.
 For example, the S. L. Wong Romanization scheme uses `e` for `[ɛː]` and `u` for `[u̯]`, but it uses `eu` for `[yː]`. This prevents the scheme from being able to represent `[ɛːu̯]`. Therefore, converting an input such as `deu6` (in Jyutping) to the S. L. Wong scheme results in no valid output.
 
 > [!NOTE]
-> Such limitations must be explicitly defined in the `validate()` method of any subclass inheriting from the `Representation` class. Without properly defined constraints, exceptions or unexpected results may occur.
+> Such constraints must be explicitly defined in the `validate()` method of any subclass inheriting from the `Representation` class. Without properly defined constraints, exceptions or unexpected results may occur.
 
 ## 🛣️ Roadmap
 
@@ -278,6 +295,7 @@ For example, the S. L. Wong Romanization scheme uses `e` for `[ɛː]` and `u` fo
 - [x] Conversion
 - [x] Parsing
 - [x] Generating all valid syllables
+- [x] Calculating the coverage of a scheme
 
 ### Schemes
 

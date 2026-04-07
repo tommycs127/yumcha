@@ -124,9 +124,15 @@ class Language(ABC, Generic[SchemeT, IPARepresentationT]):
             sorted(set(self.get_columns_by_label(self.phonology, label)))
             for label in self.ipa_representation_class.get_field_names()
         ]
+
+        seen = set()
+
         for combo in itertools.product(*symbol_sets):
             try:
-                yield self.ipa_representation_class.from_features(combo)
+                ipa_representation = self.ipa_representation_class.from_features(combo)
+                if ipa_representation not in seen:
+                    yield ipa_representation
+                    seen.add(ipa_representation)
             except ValidationError:
                 pass
             except ValueError:
