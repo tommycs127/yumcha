@@ -31,9 +31,31 @@ Yumcha provides a unified API to convert these schemes without requiring the use
 
 ## ⚙️ How it works
 
-Yumcha first parses text into an intermediate phonological representation that explicitly identifies components such as the **initial**, **medial**, **nucleus**, **coda**, and **tone**.
+Yumcha converts between romanization and phonetic schemes by using a **phonologically-aware three-stage conversion process**:
 
-Once the syllable is organized into this structured form, it can be mapped to its IPA representation and subsequently converted into any other supported romanization or phonetic scheme.
+### 1. Parse → Intermediate Representation
+
+Yumcha parses text (e.g., `seot1` in Jyutping) into a structured **scheme-specific representation** that explicitly identifies phonological components:
+
+| Initial | Nucleus | Coda | Tone |
+| ------- | ------- | ---- | ---- |
+| `s`     | `eo`    | `t`  | `1`  |
+
+### 2. Convert to IPA
+
+The structured representation is converted into the **International Phonetic Alphabet (IPA)**, which serves as a universal intermediate format.
+
+|          | Syllable               |     | IPA                   |
+| -------- | ---------------------- | --- | --------------------- |
+| Jyutping | `s` + `eo` + `t` + `1` | →   | `s` + `ɵ` + `t̚` + `˥` |
+
+### 3. Convert to Target Scheme
+
+The IPA representation is then mapped to the target scheme's representation, preserving all phonological information that the target scheme can express.
+
+|     | Syllable              |     | ILE                    |
+| --- | --------------------- | --- | ---------------------- |
+| IPA | `s` + `ɵ` + `t̚` + `˥` | →   | `s` + `oe` + `t` + `7` |
 
 ## 📋 Requirements
 
