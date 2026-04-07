@@ -150,8 +150,7 @@ CantoneseIPARepresentation(
 > Parsing methods **do not return a `str` object**, but an instance of a `Representation` subclass. To get a string, simply wrap the object in `str()`:
 >
 > ```py
-> parsed_ipa_str = str(parsed_ipa)
-> print(parsed_ipa_str)  # t͡sʰɵn˥
+> print(str(parsed_ipa))  # t͡sʰɵn˥
 > ```
 
 ### Getting all valid syllables
