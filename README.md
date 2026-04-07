@@ -238,7 +238,7 @@ Output (10,780 items):
 | Jyutping                                  | `ceon1`      | `jyutping`        |                                                       |
 | Kuping                                    | `tśeon55^1`  | `kuping`          | A romanization scheme I designed!                     |
 | Kuping (Alternative)                      | `ts'eon55^1` | `kuping_alt`      | Ditto.                                                |
-| Meyer—Wempe                               | `ts'un`      | `meyer_wempe`     |                                                       |
+| Meyer–Wempe                               | `ts'un`      | `meyer_wempe`     |                                                       |
 | Sidney Lau                                | `chun1°`     | `sidneylau`       |                                                       |
 | S. L. Wong (Romanization)                 | `ˈtseun`     | `slwong_roman`    | Conventional numeral tone marking is not implemented. |
 | S. L. Wong (Phonetic)                     | `ˈtsœn`      | `slwong_phonetic` | Ditto.                                                |
