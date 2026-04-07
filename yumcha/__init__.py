@@ -1,31 +1,30 @@
-from typing import Iterable, Sequence
+from collections.abc import Iterable, Sequence
 
 from .language import Language
 from .language.scheme.representation import Representation
 
 
 class Yumcha:
-    languages: Sequence[Language] = []
+    languages: list[Language] = []
 
     def __init__(self, languages: Sequence[Language]) -> None:
-        if not isinstance(languages, list):
-            raise TypeError("not list")
-
-        self.languages = languages.copy()
+        self.languages = list(languages)
+        self._dictionary = {lang.name.lower(): lang for lang in self.languages}
+        self._menu = {lang_k: lang_v.menu for lang_k, lang_v in self.dictionary.items()}
 
         if len(self.languages) != len(self.dictionary):
             raise ValueError("language names must be unique (case-insensitive)")
 
     @property
     def dictionary(self) -> dict[str, Language]:
-        return {lang.name.lower(): lang for lang in self.languages}
+        return self._dictionary
 
     def get(self, language_name: str) -> Language:
-        return self.dictionary[language_name]
+        return self._dictionary[language_name]
 
     @property
     def menu(self) -> dict[str, list[str]]:
-        return {lang_k: lang_v.menu for lang_k, lang_v in self.dictionary.items()}
+        return self._menu
 
     def iterate_all_syllables(
         self, language_name: str, scheme_name: str | None = None
@@ -84,7 +83,7 @@ class Yumcha:
         to_scheme_name: str,
         text: str,
         as_str: bool = True,
-    ) -> str:
+    ) -> str | Representation:
         language = self.get(language_name=language_name)
         from_scheme = language.get(scheme_name=from_scheme_name)
         to_scheme = language.get(scheme_name=to_scheme_name)
