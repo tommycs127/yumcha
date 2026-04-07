@@ -305,7 +305,7 @@ For example, the S. L. Wong Romanization scheme uses `e` for `[ɛː]` and `u` fo
     - Will not be implemented until Unicode supports the missing characters.
   - [ ] Bopomofo (Zhuyin) by the People's Government Culture and Education Department
   - [ ] Braille
-  - [ ] Cantonese Transliteration Scheme
+  - [ ] Cantonese Transliteration Scheme (Rao's Romanization)
   - [ ] Hong Kong Government Cantonese Romanization
     - Input mapping will not be implemented due to spelling ambiguities.
   - [x] Institute of Language in Education Scheme
