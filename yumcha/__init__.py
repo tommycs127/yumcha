@@ -5,15 +5,19 @@ from .language.scheme.representation import Representation
 
 
 class Yumcha:
-    languages: list[Language] = []
-
     def __init__(self, languages: Sequence[Language]) -> None:
-        self.languages = list(languages)
+        self._languages = list(languages)
         self._dictionary = {lang.name.lower(): lang for lang in self.languages}
-        self._menu = {lang_k: lang_v.menu for lang_k, lang_v in self.dictionary.items()}
+        self._menu = {
+            lang_k: lang_v.schemes for lang_k, lang_v in self.dictionary.items()
+        }
 
-        if len(self.languages) != len(self.dictionary):
+        if len(self._languages) != len(self._dictionary):
             raise ValueError("language names must be unique (case-insensitive)")
+
+    @property
+    def languages(self) -> list[Language]:
+        return self._languages
 
     @property
     def dictionary(self) -> dict[str, Language]:

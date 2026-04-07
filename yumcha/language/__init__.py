@@ -11,9 +11,11 @@ from .scheme.representation import IPARepresentationT, ValidationError
 
 @dataclass
 class Language(ABC, Generic[SchemeT, IPARepresentationT]):
-    __schemes: list[SchemeT] = field(default_factory=list, init=False)
+    _schemes: list[SchemeT] = field(default_factory=list, init=False)
+    _dictionary: dict[str, SchemeT] = dict()
 
     def __post_init__(self) -> None:
+        self._dictionary = {obj.name.lower(): obj for obj in self._schemes}
         self.__discover()
         self.__validate()
         self.validate()
@@ -45,16 +47,16 @@ class Language(ABC, Generic[SchemeT, IPARepresentationT]):
 
         # 3. Pull from the registry we built in the previous step
         discovered_classes = Scheme._registry.get(target_scheme_base, [])
-        self.__schemes = list(
+        self._schemes = list(
             cls(ipa_representation_class=self.ipa_representation_class)
             for cls in discovered_classes
         )
 
     def __validate(self) -> None:
-        if len(self.__schemes) != len(self.dictionary):
+        if len(self._schemes) != len(self.dictionary):
             raise ValueError("scheme names must be unique (case-insensitive)")
 
-        for scheme in self.__schemes:
+        for scheme in self._schemes:
             for idx in range(scheme.feature_map.key_arity):
                 symbols_set = set(scheme.feature_map.get_key_columns(idx))
                 phonology_items = map(itemgetter(idx), self.phonology)
@@ -94,25 +96,21 @@ class Language(ABC, Generic[SchemeT, IPARepresentationT]):
         raise NotImplementedError()
 
     @property
-    def dictionary(self) -> dict[str, Scheme]:
-        return {obj.name.lower(): obj for obj in self.__schemes}
+    def dictionary(self) -> dict[str, SchemeT]:
+        return self._dictionary
 
     def add(self, scheme: type[SchemeT]) -> None:
-        self.__schemes.append(
+        self._schemes.append(
             scheme(ipa_representation_class=self.ipa_representation_class)
         )
         self.__validate()
 
-    def get(self, scheme_name: str) -> Scheme:
-        return self.dictionary[scheme_name]
+    def get(self, scheme_name: str) -> SchemeT:
+        return self._dictionary[scheme_name]
 
     @property
     def schemes(self) -> list[str]:
-        return list(self.dictionary.keys())
-
-    @property
-    def menu(self) -> list[str]:
-        return self.schemes
+        return list(self._dictionary.keys())
 
     def get_columns(self, iter: Iterable, axis: int) -> list[str]:
         return list(item[axis] for item in iter if item[axis] is not ...)
