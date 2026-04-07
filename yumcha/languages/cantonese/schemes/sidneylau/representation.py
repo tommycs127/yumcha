@@ -26,8 +26,3 @@ class SidneyLauRepresentation(Representation):
             raise ValidationError(
                 f"nucleus '{self.nucleus}' cannot be with coda '{self.coda}'"
             )
-
-        if self.nucleus == "e" and self.coda == "u":
-            raise ValidationError(
-                f"invalid syllable: nucleus '{self.nucleus}' and coda '{self.coda}'"
-            )
