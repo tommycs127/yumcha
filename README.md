@@ -82,6 +82,7 @@ Output:
         'jyutping',
         'kuping',
         'kuping_alt',
+        'meyer_wempe',
         'sidneylau',
         'slwong_phonetic',
         'slwong_roman',
