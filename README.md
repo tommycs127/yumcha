@@ -33,7 +33,7 @@ Yumcha provides a unified API to convert these schemes without requiring the use
 
 Yumcha converts between romanization and phonetic schemes by using a **phonologically-aware three-stage conversion process**:
 
-### 1. Parse → Intermediate Representation
+### 1. Parse to Intermediate Representation
 
 Yumcha parses text (e.g., `seot1` in Jyutping) into a structured **scheme-specific representation** that explicitly identifies phonological components:
 
