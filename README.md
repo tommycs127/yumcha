@@ -210,7 +210,7 @@ all_syllables = yumcha.get_all_syllables(
 print(all_syllables)
 ```
 
-Output (10,780 items):
+Output (10,360 items):
 
 ```text
 [SidneyLauRepresentation(initial='f', nucleus='aa', coda='', tone='1°'),
