@@ -76,7 +76,18 @@ print(yumcha.menu)
 Output:
 
 ```text
-{'cantonese': ['ile', 'jyutping', 'kuping', 'kuping_alt', 'sidneylau', 'slwong_phonetic', 'slwong_roman', 'yale']}
+{
+    'cantonese': [
+        'ile',
+        'jyutping',
+        'kuping',
+        'kuping_alt',
+        'sidneylau',
+        'slwong_phonetic',
+        'slwong_roman',
+        'yale'
+    ]
+}
 ```
 
 ### Conversion
