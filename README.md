@@ -162,7 +162,7 @@ CantoneseIPARepresentation(
 > - The output list includes all theoretically valid syllables. While many are rare in common usage, they remain phonologically possible and pronounceable.
 > - As validation rules and syllable constraints are updated during development, the total count of the list may fluctuate.
 
-### Phonology
+#### Phonology
 
 Get all valid syllables via Cantonese phonology:
 
@@ -191,7 +191,7 @@ Output (17,780 items):
  CantoneseIPARepresentation(initial='ʔ', nucleus='ʊ', coda='ŋ', tone='˩˧')]
 ```
 
-### Scheme
+#### Scheme
 
 Get all valid syllables represented by the Sidney Lau scheme:
 
