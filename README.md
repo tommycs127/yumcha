@@ -188,7 +188,7 @@ _Note: This count represents the current output of the generation engine. As val
  SidneyLauRepresentation(initial='z', nucleus='ue', coda='u', tone='6°')]
 ```
 
-Please note that this list includes all theoretically valid syllables. While many are rare in common usage, they remain phonologically possible and pronounceable.
+The output list includes all theoretically valid syllables. While many are rare in common usage, they remain phonologically possible and pronounceable.
 
 ## 🔤 Supported schemes
 
