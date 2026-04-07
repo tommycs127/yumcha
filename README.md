@@ -158,7 +158,7 @@ print(parsed_ipa_str)  # t͡sʰɵn˥
 
 ### Getting all valid syllables
 
-Get all valid syllables in the ILE scheme:
+Get all valid syllables in the Sidney Lau scheme:
 
 ```py
 all_syllables = yumcha.get_all_syllables(
@@ -169,8 +169,6 @@ print(all_syllables)
 ```
 
 Output (29,240 items):
-
-_Note: This count represents the current output of the generation engine. As validation rules and syllable constraints are updated during development, this number will fluctuate._
 
 ```text
 [SidneyLauRepresentation(initial='', nucleus='a', coda='', tone='1'),
@@ -188,7 +186,11 @@ _Note: This count represents the current output of the generation engine. As val
  SidneyLauRepresentation(initial='z', nucleus='ue', coda='u', tone='6°')]
 ```
 
-The output list includes all theoretically valid syllables. While many are rare in common usage, they remain phonologically possible and pronounceable.
+> [!NOTE]
+>
+> - This operation may take a few seconds to complete due to the volume of validated combinations generated.
+> - The output list includes all theoretically valid syllables. While many are rare in common usage, they remain phonologically possible and pronounceable.
+> - As validation rules and syllable constraints are updated during development, the total number of the list may fluctuate.
 
 ## 🔤 Supported schemes
 
