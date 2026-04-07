@@ -11,11 +11,9 @@ A phonology-oriented romanization engine for Cantonese and other languages.
 > "Yumcha" is a play on Cantonese words. While it traditionally means "drinking tea" (<ruby>飲<rt>jam2</rt>茶<rt>caa4</rt>), it also sounds like a "phonological lookup" (<ruby>音<rt>jam1</rt>查<rt>caa4</rt>).
 > Just as tea brings people together, this engine aims to bridge different romanization and phonetic schemes!
 
-## ⚠️ Warning: Alpha Development
-
-This project is in its **early stages** and undergoing active development. The API and functionality are **highly unstable** and subject to breaking changes without notice.
-
-**Do not use this in production environments.**
+> [!CAUTION]
+>
+> This project is in its **early stages** and undergoing active development. The API and functionality are **highly unstable** and subject to breaking changes without notice. **Do not use this in production environments.**
 
 ## ✨ Highlights
 
@@ -190,7 +188,7 @@ Output (29,240 items):
 >
 > - This operation may take a few seconds to complete due to the volume of validated combinations generated.
 > - The output list includes all theoretically valid syllables. While many are rare in common usage, they remain phonologically possible and pronounceable.
-> - As validation rules and syllable constraints are updated during development, the total number of the list may fluctuate.
+> - As validation rules and syllable constraints are updated during development, the total count may fluctuate.
 
 ## 🔤 Supported schemes
 
