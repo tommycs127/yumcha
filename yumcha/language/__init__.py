@@ -1,12 +1,17 @@
 import itertools
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
+from functools import cache
 from operator import itemgetter
 from typing import Generic, Iterable, get_args
 
 from .scheme import Scheme, SchemeT
 from .scheme.feature.types import FeatureTuple
 from .scheme.representation import IPARepresentationT, ValidationError
+
+
+class PhonologyError(Exception):
+    pass
 
 
 @dataclass
@@ -50,31 +55,34 @@ class Language(ABC, Generic[SchemeT, IPARepresentationT]):
             for cls in discovered_classes
         )
 
+    def __validate_scheme(self, scheme: SchemeT):
+        for idx in range(scheme.feature_map.key_arity):
+            symbols_set = set(scheme.feature_map.get_key_columns(idx))
+            phonology_items = map(itemgetter(idx), self.phonology)
+            required_set = set(filter(lambda x: x is not ..., phonology_items))
+
+            if missing_set := required_set - symbols_set:
+                raise PhonologyError(
+                    f"scheme '{scheme.name}' does not meet "
+                    f"{self.name.capitalize()} phonology. "
+                    f"Add {tuple(sorted(missing_set))} "
+                    f"as {scheme.feature_map.key_labels[idx]}"
+                )
+
+            if overloaded_set := symbols_set - required_set:
+                raise PhonologyError(
+                    f"scheme '{scheme.name}' does not meet "
+                    f"{self.name.capitalize()} phonology. "
+                    f"Remove {scheme.feature_map.key_labels[idx]} "
+                    f"{tuple(sorted(overloaded_set))}"
+                )
+
     def __validate(self) -> None:
         if len(self._schemes) != len(self._dictionary):
             raise ValueError("scheme names must be unique (case-insensitive)")
 
         for scheme in self._schemes:
-            for idx in range(scheme.feature_map.key_arity):
-                symbols_set = set(scheme.feature_map.get_key_columns(idx))
-                phonology_items = map(itemgetter(idx), self.phonology)
-                required_set = set(filter(lambda x: x is not ..., phonology_items))
-
-                if missing_set := required_set - symbols_set:
-                    raise ValueError(
-                        f"scheme '{scheme.name}' does not meet "
-                        f"{self.name.capitalize()} phonology. "
-                        f"Add {tuple(sorted(missing_set))} "
-                        f"as {scheme.feature_map.key_labels[idx]}"
-                    )
-
-                if overloaded_set := symbols_set - required_set:
-                    raise ValueError(
-                        f"scheme '{scheme.name}' does not meet "
-                        f"{self.name.capitalize()} phonology. "
-                        f"Remove {scheme.feature_map.key_labels[idx]} "
-                        f"{tuple(sorted(overloaded_set))}"
-                    )
+            self.__validate_scheme(scheme)
 
         self.validate()
 
@@ -99,11 +107,10 @@ class Language(ABC, Generic[SchemeT, IPARepresentationT]):
     def dictionary(self) -> dict[str, SchemeT]:
         return self._dictionary
 
-    def add(self, scheme: type[SchemeT]) -> None:
-        self._schemes.append(
-            scheme(ipa_representation_class=self.ipa_representation_class)
-        )
-        self.__validate()
+    def add(self, scheme_class: type[SchemeT]) -> None:
+        scheme = scheme_class(ipa_representation_class=self.ipa_representation_class)
+        self.__validate_scheme(scheme)
+        self._schemes.append(scheme)
 
     def get(self, scheme_name: str) -> SchemeT:
         return self._dictionary[scheme_name]

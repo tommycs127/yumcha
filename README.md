@@ -49,7 +49,9 @@ pip install git+https://github.com/tommycs127/yumcha.git
 
 ## 🚀 Usage
 
-Import the `Yumcha` class from `yumcha` and initialize it with `Language` classes:
+### Initialization
+
+Import the `Yumcha` class from `yumcha` and the built-in language classes from `yumcha.languages`:
 
 ```py
 from yumcha import Yumcha
@@ -58,16 +60,41 @@ from yumcha import Yumcha
 from yumcha.languages import Cantonese
 
 # ...or define your own custom subclasses!
-# from my_languages import MyLanguage
+from my_languages import MyLanguage
+```
 
+Then, pass the initialized language instances into the `Yumcha` constructor:
+
+```py
 languages = [
     Cantonese(),
+    MyLanguage(),
 ]
 
 yumcha = Yumcha(languages)
 ```
 
-### Check available schemes
+`Yumcha` registers these instances in an internal dictionary, using the lowercase name of each language class as the key. For example, `Cantonese` is indexed as `"cantonese"`, and `MyLanguage` becomes `"mylanguage"`. This same indexing logic applies to `Scheme` instances within each language.
+
+#### Registering custom schemes
+
+> [!NOTE]
+> Custom schemes must conform to the language's underlying phonology; otherwise, `Yumcha` will raise a `PhonologyError` during initialization. Consult the `yumcha.languages.<language>.phonology` module for required phonemes.
+
+Use `Language.add()` method to register custom schemes before initialization:
+
+```py
+from my_scheme import MyScheme
+
+cantonese = Cantonese()
+cantonese.add(MyScheme)
+
+languages = [cantonese]
+
+yumcha = Yumcha(languages)
+```
+
+### Getting available schemes
 
 ```py
 print(yumcha.menu)
@@ -83,6 +110,7 @@ Output:
         'kuping',
         'kuping_alt',
         'meyer_wempe',
+        'rao',
         'sidneylau',
         'slwong_phonetic',
         'slwong_roman',
@@ -228,7 +256,7 @@ Output (10,360 items):
  SidneyLauRepresentation(initial='', nucleus='u', coda='ng', tone='5')]
 ```
 
-### Calculate the coverage of a scheme
+### Getting the coverage of a scheme
 
 > [!NOTE]
 > This function is implemented by generating all valid syllables. Refer to the notes in the [Getting all valid syllables](#getting-all-valid-syllables) section for details.
