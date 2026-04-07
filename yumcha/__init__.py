@@ -28,18 +28,26 @@ class Yumcha:
         return {lang_k: lang_v.menu for lang_k, lang_v in self.dictionary.items()}
 
     def iterate_all_syllables(
-        self, language_name: str, scheme_name: str
+        self, language_name: str, scheme_name: str | None = None
     ) -> Iterable[Representation]:
         language = self.get(language_name=language_name)
-        scheme = language.get(scheme_name=scheme_name)
-        yield from scheme.iterate_all_syllables()
+
+        if scheme_name is None:
+            yield from language.iterate_all_syllables()
+        else:
+            scheme = language.get(scheme_name=scheme_name)
+            yield from scheme.iterate_all_syllables()
 
     def get_all_syllables(
-        self, language_name: str, scheme_name: str
+        self, language_name: str, scheme_name: str | None = None
     ) -> list[Representation]:
         language = self.get(language_name=language_name)
-        scheme = language.get(scheme_name=scheme_name)
-        return scheme.get_all_syllables()
+
+        if scheme_name is None:
+            return language.get_all_syllables()
+        else:
+            scheme = language.get(scheme_name=scheme_name)
+            return scheme.get_all_syllables()
 
     def parse(self, language_name: str, scheme_name: str, text: str) -> Representation:
         language = self.get(language_name=language_name)

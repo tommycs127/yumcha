@@ -150,12 +150,50 @@ CantoneseIPARepresentation(
 > Parsing methods **do not return a `str` object**, but an instance of a `Representation` subclass. To get a string, simply wrap the object in `str()`:
 >
 > ```py
-> print(str(parsed_ipa))  # t͡sʰɵn˥
+> parsed_ipa_str = str(parsed_ipa)
+> print(parsed_ipa_str)  # t͡sʰɵn˥
 > ```
 
 ### Getting all valid syllables
 
-Get all valid syllables in the Sidney Lau scheme:
+> [!NOTE]
+>
+> - This operation may take a few seconds to complete due to the volume of validated combinations generated.
+> - The output list includes all theoretically valid syllables. While many are rare in common usage, they remain phonologically possible and pronounceable.
+> - As validation rules and syllable constraints are updated during development, the total count of the list may fluctuate.
+
+### Phonology
+
+Get all valid syllables via Cantonese phonology:
+
+```py
+all_syllables = yumcha.get_all_syllables(
+    language_name="cantonese",
+)
+print(all_syllables)
+```
+
+Output (17,780 items):
+
+```text
+[CantoneseIPARepresentation(initial='f', nucleus='aː', coda='', tone='˥'),
+ CantoneseIPARepresentation(initial='f', nucleus='aː', coda='', tone='˥˧'),
+ CantoneseIPARepresentation(initial='f', nucleus='aː', coda='', tone='˧'),
+ CantoneseIPARepresentation(initial='f', nucleus='aː', coda='', tone='˧˥'),
+ CantoneseIPARepresentation(initial='f', nucleus='aː', coda='', tone='˨'),
+ CantoneseIPARepresentation(initial='f', nucleus='aː', coda='', tone='˩'),
+ ...,
+ CantoneseIPARepresentation(initial='ʔ', nucleus='ʊ', coda='ŋ', tone='˥˧'),
+ CantoneseIPARepresentation(initial='ʔ', nucleus='ʊ', coda='ŋ', tone='˧'),
+ CantoneseIPARepresentation(initial='ʔ', nucleus='ʊ', coda='ŋ', tone='˧˥'),
+ CantoneseIPARepresentation(initial='ʔ', nucleus='ʊ', coda='ŋ', tone='˨'),
+ CantoneseIPARepresentation(initial='ʔ', nucleus='ʊ', coda='ŋ', tone='˩'),
+ CantoneseIPARepresentation(initial='ʔ', nucleus='ʊ', coda='ŋ', tone='˩˧')]
+```
+
+### Scheme
+
+Get all valid syllables represented by the Sidney Lau scheme:
 
 ```py
 all_syllables = yumcha.get_all_syllables(
@@ -182,12 +220,6 @@ Output (12,600 items):
  SidneyLauRepresentation(initial='', nucleus='u', coda='ng', tone='4'),
  SidneyLauRepresentation(initial='', nucleus='u', coda='ng', tone='5')]
 ```
-
-> [!NOTE]
->
-> - This operation may take a few seconds to complete due to the volume of validated combinations generated.
-> - The output list includes all theoretically valid syllables. While many are rare in common usage, they remain phonologically possible and pronounceable.
-> - As validation rules and syllable constraints are updated during development, the total count may fluctuate.
 
 ## 🔤 Supported schemes
 
