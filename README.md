@@ -170,6 +170,8 @@ print(all_syllables)
 
 Output (11,400 items):
 
+_Note: This count represents the current output of the generation engine. As validation rules and syllable constraints are updated during development, this number will fluctuate."_
+
 ```text
 [ILERepresentation(initial='', nucleus='a', coda='', tone='1'),
  ILERepresentation(initial='', nucleus='a', coda='', tone='2'),
