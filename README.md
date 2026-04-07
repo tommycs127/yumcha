@@ -18,7 +18,7 @@ A phonology-oriented romanization engine for Cantonese and other languages.
 
 - **Scheme-to-Scheme Conversion**: Convert seamlessly between different romanization and phonetic schemes within the same language.
 - **Scheme Parsing**: Parse strings to identify their phonological components and their IPA representations.
-- **Syllable Set Generation**: Get all valid syllables of a scheme.
+- **Syllable Set Generation**: Get all valid syllables via the phonology of the language or as represented by a specific scheme.
 - **Zero Third-Party Dependencies:** Lightweight and easy to integrate into any project.
 - **Type-hinted**: Built with modern Python 3.12+ type hints for better IDE support and readability.
 - **Modular & Extensible**: Add new schemes by simply defining the representation structure, validation rules, and an IPA-to-symbol map!
