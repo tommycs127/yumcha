@@ -180,10 +180,15 @@ class Scheme(ABC, Generic[RepresentationT, IPARepresentationT]):
             sorted(set(self.feature_map.get_key_columns(idx)))
             for idx in range(self.feature_map.key_arity)
         ]
+
+        seen = set()
+
         for combo in itertools.product(*symbol_sets):
             try:
                 ipa_representation = self.ipa_representation_class.from_features(combo)
-                yield self.from_ipa(ipa_representation)
+                if (representation := self.from_ipa(ipa_representation)) not in seen:
+                    yield representation
+                    seen.add(representation)
             except ValidationError:
                 pass
             except ValueError:
