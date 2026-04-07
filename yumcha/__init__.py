@@ -7,11 +7,10 @@ from .language.scheme.representation import Representation
 class Yumcha:
     def __init__(self, languages: Sequence[Language]) -> None:
         self._languages = list(languages)
-        self._dictionary = {lang.name.lower(): lang for lang in self.languages}
+        self._dictionary = {lang.name.lower(): lang for lang in self._languages}
         self._menu = {
-            lang_k: lang_v.schemes for lang_k, lang_v in self.dictionary.items()
+            lang_k: lang_v.schemes for lang_k, lang_v in self._dictionary.items()
         }
-
         if len(self._languages) != len(self._dictionary):
             raise ValueError("language names must be unique (case-insensitive)")
 
