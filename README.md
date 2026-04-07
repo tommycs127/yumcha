@@ -12,7 +12,6 @@ A phonology-oriented romanization engine for Cantonese and other languages.
 > Just as tea brings people together, this engine aims to bridge different romanization and phonetic schemes!
 
 > [!CAUTION]
->
 > This project is in its **early stages** and undergoing active development. The API and functionality are **highly unstable** and subject to breaking changes without notice. **Do not use this in production environments.**
 
 ## ✨ Highlights
@@ -223,7 +222,8 @@ Some schemes are designed in a way that loses certain phonological distinctions.
 
 For example, the S. L. Wong Romanization scheme uses `e` for `[ɛː]` and `u` for `[u̯]`, but it uses `eu` for `[yː]`. This prevents the scheme from being able to represent `[ɛːu̯]`. Therefore, converting an input such as `deu6` (in Jyutping) to the S. L. Wong scheme results in no valid output.
 
-Such limitations must be explicitly defined in the `validate()` method of any subclass inheriting from the `Representation` class.
+> [!NOTE]
+> Such limitations must be explicitly defined in the `validate()` method of any subclass inheriting from the `Representation` class. Without properly defined constraints, exceptions or unexpected results may occur.
 
 ## 🛣️ Roadmap
 
