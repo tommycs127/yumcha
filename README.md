@@ -45,17 +45,21 @@ Yumcha parses text (e.g., `seot1` in Jyutping) into a structured **scheme-specif
 
 The structured representation is converted into the **International Phonetic Alphabet (IPA)**, which serves as a universal intermediate format.
 
-|          | Syllable               |     | IPA                   |
-| -------- | ---------------------- | --- | --------------------- |
-| Jyutping | `s` + `eo` + `t` + `1` | →   | `s` + `ɵ` + `t̚` + `˥` |
+|          | Initial | Nucleus | Coda | Tone |
+| -------- | :-----: | :-----: | :--: | :--: |
+| Jyutping |   `s`   |  `eo`   | `t`  | `1`  |
+|          |    ↓    |    ↓    |  ↓   |  ↓   |
+| IPA      |   `s`   |   `ɵ`   | `t̚`  | `˥`  |
 
 ### 3. Convert to Target Scheme
 
 The IPA representation is then mapped to the target scheme's representation, preserving all phonological information that the target scheme can express.
 
-|     | Syllable              |     | ILE                    |
-| --- | --------------------- | --- | ---------------------- |
-| IPA | `s` + `ɵ` + `t̚` + `˥` | →   | `s` + `oe` + `t` + `7` |
+|     | Initial | Nucleus | Coda | Tone |
+| --- | :-----: | :-----: | :--: | :--: |
+| IPA |   `s`   |   `ɵ`   | `t̚`  | `˥`  |
+|     |    ↓    |    ↓    |  ↓   |  ↓   |
+| ILE |   `s`   |  `oe`   | `t`  | `7`  |
 
 ## 📋 Requirements
 
