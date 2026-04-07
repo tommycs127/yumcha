@@ -176,9 +176,9 @@ class Scheme(ABC, Generic[RepresentationT, IPARepresentationT]):
             if it passes validation.
         """
 
-        fmap = self.feature_map
         symbol_sets: list[list[str]] = [
-            sorted(set(fmap.get_key_columns(idx))) for idx in range(fmap.key_arity)
+            sorted(set(self.feature_map.get_key_columns(idx)))
+            for idx in range(self.feature_map.key_arity)
         ]
         for combo in itertools.product(*symbol_sets):
             try:
