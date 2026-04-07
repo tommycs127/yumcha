@@ -95,6 +95,9 @@ print(converted)  # soet7
 
 ### Parsing
 
+> [!NOTE]
+> Parsing methods **do not return a `str` object**, but an instance of a `Representation` subclass. To get a string, simply wrap the object in `str()`.
+
 #### Scheme representation
 
 Parse a Yale syllable into components:
@@ -145,14 +148,6 @@ CantoneseIPARepresentation(
     tone='˥'
 )
 ```
-
-> [!NOTE]
-> Parsing methods **do not return a `str` object**, but an instance of a `Representation` subclass. To get a string, simply wrap the object in `str()`:
->
-> ```py
-> parsed_ipa_str = str(parsed_ipa)
-> print(parsed_ipa_str)  # t͡sʰɵn˥
-> ```
 
 ### Getting all valid syllables
 
