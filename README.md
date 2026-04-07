@@ -300,7 +300,7 @@ Tone sandhi depends on linguistic context (e.g., phonological environment) and i
 
 #### Tone Information Loss during Conversion
 
-Some schemes include specialized markers for different tone contours—such as the Sidney Lau scheme, which uses `1°` for the high-flat tone and `1` for the high-falling tone—Yumcha treats these as having the same tone register and name. Consequently, precise information regarding these tonal distinctions may be lost during the scheme-to-scheme conversion.
+Some schemes include specialized markers for detailed tone contours. For example, the Sidney Lau scheme distinguishes between the high-flat tone (`1°`) and the high-falling tone (`1`). In contrast, other schemes lack this distinction; in Jyutping, `1` represents both contours, where the high level tone is assumed by default. Consequently, this precise tonal granularity may be lost during scheme-to-scheme conversion.
 
 #### Unrepresentable Syllables
 
