@@ -358,7 +358,7 @@ For example, the S. L. Wong Romanization scheme uses `e` for `[ɛː]` and `u` fo
 
 #### Cantonese
 
-![](https://us-central1-progress-markdown.cloudfunctions.net/progress/11?&label=11/15&min=0&max=15)
+![](https://us-central1-progress-markdown.cloudfunctions.net/progress/10?&label=10/14&min=0&max=14)
 
 - [ ] Barnett–Chao
 - [ ] ~~Bopomofo (Zhuyin) by the Commission on the Unification of Pronunciation~~
@@ -367,7 +367,6 @@ For example, the S. L. Wong Romanization scheme uses `e` for `[ɛː]` and `u` fo
 - [x] Braille
 - [x] Cantonese Transliteration Scheme (Rao's Romanization)
 - [x] Institute of Language in Education Scheme
-- [x] International Phonetic Alphabet
 - [x] Jyutping
 - [x] Kuping
 - [x] Meyer–Wempe
@@ -380,12 +379,11 @@ For example, the S. L. Wong Romanization scheme uses `e` for `[ɛː]` and `u` fo
 
 #### Mandarin
 
-![](https://us-central1-progress-markdown.cloudfunctions.net/progress/0?&label=0/8&min=0&max=8)
+![](https://us-central1-progress-markdown.cloudfunctions.net/progress/0?&label=0/7&min=0&max=7)
 
 - [ ] Bopomofo (Zhuyin)
 - [ ] Gwoyeu Romatzyh
 - [ ] Hanyu Pinyin
-- [ ] International Phonetic Alphabet
 - [ ] Palladius
 - [ ] Tongyong Pinyin
 - [ ] Wade–Giles
@@ -393,9 +391,8 @@ For example, the S. L. Wong Romanization scheme uses `e` for `[ɛː]` and `u` fo
 
 #### Hokkien
 
-![](https://us-central1-progress-markdown.cloudfunctions.net/progress/0?&label=0/5&min=0&max=5)
+![](https://us-central1-progress-markdown.cloudfunctions.net/progress/0?&label=0/4&min=0&max=4)
 
-- [ ] International Phonetic Alphabet
 - [ ] Pe̍h-ōe-jī
 - [ ] Phofsit Daibuun
 - [ ] Taiwanese Language Phonetic Alphabet
