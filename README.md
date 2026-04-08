@@ -358,7 +358,7 @@ For example, the S. L. Wong Romanization scheme uses `e` for `[ɛː]` and `u` fo
 
 #### Cantonese
 
-<progress value="10" max="14">71.42%</progress> `10/14` completed
+![](https://us-central1-progress-markdown.cloudfunctions.net/progress/10?&label=10/14&min=0&max=14)
 
 - [ ] Barnett–Chao
 - [ ] ~~Bopomofo (Zhuyin) by the Commission on the Unification of Pronunciation~~
@@ -379,7 +379,7 @@ For example, the S. L. Wong Romanization scheme uses `e` for `[ɛː]` and `u` fo
 
 #### Mandarin
 
-<progress value="0" max="7">0%</progress> `0/7` completed
+![](https://us-central1-progress-markdown.cloudfunctions.net/progress/0?&label=0/7&min=0&max=7)
 
 - [ ] Bopomofo (Zhuyin)
 - [ ] Gwoyeu Romatzyh
@@ -391,7 +391,7 @@ For example, the S. L. Wong Romanization scheme uses `e` for `[ɛː]` and `u` fo
 
 #### Hokkien
 
-<progress value="0" max="7">0%</progress> `0/4` completed
+![](https://us-central1-progress-markdown.cloudfunctions.net/progress/0?&label=0/4&min=0&max=4)
 
 - [ ] Pe̍h-ōe-jī
 - [ ] Phofsit Daibuun
