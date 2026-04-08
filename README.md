@@ -6,17 +6,17 @@
 ![type](https://badgen.net/badge/type/Romanization%20engine/cyan)
 ![made-in](https://badgen.net/badge/made%20in/Hong%20Kong/cc3399)
 
-A phonology-oriented romanization engine for Cantonese and other languages.
+A phonology-oriented transcription engine for Cantonese and other languages.
 
 > "Yumcha" is a play on Cantonese words. While it traditionally means "drinking tea" (<ruby>飲<rt>jam2</rt>茶<rt>caa4</rt>), it also sounds like a "phonological lookup" (<ruby>音<rt>jam1</rt>查<rt>caa4</rt>).
-> Just as tea brings people together, this engine aims to bridge different romanization and phonetic schemes!
+> Just as tea brings people together, this engine aims to bridge different transcription and phonetic schemes!
 
 > [!CAUTION]
 > This project is in its **early stages** and undergoing active development. The API and functionality are **highly unstable** and subject to breaking changes without notice. **Do not use this in production environments.**
 
 ## ✨ Highlights
 
-- [**Scheme-to-Scheme Conversion**](#conversion): Convert seamlessly between different romanization and phonetic schemes within the same language.
+- [**Scheme-to-Scheme Conversion**](#conversion): Convert seamlessly between different transcription and phonetic schemes within the same language.
 - [**Scheme Parsing**](#parsing): Parse strings to identify their phonological components and their IPA representations.
 - [**Syllable Set Generation**](#getting-all-valid-syllables): Get all valid syllables via the phonology of the language or as represented by a specific scheme.
 - **Zero Third-Party Dependencies:** Lightweight and easy to integrate into any project.
@@ -25,7 +25,7 @@ A phonology-oriented romanization engine for Cantonese and other languages.
 
 ## 🤔 Why Yumcha?
 
-Sinitic romanization is fragmented and converting between systems often requires large handwritten mapping tables, which break down for edge cases such as unusual spellings and tone markings.
+Sinitic transcription is fragmented and converting between systems often requires large handwritten mapping tables, which break down for edge cases such as unusual spellings and tone markings.
 
 Yumcha provides a unified API to convert these schemes without requiring the user to write complex mapping logic or maintaining large mapping tables that can miss edge cases.
 
@@ -321,18 +321,21 @@ For example, the S. L. Wong Romanization scheme uses `e` for `[ɛː]` and `u` fo
 
 #### Cantonese
 
-![](https://us-central1-progress-markdown.cloudfunctions.net/progress/10?&label=10/14&min=0&max=14)
+![](https://us-central1-progress-markdown.cloudfunctions.net/progress/10?&label=10/17&min=0&max=17)
 
 - [ ] Barnett–Chao
 - [ ] ~~Bopomofo (Zhuyin) by the Commission on the Unification of Pronunciation~~
   - Will not be implemented until Unicode supports the missing characters.
 - [ ] Bopomofo (Zhuyin) by the People's Government Culture and Education Department
 - [x] Braille
+- [ ] Cantonese Hangul
 - [x] Cantonese Transliteration Scheme (Rao's Romanization)
 - [x] Institute of Language in Education Scheme
 - [x] Jyutping
 - [x] Kuping
+- [x] Kuping (Alternative)
 - [x] Meyer–Wempe
+- [ ] Pênkyämp
 - [x] S. L. Wong (Romanization)
 - [x] S. L. Wong (Phonetic)
 - [x] Sidney Lau
@@ -347,7 +350,7 @@ For example, the S. L. Wong Romanization scheme uses `e` for `[ɛː]` and `u` fo
 - [ ] Bopomofo (Zhuyin)
 - [ ] Gwoyeu Romatzyh
 - [ ] Hanyu Pinyin
-- [ ] Palladius
+- [ ] Palladius (Cyrillization)
 - [ ] Tongyong Pinyin
 - [ ] Wade–Giles
 - [ ] Yale
@@ -363,7 +366,7 @@ For example, the S. L. Wong Romanization scheme uses `e` for `[ɛː]` and `u` fo
 
 ## 🙏 Acknowledgments
 
-This project implements romanization and phonetic standards developed by linguists and language communities, whose foundational work made this project possible.
+This project implements transcription and phonetic standards developed by linguists and language communities, whose foundational work made this project possible.
 
 ## 📜 License
 
