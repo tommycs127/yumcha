@@ -60,6 +60,8 @@ graph LR
 
 Yumcha implements a **context-aware lookup mechanism**. if a parsed structure matches a predefined phonological context, the system prioritizes a context-specific mapping over a literal symbol-to-symbol translation. This logic is fully reversible, ensuring robust bidirectional conversion between schemes.
 
+<small>(🚧 This section is to be completed.)</small>
+
 ## 4. Convert to Target Scheme
 
 Finally, the IPA representation is mapped to the target scheme, preserving all phonological information expressible by the target format.

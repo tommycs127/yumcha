@@ -209,13 +209,7 @@ Output (17,780 items):
 [CantoneseIPARepresentation(initial='f', nucleus='aː', coda='', tone='˥'),
  CantoneseIPARepresentation(initial='f', nucleus='aː', coda='', tone='˥˧'),
  CantoneseIPARepresentation(initial='f', nucleus='aː', coda='', tone='˧'),
- CantoneseIPARepresentation(initial='f', nucleus='aː', coda='', tone='˧˥'),
- CantoneseIPARepresentation(initial='f', nucleus='aː', coda='', tone='˨'),
- CantoneseIPARepresentation(initial='f', nucleus='aː', coda='', tone='˩'),
  ...,
- CantoneseIPARepresentation(initial='ʔ', nucleus='ʊ', coda='ŋ', tone='˥˧'),
- CantoneseIPARepresentation(initial='ʔ', nucleus='ʊ', coda='ŋ', tone='˧'),
- CantoneseIPARepresentation(initial='ʔ', nucleus='ʊ', coda='ŋ', tone='˧˥'),
  CantoneseIPARepresentation(initial='ʔ', nucleus='ʊ', coda='ŋ', tone='˨'),
  CantoneseIPARepresentation(initial='ʔ', nucleus='ʊ', coda='ŋ', tone='˩'),
  CantoneseIPARepresentation(initial='ʔ', nucleus='ʊ', coda='ŋ', tone='˩˧')]
@@ -239,13 +233,7 @@ Output (10,360 items):
 [SidneyLauRepresentation(initial='f', nucleus='aa', coda='', tone='1°'),
  SidneyLauRepresentation(initial='f', nucleus='aa', coda='', tone='1'),
  SidneyLauRepresentation(initial='f', nucleus='aa', coda='', tone='3'),
- SidneyLauRepresentation(initial='f', nucleus='aa', coda='', tone='2'),
- SidneyLauRepresentation(initial='f', nucleus='aa', coda='', tone='6'),
- SidneyLauRepresentation(initial='f', nucleus='aa', coda='', tone='4'),
  ...,
- SidneyLauRepresentation(initial='', nucleus='u', coda='ng', tone='1'),
- SidneyLauRepresentation(initial='', nucleus='u', coda='ng', tone='3'),
- SidneyLauRepresentation(initial='', nucleus='u', coda='ng', tone='2'),
  SidneyLauRepresentation(initial='', nucleus='u', coda='ng', tone='6'),
  SidneyLauRepresentation(initial='', nucleus='u', coda='ng', tone='4'),
  SidneyLauRepresentation(initial='', nucleus='u', coda='ng', tone='5')]
@@ -288,7 +276,9 @@ The closer this value is to `1`, the more phonologically complete the scheme's d
 
 ## ⚙️ How it works
 
-Please refer to the [How it works](/docs/how-it-works.md) documentation for a detailed technical breakdown.
+Yumcha parses input text into a source scheme representation, maps it to a universal intermediate representation, and finally maps it into the target scheme representation. A context-aware lookup is utilized during the mapping process, enabling conditional logic for specific phonological environments.
+
+For a detailed technical breakdown of the conversion pipeline and examples, please refer to the [How it works](/docs/how-it-works.md) documentation.
 
 ## 🚫 Limitations
 
@@ -316,6 +306,7 @@ For example, the S. L. Wong Romanization scheme uses `e` for `[ɛː]` and `u` fo
 ### Documentations
 
 - [x] README.md
+- [x] How it works documentation
 - [ ] Tutorial on adding custom languages
 - [ ] Tutorial on adding custom schemes
 
