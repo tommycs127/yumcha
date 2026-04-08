@@ -307,7 +307,7 @@ For example, `chēun` in Cantonese Yale will be parsed as the following structur
 | **Coda** (consonant)           | `n`                    |
 
 > [!NOTE]
-> Components must be defined in **sequential (left-to-right) order** to ensure correct parsing.
+> Components must be defined in **sequential (left-to-right) order** to ensure correct parsing. Because Yumcha decomposes combining characters for fine-grained parsing, schemes that include combining characters must have their diacritics extracted as **a single component**.
 
 ### 2. Convert to IPA
 
