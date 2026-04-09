@@ -276,9 +276,17 @@ The closer this value is to `1`, the more phonologically complete the scheme's d
 
 ## ⚙️ How it works
 
-Yumcha parses input text into a source scheme representation, maps it to a universal intermediate representation, and finally maps it into the target scheme representation. A context-aware lookup is utilized during the mapping process, enabling conditional logic for specific phonological environments.
+Yumcha functions as a bridge between diverse transcription systems by utilizing a structured, phonology-driven engine. Instead of simple string replacement, it processes language through four distinct layers:
 
-For a detailed technical breakdown of the conversion pipeline and examples, please refer to the [How it works](/docs/how-it-works.md) documentation.
+- **Phonology Definition**: Languages are defined by their internal sound structures (e.g., Initial, Nucleus, Coda, and Tone). This creates a "source of truth" called an Intermediate Representation—a universal format that bridges different schemes much like IPA.
+
+- **Sequential Text Parsing**: Input text is decomposed into its orthographical components using fine-grained regular expressions. This ensures that even complex diacritics and combining characters are identified accurately.
+
+- **Context-Aware Conversion**: Yumcha maps these parsed components to the Intermediate Representation. This process is context-aware, meaning it can prioritize specific phonological or orthographical rules over literal translations, ensuring linguistic accuracy.
+
+- **Bidirectional Mapping**: Because the system is built on reversible logic, the intermediate format can be seamlessly converted into any supported target scheme (e.g., converting Yale to Meyer–Wempe), preserving all relevant phonological information.
+
+For a detailed breakdown of the code implementation and mapping logic, please refer to the [How it works](/docs/how-it-works.md) documentation.
 
 ## 🚫 Limitations
 
