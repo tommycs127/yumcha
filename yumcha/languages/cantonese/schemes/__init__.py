@@ -1,4 +1,5 @@
 from .braille import Braille as Braille
+from .hangul import Hangul as Hangul
 from .ile import ILE as ILE
 from .jyutping import Jyutping as Jyutping
 from .kuping import Kuping as Kuping
