@@ -278,13 +278,13 @@ The closer this value is to `1`, the more phonologically complete the scheme's d
 
 Yumcha functions as a bridge between diverse transcription systems by utilizing a structured, phonology-driven engine. Instead of simple string replacement, it processes language through four distinct layers:
 
-- **Phonology Definition**: Languages are defined by their internal sound structures (e.g., Initial, Nucleus, Coda, and Tone). This creates a "source of truth" called an Intermediate Representation—a universal format that bridges different schemes much like IPA.
+- **Phonology Definition**: Languages are defined by their internal sound structures. This creates a universal format that bridges different schemes much like IPA.
 
 - **Sequential Text Parsing**: Input text is decomposed into its orthographical components using fine-grained regular expressions. This ensures that even complex diacritics and combining characters are identified accurately.
 
 - **Context-Aware Conversion**: Yumcha maps these parsed components to the Intermediate Representation. This process is context-aware, meaning it can prioritize specific phonological or orthographical rules over literal translations, ensuring linguistic accuracy.
 
-- **Bidirectional Mapping**: Because the system is built on reversible logic, the intermediate format can be seamlessly converted into any supported target scheme (e.g., converting Yale to Meyer–Wempe), preserving all relevant phonological information.
+- **Bidirectional Mapping**: Because the system is built on reversible logic, the intermediate format can be seamlessly converted into any supported target scheme, preserving all relevant phonological information.
 
 For a detailed breakdown of the code implementation and mapping logic, please refer to the [How it works](/docs/how-it-works.md) documentation.
 
@@ -296,18 +296,15 @@ Tone sandhi depends on linguistic context (e.g., phonological environment) and i
 
 ### Limitations of Certain Schemes
 
-#### Tone Information Loss during Conversion
+#### Information Loss during Conversion
 
-Some schemes include specialized markers for detailed tone contours. For example, the Sidney Lau scheme distinguishes between the high-flat tone (`1°`) and the high-falling tone (`1`). In contrast, other schemes lack this distinction; in Jyutping, `1` represents both contours, where the high level tone is assumed by default. Consequently, this precise tonal granularity may be lost during scheme-to-scheme conversion.
+Some schemes include specialized symbols for historical phonemes or detailed tone contours. For example, the Sidney Lau scheme distinguishes between the high-flat tone (`1°`) and the high-falling tone (`1`). In contrast, other schemes lack this distinction; in Jyutping, `1` represents both contours, where the high level tone is assumed by default. Consequently, this precise tonal granularity may be lost during scheme-to-scheme conversion.
 
 #### Unrepresentable Syllables
 
 Some schemes are designed in a way that loses certain phonological distinctions.
 
 For example, the S. L. Wong Romanization scheme uses `e` for `[ɛː]` and `u` for `[u̯]`, but it uses `eu` for `[yː]`. This prevents the scheme from being able to represent `[ɛːu̯]`. Therefore, converting an input such as `deu6` (in Jyutping) to the S. L. Wong scheme results in no valid output.
-
-> [!NOTE]
-> Such constraints must be explicitly defined in the `validate()` method of any subclass inheriting from the `Representation` class. Without properly defined constraints, exceptions or unexpected results may occur.
 
 ## 🛣️ Roadmap
 
