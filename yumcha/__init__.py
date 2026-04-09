@@ -65,28 +65,28 @@ class Yumcha:
         scheme = language.get(scheme_name=scheme_name)
         return scheme.parse(text=text)
 
-    def parse_ipa(
+    def parse_intermediate(
         self, language_name: str, scheme_name: str, text: str
     ) -> Representation:
         language = self.get(language_name=language_name)
         scheme = language.get(scheme_name=scheme_name)
-        return scheme.parse_ipa(text=text)
+        return scheme.parse_intermediate(text=text)
 
-    def parse_to_ipa(
+    def parse_to_intermediate(
         self, language_name: str, scheme_name: str, text: str
     ) -> Representation:
         language = self.get(language_name=language_name)
         scheme = language.get(scheme_name=scheme_name)
         parsed = scheme.parse(text=text)
-        return scheme.to_ipa(parsed=parsed)
+        return scheme.to_intermediate(parsed=parsed)
 
-    def parse_from_ipa(
+    def parse_from_intermediate(
         self, language_name: str, scheme_name: str, text: str
     ) -> Representation:
         language = self.get(language_name=language_name)
         scheme = language.get(scheme_name=scheme_name)
-        parsed_ipa = scheme.parse_ipa(text=text)
-        return scheme.from_ipa(parsed=parsed_ipa)
+        parsed_intermediate = scheme.parse_intermediate(text=text)
+        return scheme.from_intermediate(parsed=parsed_intermediate)
 
     def convert(
         self,
@@ -100,6 +100,6 @@ class Yumcha:
         from_scheme = language.get(scheme_name=from_scheme_name)
         to_scheme = language.get(scheme_name=to_scheme_name)
         parsed = from_scheme.parse(text=text)
-        parsed_ipa = from_scheme.to_ipa(parsed=parsed)
-        to_scheme_repr = to_scheme.from_ipa(parsed=parsed_ipa)
+        parsed_intermediate = from_scheme.to_intermediate(parsed=parsed)
+        to_scheme_repr = to_scheme.from_intermediate(parsed=parsed_intermediate)
         return str(to_scheme_repr) if as_str else to_scheme_repr
