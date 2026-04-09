@@ -68,7 +68,7 @@ class FeatureMap(dict):
                 self[k] = (*v, True)
             elif len(v) == value_tuple_reqs[1]:
                 if not isinstance(v[-1], bool):
-                    raise TypeError("the extra item of value tuple is not bool")
+                    raise TypeError(f"the extra item of value tuple {v} is not bool")
             else:
                 _fail_length(v, value_tuple_reqs)
 

@@ -53,4 +53,6 @@ class Representation:
 
 
 RepresentationT = TypeVar("RepresentationT", bound=Representation)
-IPARepresentationT = TypeVar("IPARepresentationT", bound=Representation)
+IntermediateRepresentationT = TypeVar(
+    "IntermediateRepresentationT", bound=Representation
+)

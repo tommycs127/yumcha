@@ -4,7 +4,7 @@ from yumcha.language.scheme.representation import Representation, ValidationErro
 
 
 @dataclass(frozen=True)
-class CantoneseIPARepresentation(Representation):
+class CantoneseRepresentation(Representation):
     REQUIRED = ("nucleus", "tone")
     initial: str
     nucleus: str

@@ -2,14 +2,14 @@ from typing import Generic
 
 from yumcha.language.scheme import Scheme
 from yumcha.language.scheme.representation import (
-    IPARepresentationT,
+    IntermediateRepresentationT,
     RepresentationT,
 )
 
-from .ipa_representation import CantoneseIPARepresentation
+from .representation import CantoneseRepresentation
 
 
-class CantoneseScheme(Scheme, Generic[RepresentationT, IPARepresentationT]):
+class CantoneseScheme(Scheme, Generic[RepresentationT, IntermediateRepresentationT]):
     @property
-    def ipa_representation_class(self) -> type[CantoneseIPARepresentation]:
-        return CantoneseIPARepresentation
+    def intermediate_representation_class(self) -> type[CantoneseRepresentation]:
+        return CantoneseRepresentation

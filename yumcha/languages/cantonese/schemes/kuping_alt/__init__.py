@@ -1,12 +1,12 @@
 from yumcha.language.scheme.feature.types import FeatureDict, InverseFeatureDict
-from yumcha.languages.cantonese import CantoneseIPARepresentation, CantoneseScheme
+from yumcha.languages.cantonese import CantoneseRepresentation, CantoneseScheme
 
 from .representation import KupingAlternativeRepresentation
 from .scheme import INVERSE_MAP, MAP
 
 
 class KupingAlternative(
-    CantoneseScheme[KupingAlternativeRepresentation, CantoneseIPARepresentation]
+    CantoneseScheme[KupingAlternativeRepresentation, CantoneseRepresentation]
 ):
     @property
     def representation_class(self) -> type:

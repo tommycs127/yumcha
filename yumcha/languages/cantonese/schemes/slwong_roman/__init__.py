@@ -1,13 +1,11 @@
 from yumcha.language.scheme.feature.types import FeatureDict
-from yumcha.languages.cantonese import CantoneseIPARepresentation, CantoneseScheme
+from yumcha.languages.cantonese import CantoneseRepresentation, CantoneseScheme
 
 from .representation import SLWongRomanRepresentation
 from .scheme import MAP
 
 
-class SLWongRoman(
-    CantoneseScheme[SLWongRomanRepresentation, CantoneseIPARepresentation]
-):
+class SLWongRoman(CantoneseScheme[SLWongRomanRepresentation, CantoneseRepresentation]):
     @property
     def representation_class(self) -> type:
         return SLWongRomanRepresentation

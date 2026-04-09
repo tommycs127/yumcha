@@ -6,7 +6,7 @@ from typing import Generic, Iterable, get_args
 
 from .scheme import Scheme, SchemeT
 from .scheme.feature.types import FeatureTuple
-from .scheme.representation import IPARepresentationT, ValidationError
+from .scheme.representation import IntermediateRepresentationT, ValidationError
 
 
 class PhonologyError(Exception):
@@ -14,7 +14,7 @@ class PhonologyError(Exception):
 
 
 @dataclass
-class Language(ABC, Generic[SchemeT, IPARepresentationT]):
+class Language(ABC, Generic[SchemeT, IntermediateRepresentationT]):
     _schemes: list[SchemeT] = field(default_factory=list, init=False)
 
     def __post_init__(self) -> None:
@@ -50,7 +50,9 @@ class Language(ABC, Generic[SchemeT, IPARepresentationT]):
         # 3. Pull from the registry we built in the previous step
         discovered_classes = Scheme._registry.get(target_scheme_base, [])
         self._schemes = list(
-            cls(ipa_representation_class=self.ipa_representation_class)
+            cls(
+                intermediate_representation_class=self.intermediate_representation_class
+            )
             for cls in discovered_classes
         )
 
@@ -94,7 +96,7 @@ class Language(ABC, Generic[SchemeT, IPARepresentationT]):
 
     @property
     @abstractmethod
-    def ipa_representation_class(self) -> type[IPARepresentationT]:
+    def intermediate_representation_class(self) -> type[IntermediateRepresentationT]:
         raise NotImplementedError()
 
     @property
@@ -107,7 +109,9 @@ class Language(ABC, Generic[SchemeT, IPARepresentationT]):
         return self._dictionary
 
     def add(self, scheme_class: type[SchemeT]) -> None:
-        scheme = scheme_class(ipa_representation_class=self.ipa_representation_class)
+        scheme = scheme_class(
+            intermediate_representation_class=self.intermediate_representation_class
+        )
         self.__validate_scheme(scheme)
         self._schemes.append(scheme)
 
@@ -122,20 +126,22 @@ class Language(ABC, Generic[SchemeT, IPARepresentationT]):
         return list(item[axis] for item in iter if item[axis] is not ...)
 
     def get_columns_by_label(self, iter: Iterable, label: str) -> list[str]:
-        axis = self.ipa_representation_class.get_field_names().index(label)
+        axis = self.intermediate_representation_class.get_field_names().index(label)
         return self.get_columns(iter=iter, axis=axis)
 
-    def iterate_all_syllables(self) -> Iterable[IPARepresentationT]:
+    def iterate_all_syllables(self) -> Iterable[IntermediateRepresentationT]:
         symbol_sets: list[list[str]] = [
             sorted(set(self.get_columns_by_label(self.phonology, label)))
-            for label in self.ipa_representation_class.get_field_names()
+            for label in self.intermediate_representation_class.get_field_names()
         ]
 
         seen = set()
 
         for combo in itertools.product(*symbol_sets):
             try:
-                ipa_representation = self.ipa_representation_class.from_features(combo)
+                ipa_representation = (
+                    self.intermediate_representation_class.from_features(combo)
+                )
                 if ipa_representation not in seen:
                     yield ipa_representation
                     seen.add(ipa_representation)
@@ -144,5 +150,5 @@ class Language(ABC, Generic[SchemeT, IPARepresentationT]):
             except ValueError:
                 pass
 
-    def get_all_syllables(self) -> list[IPARepresentationT]:
+    def get_all_syllables(self) -> list[IntermediateRepresentationT]:
         return list(self.iterate_all_syllables())

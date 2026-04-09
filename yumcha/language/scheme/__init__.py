@@ -10,15 +10,21 @@ from typing import Generic, Iterable, TypeVar, get_origin
 from .feature import FeatureMap
 from .feature.types import FeatureDict, FeatureTuple, InverseFeatureDict
 from .feature.utils import weak_union_tuples
-from .representation import IPARepresentationT, RepresentationT, ValidationError
+from .representation import (
+    IntermediateRepresentationT,
+    RepresentationT,
+    ValidationError,
+)
 
 
-class Scheme(ABC, Generic[RepresentationT, IPARepresentationT]):
+class Scheme(ABC, Generic[RepresentationT, IntermediateRepresentationT]):
     _registry: dict = {}
-    __ipa_representation_class: type[IPARepresentationT]
+    __intermediate_representation_class: type[IntermediateRepresentationT]
 
-    def __init__(self, ipa_representation_class: type[IPARepresentationT]) -> None:
-        self.__ipa_representation_class = ipa_representation_class
+    def __init__(
+        self, intermediate_representation_class: type[IntermediateRepresentationT]
+    ) -> None:
+        self.__intermediate_representation_class = intermediate_representation_class
 
     def __init_subclass__(cls, **kwargs) -> None:
         super().__init_subclass__(**kwargs)
@@ -55,17 +61,33 @@ class Scheme(ABC, Generic[RepresentationT, IPARepresentationT]):
         raise NotImplementedError()
 
     @property
-    def ipa_representation_class(self) -> type[IPARepresentationT]:
-        return self.__ipa_representation_class
+    def intermediate_representation_class(self) -> type[IntermediateRepresentationT]:
+        return self.__intermediate_representation_class
 
     @cached_property
     def feature_map(self) -> FeatureMap:
-        feature_map = FeatureMap(
-            self.map,
-            key_labels=self.ipa_representation_class.get_field_names(),
-            value_labels=self.representation_class.get_field_names(),
-            inverse_map=self.inverse_map,
-        )
+        def _error(exception_type: type[Exception], e: Exception):
+            raise exception_type(
+                f"invalid map defined for scheme '{self.name}': {str(e)}"
+            ) from e
+
+        feature_map = None
+
+        try:
+            feature_map = FeatureMap(
+                self.map,
+                key_labels=self.intermediate_representation_class.get_field_names(),
+                value_labels=self.representation_class.get_field_names(),
+                inverse_map=self.inverse_map,
+            )
+        except TypeError as te:
+            _error(TypeError, te)
+        except ValueError as ve:
+            _error(ValueError, ve)
+
+        if feature_map is None:
+            raise ValueError("invalid map")
+
         return feature_map
 
     @property
@@ -80,7 +102,7 @@ class Scheme(ABC, Generic[RepresentationT, IPARepresentationT]):
     def _get_regex_pattern(
         self,
         feature_map: FeatureMap,
-        representation_class: type[RepresentationT] | type[IPARepresentationT],
+        representation_class: type[RepresentationT] | type[IntermediateRepresentationT],
     ) -> str:
         return "".join(
             f"{feature_map.get_key_regex_pattern(name)}"
@@ -94,10 +116,10 @@ class Scheme(ABC, Generic[RepresentationT, IPARepresentationT]):
             representation_class=self.representation_class,
         )
 
-    def get_ipa_regex_pattern(self) -> str:
+    def get_intermediate_regex_pattern(self) -> str:
         return self._get_regex_pattern(
             feature_map=self.feature_map,
-            representation_class=self.ipa_representation_class,
+            representation_class=self.intermediate_representation_class,
         )
 
     def _parse(self, pattern: str, text: str) -> RepresentationT:
@@ -110,8 +132,8 @@ class Scheme(ABC, Generic[RepresentationT, IPARepresentationT]):
     def parse(self, text: str) -> RepresentationT:
         return self._parse(self.get_regex_pattern(), text)
 
-    def parse_ipa(self, text: str) -> RepresentationT:
-        return self._parse(self.get_ipa_regex_pattern(), text)
+    def parse_intermediate(self, text: str) -> RepresentationT:
+        return self._parse(self.get_intermediate_regex_pattern(), text)
 
     def _get_score(self, main_tuple: tuple, comparison_tuple: tuple) -> int:
         score = 0
@@ -126,7 +148,7 @@ class Scheme(ABC, Generic[RepresentationT, IPARepresentationT]):
         return score
 
     def _get_matched(
-        self, rep: RepresentationT | IPARepresentationT, fmap: FeatureMap
+        self, rep: RepresentationT | IntermediateRepresentationT, fmap: FeatureMap
     ) -> dict[int, list[FeatureTuple]]:
         matched = defaultdict(list)
 
@@ -138,7 +160,7 @@ class Scheme(ABC, Generic[RepresentationT, IPARepresentationT]):
 
     def invert(
         self,
-        parsed: RepresentationT | IPARepresentationT,
+        parsed: RepresentationT | IntermediateRepresentationT,
         fmap: FeatureMap,
         backward: bool = False,
     ) -> FeatureTuple:
@@ -159,11 +181,11 @@ class Scheme(ABC, Generic[RepresentationT, IPARepresentationT]):
             f"incomplete feature {final_feature} inverted from {repr(parsed)}"
         )
 
-    def to_ipa(self, parsed: RepresentationT) -> IPARepresentationT:
+    def to_intermediate(self, parsed: RepresentationT) -> IntermediateRepresentationT:
         inverted = self.invert(parsed, self.feature_map, backward=True)
-        return self.ipa_representation_class(*inverted)
+        return self.intermediate_representation_class(*inverted)
 
-    def from_ipa(self, parsed: IPARepresentationT) -> RepresentationT:
+    def from_intermediate(self, parsed: IntermediateRepresentationT) -> RepresentationT:
         inverted = self.invert(parsed, self.feature_map)
         return self.representation_class(*inverted)
 
@@ -185,8 +207,14 @@ class Scheme(ABC, Generic[RepresentationT, IPARepresentationT]):
 
         for combo in itertools.product(*symbol_sets):
             try:
-                ipa_representation = self.ipa_representation_class.from_features(combo)
-                if (representation := self.from_ipa(ipa_representation)) not in seen:
+                intermediate_representation = (
+                    self.intermediate_representation_class.from_features(combo)
+                )
+                if (
+                    representation := self.from_intermediate(
+                        intermediate_representation
+                    )
+                ) not in seen:
                     yield representation
                     seen.add(representation)
             except ValidationError:
