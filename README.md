@@ -203,7 +203,7 @@ all_syllables = yumcha.get_all_syllables(
 print(all_syllables)
 ```
 
-Output (17,780 items):
+Output (20,776 items):
 
 ```text
 [CantoneseRepresentation(initial='f', nucleus='aː', coda='', tone='˥'),
@@ -227,7 +227,7 @@ all_syllables = yumcha.get_all_syllables(
 print(all_syllables)
 ```
 
-Output (10,360 items):
+Output (10,626 items):
 
 ```text
 [SidneyLauRepresentation(initial='f', nucleus='aa', coda='', tone='1°'),
@@ -251,7 +251,7 @@ coverage = yumcha.get_coverage(
     language_name="cantonese",
     scheme_name="meyer_wempe",
 )
-print(coverage)  # 0.5014623172103487
+print(coverage)  # 0.5068348093954563
 ```
 
 The closer this value is to `1`, the more phonologically complete the scheme's design is.

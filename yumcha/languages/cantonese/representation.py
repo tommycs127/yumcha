@@ -48,3 +48,15 @@ class CantoneseRepresentation(Representation):
                 f"syllabic consonant nucleus '{self.nucleus}' "
                 f"cannot be with coda '{self.coda}'"
             )
+
+        valid_initial_for_sz = ["t͡s", "t͡sʰ", "s"]
+
+        if self.nucleus == "ɿ":
+            if self.initial not in valid_initial_for_sz:
+                raise ValidationError(
+                    f"nucleus '{self.nucleus}' is not with initial {valid_initial_for_sz}"
+                )
+            if self.coda:
+                raise ValidationError(
+                    f"nucleus '{self.nucleus}' cannot be with any coda"
+                )
