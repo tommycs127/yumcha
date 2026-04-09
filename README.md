@@ -256,20 +256,20 @@ The closer this value is to `1`, the more phonologically complete the scheme's d
 
 ### Cantonese
 
-| Scheme name                                           | Example      | Scheme code       | Note                                                                                             |
-| ----------------------------------------------------- | ------------ | ----------------- | ------------------------------------------------------------------------------------------------ |
-| Braille                                               | `⠭⠎⠀`        | `braille`         |                                                                                                  |
-| Cantonese Hangul (T. S. Wong Scheme)                  | `츈`         | `hangul`          | Some syllables may not display correctly due to the limitations of Unicode combining characters. |
-| Institute of Language in Education Scheme             | `tsoen1`     | `ile`             |                                                                                                  |
-| Jyutping                                              | `ceon1`      | `jyutping`        |                                                                                                  |
-| Kuping                                                | `tśeon55^1`  | `kuping`          | A romanization scheme I designed!                                                                |
-| Kuping (Alternative)                                  | `ts'eon55^1` | `kuping_alt`      | Ditto.                                                                                           |
-| Meyer–Wempe                                           | `ts'un`      | `meyer_wempe`     |                                                                                                  |
-| Cantonese Transliteration Scheme (Rao's Romanization) | `cên1`       | `rao`             |                                                                                                  |
-| Sidney Lau                                            | `chun1°`     | `sidneylau`       |                                                                                                  |
-| S. L. Wong (Romanization)                             | `ˈtseun`     | `slwong_roman`    | Conventional numeral tone marking is not implemented.                                            |
-| S. L. Wong (Phonetic)                                 | `ˈtsœn`      | `slwong_phonetic` | Ditto.                                                                                           |
-| Yale                                                  | `chēun`      | `yale`            |                                                                                                  |
+| Scheme name                                           | Example      | Scheme code       | Note                                                                                              |
+| ----------------------------------------------------- | ------------ | ----------------- | ------------------------------------------------------------------------------------------------- |
+| Braille                                               | `⠭⠎⠀`        | `braille`         |                                                                                                   |
+| Cantonese Hangul (T. S. Wong Scheme)                  | `츈`         | `hangul`          | Some characters may not display correctly due to the limitations of Unicode combining characters. |
+| Institute of Language in Education Scheme             | `tsoen1`     | `ile`             |                                                                                                   |
+| Jyutping                                              | `ceon1`      | `jyutping`        |                                                                                                   |
+| Kuping                                                | `tśeon55^1`  | `kuping`          | A romanization scheme I designed!                                                                 |
+| Kuping (Alternative)                                  | `ts'eon55^1` | `kuping_alt`      | Ditto.                                                                                            |
+| Meyer–Wempe                                           | `ts'un`      | `meyer_wempe`     |                                                                                                   |
+| Cantonese Transliteration Scheme (Rao's Romanization) | `cên1`       | `rao`             |                                                                                                   |
+| Sidney Lau                                            | `chun1°`     | `sidneylau`       | Tones are not superscripted as it is impossible to superscript the degree symbol.                 |
+| S. L. Wong (Romanization)                             | `ˈtseun`     | `slwong_roman`    | Conventional numeral tone marking is not implemented.                                             |
+| S. L. Wong (Phonetic)                                 | `ˈtsœn`      | `slwong_phonetic` | Ditto.                                                                                            |
+| Yale                                                  | `chēun`      | `yale`            |                                                                                                   |
 
 ## ⚙️ How it works
 
