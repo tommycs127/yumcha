@@ -51,6 +51,9 @@ class Representation:
     def __str__(self) -> str:
         return self.get_string()
 
+    def __len__(self) -> int:
+        return len(self.get_string())
+
 
 RepresentationT = TypeVar("RepresentationT", bound=Representation)
 IntermediateRepresentationT = TypeVar(
