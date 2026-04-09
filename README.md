@@ -17,11 +17,11 @@ A phonology-oriented transliteration engine for Cantonese and other languages.
 ## ✨ Highlights
 
 - [**Scheme-to-Scheme Conversion**](#conversion): Convert seamlessly between different transcription and phonetic schemes within the same language.
-- [**Scheme Parsing**](#parsing): Parse strings to identify their phonological components and their IPA representations.
+- [**Scheme Parsing**](#parsing): Parse strings to identify their phonological components and their intermediate representations.
 - [**Syllable Set Generation**](#getting-all-valid-syllables): Get all valid syllables via the phonology of the language or as represented by a specific scheme.
 - **Zero Third-Party Dependencies:** Lightweight and easy to integrate into any project.
 - **Type-hinted**: Built with modern Python 3.12+ type hints for better IDE support and readability.
-- **Modular & Extensible**: Add new schemes by simply defining the representation structure, validation rules, and an IPA-to-symbol map!
+- **Modular & Extensible**: Add new schemes by simply defining the representation structure, validation rules, and an intermediate-to-symbol map!
 
 ## 🤔 Why Yumcha?
 
@@ -160,23 +160,23 @@ YaleRepresentation(
 )
 ```
 
-#### IPA from scheme representation
+#### Intermediate representation from scheme
 
-Parse a Yale syllable into components and retrieve its IPA representation:
+Parse a Yale syllable into components and retrieve its intermediate representation:
 
 ```py
-parsed_ipa = yumcha.parse_to_ipa(
+parsed_intermediate = yumcha.parse_to_intermediate(
     language_name="cantonese",
     scheme_name="yale",
     text="chēun",
 )
-print(repr(parsed_ipa))
+print(repr(parsed_intermediate))
 ```
 
 Output:
 
 ```text
-CantoneseIPARepresentation(
+CantoneseRepresentation(
     initial='t͡sʰ',
     nucleus='ɵ',
     coda='n',
@@ -206,13 +206,13 @@ print(all_syllables)
 Output (17,780 items):
 
 ```text
-[CantoneseIPARepresentation(initial='f', nucleus='aː', coda='', tone='˥'),
- CantoneseIPARepresentation(initial='f', nucleus='aː', coda='', tone='˥˧'),
- CantoneseIPARepresentation(initial='f', nucleus='aː', coda='', tone='˧'),
+[CantoneseRepresentation(initial='f', nucleus='aː', coda='', tone='˥'),
+ CantoneseRepresentation(initial='f', nucleus='aː', coda='', tone='˥˧'),
+ CantoneseRepresentation(initial='f', nucleus='aː', coda='', tone='˧'),
  ...,
- CantoneseIPARepresentation(initial='ʔ', nucleus='ʊ', coda='ŋ', tone='˨'),
- CantoneseIPARepresentation(initial='ʔ', nucleus='ʊ', coda='ŋ', tone='˩'),
- CantoneseIPARepresentation(initial='ʔ', nucleus='ʊ', coda='ŋ', tone='˩˧')]
+ CantoneseRepresentation(initial='ʔ', nucleus='ʊ', coda='ŋ', tone='˨'),
+ CantoneseRepresentation(initial='ʔ', nucleus='ʊ', coda='ŋ', tone='˩'),
+ CantoneseRepresentation(initial='ʔ', nucleus='ʊ', coda='ŋ', tone='˩˧')]
 ```
 
 #### Scheme
@@ -306,7 +306,7 @@ For example, the S. L. Wong Romanization scheme uses `e` for `[ɛː]` and `u` fo
 ### Documentations
 
 - [x] README.md
-- [x] How it works documentation
+- [ ] How it works documentation
 - [ ] Tutorial on adding custom languages
 - [ ] Tutorial on adding custom schemes
 
