@@ -254,12 +254,16 @@ The closer this value is to `1`, the more phonologically complete the scheme's d
 
 ## 🔤 Supported schemes
 
+> [!NOTE]
+> While I've done my best to keep the supported schemes true to their original design, some syllables may be incorrectly handled due to existing constraints.
+> If you spot any errors, please [open an issue](https://github.com/tommycs127/yumcha/issues/new). Any help is welcome and appreciated!
+
 ### Cantonese
 
 | Scheme name                                           | Example      | Scheme code       | Note                                                                                              |
 | ----------------------------------------------------- | ------------ | ----------------- | ------------------------------------------------------------------------------------------------- |
 | Braille                                               | `⠭⠎⠀`        | `braille`         |                                                                                                   |
-| Cantonese Hangul (T. S. Wong Scheme)                  | `츈`         | `hangul`          | Some characters may not display correctly due to the limitations of Unicode combining characters. |
+| Hangul (T. S. Wong Scheme)                            | `츈`         | `hangul`          | Some characters may not display correctly due to the limitations of Unicode combining characters. |
 | Institute of Language in Education Scheme             | `tsoen1`     | `ile`             |                                                                                                   |
 | Jyutping                                              | `ceon1`      | `jyutping`        |                                                                                                   |
 | Kuping                                                | `tśeon55^1`  | `kuping`          | A romanization scheme I designed!                                                                 |
