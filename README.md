@@ -265,6 +265,7 @@ The closer this value is to `1`, the more phonologically complete the scheme's d
 | Kuping                                                | `tśeon55^1`  | `kuping`          | A romanization scheme I designed!                                                                 |
 | Kuping (Alternative)                                  | `ts'eon55^1` | `kuping_alt`      | Ditto.                                                                                            |
 | Meyer–Wempe                                           | `ts'un`      | `meyer_wempe`     |                                                                                                   |
+| Pênkyämp                                              | `cönt`       | `penkyamp`        | The letter `q` as a coda for the glottal stop `[ʔ]` is not implemented.                           |
 | Cantonese Transliteration Scheme (Rao's Romanization) | `cên1`       | `rao`             |                                                                                                   |
 | Sidney Lau                                            | `chun1°`     | `sidneylau`       | Tones are not superscripted as it is impossible to superscript the degree symbol.                 |
 | S. L. Wong (Romanization)                             | `ˈtseun`     | `slwong_roman`    | Conventional numeral tone marking is not implemented.                                             |
@@ -323,7 +324,7 @@ For example, the S. L. Wong Romanization scheme uses `e` for `[ɛː]` and `u` fo
 
 #### Cantonese
 
-![](https://us-central1-progress-markdown.cloudfunctions.net/progress/11?&label=11/17&min=0&max=17)
+![](https://us-central1-progress-markdown.cloudfunctions.net/progress/13?&label=13/17&min=0&max=17)
 
 - [ ] Barnett–Chao
 - [ ] ~~Bopomofo (Zhuyin) by the Commission on the Unification of Pronunciation~~
@@ -337,7 +338,7 @@ For example, the S. L. Wong Romanization scheme uses `e` for `[ɛː]` and `u` fo
 - [x] Kuping
 - [x] Kuping (Alternative)
 - [x] Meyer–Wempe
-- [ ] Pênkyämp
+- [x] Pênkyämp
 - [x] S. L. Wong (Romanization)
 - [x] S. L. Wong (Phonetic)
 - [x] Sidney Lau
