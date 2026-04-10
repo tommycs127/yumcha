@@ -235,7 +235,7 @@ Output (10,626 items):
  SidneyLauRepresentation(initial='', nucleus='u', coda='ng', tone='5')]
 ```
 
-### Getting the coverage of a scheme
+### Calculating the coverage of a scheme
 
 > [!NOTE]
 > This function is implemented by generating all valid syllables. Refer to the notes in the [Getting all valid syllables](#getting-all-valid-syllables) section for details.
