@@ -33,7 +33,7 @@ By leveraging Python’s built-in `dataclass` library and Yumcha’s core module
 
 ### Validation
 
-Cantonese utilizes `[m]` as both an initial and a coda, and a syllabic consonant `[m̩]` as a nucleus. While it is technically possible to combine these into `[mm̩]` or `[m̩m]`, such combinations are redundant in most linguistic analyses.
+Cantonese has `[m]` as both an initial and a coda, and a syllabic consonant `[m̩]` as a nucleus. While it is technically possible to combine these into `[mm̩]` or `[m̩m]`, such combinations are redundant in most linguistic analyses.
 
 To handle these rules, the `Representation` class provides a `validate` method to check the legitimacy of a syllable:
 
@@ -70,7 +70,7 @@ class CantoneseRepresentation(Representation):
 
 With this method, an exception is raised whenever a `CantoneseRepresentation` is initialized with an invalid combination.
 
-### Scheme definition
+### Scheme Definition
 
 At first glance, the `CantoneseRepresentation` class may look like any other method for transcribing Cantonese syllables. However, because it allows for the exhaustive listing of every phonemic combination (modern or historical), it functions as an **intermediate scheme** to bridge different transcription systems—much like the International Phonetic Alphabet (IPA) does for global languages.
 
