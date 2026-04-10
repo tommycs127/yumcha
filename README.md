@@ -256,6 +256,7 @@ The closer this value is to `1`, the more phonologically complete the scheme's d
 
 > [!NOTE]
 > While I've done my best to keep the supported schemes true to their original design, some syllables may be incorrectly handled due to existing constraints.
+>
 > If you spot any errors, please [open an issue](https://github.com/tommycs127/yumcha/issues/new). Any help is welcome and appreciated!
 
 ### Cantonese
