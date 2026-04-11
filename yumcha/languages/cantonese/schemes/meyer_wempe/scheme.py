@@ -1,6 +1,6 @@
 from yumcha.language.scheme.feature.types import FeatureDict
 
-HAT = chr(0x2C6)
+CIRCUMFLEX = chr(0x2C6)
 CARON = chr(0x2C7)
 FLAT = chr(0x304)
 DROP = chr(0x300)
@@ -68,7 +68,7 @@ MAP: FeatureDict = {
     (..., ..., ..., "˥˧"): (..., ..., ..., "", ..., False),
     (..., ..., ..., "˧˥"): (..., ..., ..., RISE, ...),
     (..., ..., ..., "˧"): (..., ..., ..., DROP, ...),
-    (..., ..., ..., "˩"): (..., ..., ..., HAT, ...),
+    (..., ..., ..., "˩"): (..., ..., ..., CIRCUMFLEX, ...),
     (..., ..., ..., "˩˧"): (..., ..., ..., CARON, ...),
     (..., ..., ..., "˨"): (..., ..., ..., FLAT, ...),
 }
