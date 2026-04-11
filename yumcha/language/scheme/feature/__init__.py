@@ -1,7 +1,8 @@
 import re
+from collections.abc import Iterable
 from functools import cached_property
 from types import EllipsisType
-from typing import Any, Iterable
+from typing import Any
 
 from .types import FeatureTuple
 

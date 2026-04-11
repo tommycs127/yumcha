@@ -4,8 +4,9 @@ import re
 import unicodedata
 from abc import ABC, abstractmethod
 from collections import defaultdict
+from collections.abc import Iterable
 from functools import cached_property
-from typing import Generic, Iterable, TypeVar, get_origin
+from typing import Generic, TypeVar, get_origin
 
 from .feature import FeatureMap
 from .feature.types import FeatureDict, FeatureTuple, InverseFeatureDict
@@ -54,6 +55,10 @@ class Scheme(ABC, Generic[RepresentationT, IntermediateRepresentationT]):
     @property
     def name(self) -> str:
         return self.__class__.__name__
+
+    @property
+    def code(self) -> str:
+        return self.name.lower()
 
     @property
     @abstractmethod
@@ -190,33 +195,22 @@ class Scheme(ABC, Generic[RepresentationT, IntermediateRepresentationT]):
         return self.representation_class(*inverted)
 
     def iterate_all_syllables(self) -> Iterable[RepresentationT]:
-        """
-        Generates all valid syllable combinations.
-
-        Yields:
-            RepresentationT: An instance of the representation class
-            if it passes validation.
-        """
-
         symbol_sets: list[list[str]] = [
             sorted(set(self.feature_map.get_key_columns(idx)))
             for idx in range(self.feature_map.key_arity)
         ]
-
-        seen = set()
 
         for combo in itertools.product(*symbol_sets):
             try:
                 intermediate_representation = (
                     self.intermediate_representation_class.from_features(combo)
                 )
-                if (
-                    representation := self.from_intermediate(
-                        intermediate_representation
-                    )
-                ) not in seen:
+                representation = self.from_intermediate(intermediate_representation)
+                intermediate_representation_roundtrip = self.to_intermediate(
+                    representation
+                )
+                if intermediate_representation == intermediate_representation_roundtrip:
                     yield representation
-                    seen.add(representation)
             except ValidationError:
                 pass
             except ValueError:

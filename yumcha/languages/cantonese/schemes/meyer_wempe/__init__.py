@@ -15,5 +15,5 @@ class MeyerWempe(CantoneseScheme[MeyerWempeRepresentation, CantoneseRepresentati
         return MAP
 
     @property
-    def name(self) -> str:
-        return "Meyer_Wempe"
+    def code(self) -> str:
+        return "meyer_wempe"

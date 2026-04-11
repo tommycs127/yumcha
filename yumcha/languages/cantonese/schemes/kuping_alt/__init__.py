@@ -21,5 +21,5 @@ class KupingAlternative(
         return INVERSE_MAP
 
     @property
-    def name(self) -> str:
-        return "Kuping_Alt"
+    def code(self) -> str:
+        return "kuping_alt"

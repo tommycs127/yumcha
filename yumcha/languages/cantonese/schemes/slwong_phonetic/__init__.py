@@ -17,5 +17,5 @@ class SLWongPhonetic(
         return MAP
 
     @property
-    def name(self) -> str:
-        return "SLWong_Phonetic"
+    def code(self) -> str:
+        return "slwong_phonetic"

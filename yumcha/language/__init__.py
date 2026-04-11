@@ -1,8 +1,9 @@
 import itertools
 from abc import ABC, abstractmethod
+from collections.abc import Iterable, Sequence
 from dataclasses import dataclass, field
 from operator import itemgetter
-from typing import Generic, Iterable, get_args
+from typing import Generic, get_args
 
 from .scheme import Scheme, SchemeT
 from .scheme.feature.types import FeatureTuple
@@ -19,7 +20,7 @@ class Language(ABC, Generic[SchemeT, IntermediateRepresentationT]):
 
     def __post_init__(self) -> None:
         self.__discover()
-        self._dictionary = {obj.name.lower(): obj for obj in self._schemes}
+        self._dictionary = {obj.code: obj for obj in self._schemes}
         self.__validate()
 
     def __discover(self) -> None:
@@ -64,7 +65,7 @@ class Language(ABC, Generic[SchemeT, IntermediateRepresentationT]):
 
             if missing_set := required_set - symbols_set:
                 raise PhonologyError(
-                    f"scheme '{scheme.name}' does not meet "
+                    f"scheme '{scheme.__class__.__name__}' does not meet "
                     f"{self.name.capitalize()} phonology. "
                     f"Add {tuple(sorted(missing_set))} "
                     f"as {scheme.feature_map.key_labels[idx]}"
@@ -72,7 +73,7 @@ class Language(ABC, Generic[SchemeT, IntermediateRepresentationT]):
 
             if overloaded_set := symbols_set - required_set:
                 raise PhonologyError(
-                    f"scheme '{scheme.name}' does not meet "
+                    f"scheme '{scheme.__class__.__name__}' does not meet "
                     f"{self.name.capitalize()} phonology. "
                     f"Remove {scheme.feature_map.key_labels[idx]} "
                     f"{tuple(sorted(overloaded_set))}"
@@ -95,6 +96,10 @@ class Language(ABC, Generic[SchemeT, IntermediateRepresentationT]):
         return self.__class__.__name__
 
     @property
+    def code(self) -> str:
+        return self.name.lower()
+
+    @property
     @abstractmethod
     def intermediate_representation_class(self) -> type[IntermediateRepresentationT]:
         raise NotImplementedError()
@@ -108,43 +113,33 @@ class Language(ABC, Generic[SchemeT, IntermediateRepresentationT]):
     def dictionary(self) -> dict[str, SchemeT]:
         return self._dictionary
 
-    def add(self, scheme_class: type[SchemeT]) -> None:
+    def add_scheme(self, scheme_class: type[SchemeT]) -> None:
         scheme = scheme_class(
             intermediate_representation_class=self.intermediate_representation_class
         )
         self.__validate_scheme(scheme)
         self._schemes.append(scheme)
 
-    def get(self, scheme_name: str) -> SchemeT:
-        return self._dictionary[scheme_name]
+    def get_scheme(self, name: str) -> SchemeT:
+        return self._dictionary[name]
 
     @property
     def schemes(self) -> list[str]:
         return list(self._dictionary.keys())
 
-    def get_columns(self, iter: Iterable, axis: int) -> list[str]:
-        return list(item[axis] for item in iter if item[axis] is not ...)
-
-    def get_columns_by_label(self, iter: Iterable, label: str) -> list[str]:
+    def _get_phonology_columns_by_label(self, iter: Sequence, label: str) -> list[str]:
         axis = self.intermediate_representation_class.get_field_names().index(label)
-        return self.get_columns(iter=iter, axis=axis)
+        return list(item[axis] for item in iter if item[axis] is not ...)
 
     def iterate_all_syllables(self) -> Iterable[IntermediateRepresentationT]:
         symbol_sets: list[list[str]] = [
-            sorted(set(self.get_columns_by_label(self.phonology, label)))
+            sorted(set(self._get_phonology_columns_by_label(self.phonology, label)))
             for label in self.intermediate_representation_class.get_field_names()
         ]
 
-        seen = set()
-
         for combo in itertools.product(*symbol_sets):
             try:
-                ipa_representation = (
-                    self.intermediate_representation_class.from_features(combo)
-                )
-                if ipa_representation not in seen:
-                    yield ipa_representation
-                    seen.add(ipa_representation)
+                yield self.intermediate_representation_class.from_features(combo)
             except ValidationError:
                 pass
             except ValueError:
@@ -152,3 +147,8 @@ class Language(ABC, Generic[SchemeT, IntermediateRepresentationT]):
 
     def get_all_syllables(self) -> list[IntermediateRepresentationT]:
         return list(self.iterate_all_syllables())
+
+    def get_coverage(self, scheme_name: str) -> float:
+        all_syllables = self.get_all_syllables()
+        scheme_all_syllables = self.get_scheme(name=scheme_name).get_all_syllables()
+        return len(scheme_all_syllables) / len(all_syllables)
