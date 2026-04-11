@@ -1,7 +1,7 @@
 from yumcha.language.scheme.feature.types import FeatureDict
 
-CIRCUMFLEX = chr(0x2C6)
-CARON = chr(0x2C7)
+CIRCUMFLEX = chr(0x302)
+CARON = chr(0x30C)
 FLAT = chr(0x304)
 DROP = chr(0x300)
 RISE = chr(0x301)
