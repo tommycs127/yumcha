@@ -54,7 +54,7 @@ class CantoneseRepresentation(Representation):
     def validate(self) -> None:
         invalid_initial_nucleus_comb = {
             "m": "m̩",
-            "ŋ": "ŋ̩",
+            "ŋ": "ŋ̍",
         }
 
         if (

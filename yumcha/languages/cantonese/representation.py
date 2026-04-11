@@ -14,7 +14,7 @@ class CantoneseRepresentation(Representation):
     def validate(self) -> None:
         invalid_initial_nucleus_comb = {
             "m": "m̩",
-            "ŋ": "ŋ̩",
+            "ŋ": "ŋ̍",
         }
 
         if (
@@ -30,7 +30,7 @@ class CantoneseRepresentation(Representation):
             "uː": "u̯",
             "yː": "y̯",
             "m̩": "m",
-            "ŋ̩": "ŋ",
+            "ŋ̍": "ŋ",
         }
 
         if (
@@ -41,7 +41,7 @@ class CantoneseRepresentation(Representation):
                 f"nucleus '{self.nucleus}' cannot be with coda '{self.coda}'"
             )
 
-        syllabic_consonants = ("m̩", "ŋ̩")
+        syllabic_consonants = ("m̩", "ŋ̍")
 
         if self.nucleus in syllabic_consonants and self.coda:
             raise ValidationError(
