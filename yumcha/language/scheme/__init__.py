@@ -157,6 +157,8 @@ class Scheme(ABC, Generic[RepresentationT, IntermediateRepresentationT]):
     ) -> dict[int, list[FeatureTuple]]:
         matched = defaultdict(list)
 
+        # TODO: Improve efficiency?
+
         for k in fmap:
             if (score := self._get_score(rep.features, k)) > 0:
                 matched[score].append(k)

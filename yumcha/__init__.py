@@ -92,7 +92,7 @@ class Yumcha:
                         )
                         if representation_roundtrip != syllable:
                             rows.append(
-                                f"⇍ {representation} [{representation_roundtrip}]"
+                                f"↦ {representation} [{representation_roundtrip}]"
                             )
                         else:
                             rows.append(representation)

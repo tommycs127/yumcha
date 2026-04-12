@@ -1,10 +1,11 @@
 from yumcha.language.scheme.feature.types import FeatureDict
 
-ONE_DOTS_ABOVE = chr(0x307)
-TWO_DOTS_ABOVE = chr(0x308)
+ONE_DOTS_LEFT = chr(0x302E)
+TWO_DOTS_LEFT = chr(0x302F)
+
 ONE_DOTS_BELOW = chr(0x323)
 TWO_DOTS_BELOW = chr(0x324)
-BAR_BELOW = chr(0x331)
+BAR_BELOW = chr(0x332)
 
 MAP: FeatureDict = {
     ("p", ..., ..., ...): ("ᄇ", ..., ...),
@@ -115,8 +116,8 @@ MAP: FeatureDict = {
     ("j", "ɵ", "n", ...): ("ᄋ", "ᅲᆫ", ...),
     (..., ..., ..., "˥"): (..., ..., ""),
     (..., ..., ..., "˥˧"): (..., ..., "", False),
-    (..., ..., ..., "˧˥"): (..., ..., TWO_DOTS_ABOVE),
-    (..., ..., ..., "˧"): (..., ..., ONE_DOTS_ABOVE),
+    (..., ..., ..., "˧˥"): (..., ..., TWO_DOTS_LEFT),
+    (..., ..., ..., "˧"): (..., ..., ONE_DOTS_LEFT),
     (..., ..., ..., "˩"): (..., ..., BAR_BELOW),
     (..., ..., ..., "˩˧"): (..., ..., TWO_DOTS_BELOW),
     (..., ..., ..., "˨"): (..., ..., ONE_DOTS_BELOW),
