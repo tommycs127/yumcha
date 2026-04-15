@@ -1,7 +1,7 @@
 import unicodedata
 from dataclasses import astuple, dataclass, fields
 from functools import cache
-from typing import ClassVar, Self, TypeVar
+from typing import ClassVar, Self
 
 MISSING = object()
 
@@ -53,9 +53,3 @@ class Representation:
 
     def __len__(self) -> int:
         return len(self.get_string())
-
-
-RepresentationT = TypeVar("RepresentationT", bound=Representation)
-IntermediateRepresentationT = TypeVar(
-    "IntermediateRepresentationT", bound=Representation
-)

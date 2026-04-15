@@ -3,29 +3,21 @@ import itertools
 import re
 import unicodedata
 from abc import ABC, abstractmethod
-from collections import defaultdict
 from collections.abc import Iterable
 from functools import cached_property
-from typing import Generic, TypeVar, get_origin
+from typing import get_origin
 
-from .feature import FeatureMap
-from .feature.types import FeatureDict, FeatureTuple, InverseFeatureDict
-from .feature.utils import weak_union_tuples
-from .representation import (
-    IntermediateRepresentationT,
-    RepresentationT,
-    ValidationError,
-)
+from .pattern_map import PatternDict, PatternMap
+from .representation import Representation, ValidationError
 
 
-class Scheme(ABC, Generic[RepresentationT, IntermediateRepresentationT]):
+class Scheme[RT: Representation, IRT: Representation](ABC):
     _registry: dict = {}
-    __intermediate_representation_class: type[IntermediateRepresentationT]
 
-    def __init__(
-        self, intermediate_representation_class: type[IntermediateRepresentationT]
-    ) -> None:
-        self.__intermediate_representation_class = intermediate_representation_class
+    def __init__(self, intermediate_representation_class: type[IRT]) -> None:
+        self.__intermediate_representation_class: type[IRT] = (
+            intermediate_representation_class
+        )
 
     def __init_subclass__(cls, **kwargs) -> None:
         super().__init_subclass__(**kwargs)
@@ -62,27 +54,28 @@ class Scheme(ABC, Generic[RepresentationT, IntermediateRepresentationT]):
 
     @property
     @abstractmethod
-    def representation_class(self) -> type[RepresentationT]:
+    def representation_class(self) -> type[RT]:
         raise NotImplementedError()
 
     @property
-    def intermediate_representation_class(self) -> type[IntermediateRepresentationT]:
+    def intermediate_representation_class(self) -> type[IRT]:
         return self.__intermediate_representation_class
 
     @cached_property
-    def feature_map(self) -> FeatureMap:
+    def pattern_map(self) -> PatternMap:
         def _error(exception_type: type[Exception], e: Exception):
             raise exception_type(
                 f"invalid map defined for scheme '{self.name}': {str(e)}"
             ) from e
 
-        feature_map = None
+        pattern_map = None
 
         try:
-            feature_map = FeatureMap(
+            pattern_map = PatternMap(
                 self.map,
                 key_labels=self.intermediate_representation_class.get_field_names(),
                 value_labels=self.representation_class.get_field_names(),
+                one_way_map=self.one_way_map,
                 inverse_map=self.inverse_map,
             )
         except TypeError as te:
@@ -90,136 +83,84 @@ class Scheme(ABC, Generic[RepresentationT, IntermediateRepresentationT]):
         except ValueError as ve:
             _error(ValueError, ve)
 
-        if feature_map is None:
+        if pattern_map is None:
             raise ValueError("invalid map")
 
-        return feature_map
+        return pattern_map
 
     @property
     @abstractmethod
-    def map(self) -> FeatureDict:
+    def map(self) -> PatternDict:
         raise NotImplementedError()
 
     @property
-    def inverse_map(self) -> InverseFeatureDict:
+    def one_way_map(self) -> PatternDict:
+        return dict()
+
+    @property
+    def inverse_map(self) -> PatternDict:
         return dict()
 
     def _get_regex_pattern(
         self,
-        feature_map: FeatureMap,
-        representation_class: type[RepresentationT] | type[IntermediateRepresentationT],
+        pattern_map: PatternMap,
+        representation_class: type[RT] | type[IRT],
     ) -> str:
         return "".join(
-            f"{feature_map.get_key_regex_pattern(name)}"
+            f"{pattern_map.get_key_regex_pattern(name)}"
             f"{'' if name in representation_class.REQUIRED else '?'}"
             for name in representation_class.get_field_names()
         )
 
-    def get_regex_pattern(self) -> str:
+    @cached_property
+    def regex_pattern(self) -> str:
         return self._get_regex_pattern(
-            feature_map=self.feature_map.inverse,
+            pattern_map=self.pattern_map.inverse,
             representation_class=self.representation_class,
         )
 
-    def get_intermediate_regex_pattern(self) -> str:
+    @cached_property
+    def intermediate_regex_pattern(self) -> str:
         return self._get_regex_pattern(
-            feature_map=self.feature_map,
+            pattern_map=self.pattern_map,
             representation_class=self.intermediate_representation_class,
         )
 
-    def _parse(self, pattern: str, text: str) -> RepresentationT:
+    def _parse(self, pattern: str, text: str) -> RT:
         decomposed_text = unicodedata.normalize("NFD", text)
         match = re.fullmatch(pattern, decomposed_text)
-        if match is None:
-            raise ValueError(f'invalid {self.name} syllable: "{text}"')
+        if match is None or None in match.groups():
+            raise ValueError(f"invalid {self.name} syllable: '{text}'")
         return self.representation_class(**match.groupdict())
 
-    def parse(self, text: str) -> RepresentationT:
-        return self._parse(self.get_regex_pattern(), text)
+    def parse(self, text: str) -> RT:
+        return self._parse(self.regex_pattern, text)
 
-    def parse_intermediate(self, text: str) -> RepresentationT:
-        return self._parse(self.get_intermediate_regex_pattern(), text)
+    def parse_intermediate(self, text: str) -> RT:
+        return self._parse(self.intermediate_regex_pattern, text)
 
-    def _get_score(self, main_tuple: tuple, comparison_tuple: tuple) -> int:
-        score = 0
-
-        for m, c in zip(main_tuple, comparison_tuple):
-            if c is ...:
-                continue
-            if m != c:
-                return 0
-            score += 1
-
-        return score
-
-    def _get_matched(
-        self, rep: RepresentationT | IntermediateRepresentationT, fmap: FeatureMap
-    ) -> dict[int, list[FeatureTuple]]:
-        matched = defaultdict(list)
-
-        # TODO: Improve efficiency?
-
-        for k in fmap:
-            if (score := self._get_score(rep.features, k)) > 0:
-                matched[score].append(k)
-
-        return dict(matched)
-
-    def invert(
-        self,
-        parsed: RepresentationT | IntermediateRepresentationT,
-        fmap: FeatureMap,
-        backward: bool = False,
-    ) -> FeatureTuple:
-        fmap = fmap.inverse if backward else fmap
-        matched = self._get_matched(parsed, fmap)
-        scores = sorted(matched.keys(), reverse=True)
-        final_feature = (...,) * fmap.value_arity
-
-        for score in scores:
-            for feature in matched[score]:
-                if (sym := fmap[feature]) is not None:
-                    final_feature = weak_union_tuples(final_feature, sym)
-
-                if ... not in final_feature:
-                    return final_feature
-
-        raise ValueError(
-            f"incomplete feature {final_feature} inverted from {repr(parsed)}"
-        )
-
-    def to_intermediate(self, parsed: RepresentationT) -> IntermediateRepresentationT:
-        inverted = self.invert(parsed, self.feature_map, backward=True)
+    def to_intermediate(self, parsed: RT) -> IRT:
+        inverted = self.pattern_map.inverse.query(parsed.features)
         return self.intermediate_representation_class(*inverted)
 
-    def from_intermediate(self, parsed: IntermediateRepresentationT) -> RepresentationT:
-        inverted = self.invert(parsed, self.feature_map)
+    def from_intermediate(self, parsed: IRT) -> RT:
+        inverted = self.pattern_map.query(parsed.features)
         return self.representation_class(*inverted)
 
-    def iterate_all_syllables(self) -> Iterable[RepresentationT]:
-        symbol_sets: list[list[str]] = [
-            sorted(set(self.feature_map.get_key_columns(idx)))
-            for idx in range(self.feature_map.key_arity)
-        ]
+    def iterate_all_syllables(self) -> Iterable[RT]:
+        key_transpose = [sorted(_) for _ in self.pattern_map.key_transpose]
 
-        for combo in itertools.product(*symbol_sets):
+        for combo in itertools.product(*key_transpose):
             try:
-                intermediate_representation = (
-                    self.intermediate_representation_class.from_features(combo)
-                )
-                representation = self.from_intermediate(intermediate_representation)
-                intermediate_representation_roundtrip = self.to_intermediate(
-                    representation
-                )
-                if intermediate_representation == intermediate_representation_roundtrip:
-                    yield representation
+                ir = self.intermediate_representation_class.from_features(combo)
+                r = self.from_intermediate(ir)
+                ir_roundtrip = self.to_intermediate(r)
+                if ir == ir_roundtrip:
+                    yield r
             except ValidationError:
                 pass
             except ValueError:
                 pass
 
-    def get_all_syllables(self) -> list[RepresentationT]:
+    def get_all_syllables(self) -> list[RT]:
         return list(self.iterate_all_syllables())
-
-
-SchemeT = TypeVar("SchemeT", bound=Scheme)

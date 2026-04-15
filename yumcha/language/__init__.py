@@ -1,29 +1,41 @@
 import itertools
 from abc import ABC, abstractmethod
-from collections.abc import Iterable, Sequence
+from collections.abc import Iterable
 from dataclasses import dataclass, field
 from operator import itemgetter
-from typing import Generic, get_args
+from typing import get_args
 
-from .scheme import Scheme, SchemeT
-from .scheme.feature.types import FeatureTuple
-from .scheme.representation import IntermediateRepresentationT, ValidationError
+from .scheme import Scheme
+from .scheme.pattern_map import PatternTuple
+from .scheme.representation import Representation, ValidationError
 
 
 class PhonologyError(Exception):
     pass
 
 
+type Phonology = tuple[PatternTuple, ...]
+
+
 @dataclass
-class Language(ABC, Generic[SchemeT, IntermediateRepresentationT]):
-    _schemes: list[SchemeT] = field(default_factory=list, init=False)
+class Language[S: Scheme, IRT: Representation](ABC):
+    __schemes: list[S] = field(default_factory=list, init=False)
 
     def __post_init__(self) -> None:
-        self.__discover()
-        self._dictionary = {obj.code: obj for obj in self._schemes}
-        self.__validate()
+        self._discover()
+        self.__dictionary = {obj.code: obj for obj in self.__schemes}
 
-    def __discover(self) -> None:
+        field_names = self.intermediate_representation_class.get_field_names()
+        self.__key_transpose: list[set[str]] = [set() for _ in range(len(field_names))]
+
+        for patterns in self.phonology:
+            for idx in range(len(field_names)):
+                if (phoneme := patterns[idx]) is not ...:
+                    self.__key_transpose[idx].add(phoneme)
+
+        self._validate()
+
+    def _discover(self) -> None:
         # 1. Identify the specific Scheme class from the Generic alias
         # Look at Language[SchemeT] and grabs "SchemeT"
         cls_hierarchy = getattr(self, "__orig_bases__", [])
@@ -50,16 +62,16 @@ class Language(ABC, Generic[SchemeT, IntermediateRepresentationT]):
 
         # 3. Pull from the registry we built in the previous step
         discovered_classes = Scheme._registry.get(target_scheme_base, [])
-        self._schemes = list(
+        self.__schemes = list(
             cls(
                 intermediate_representation_class=self.intermediate_representation_class
             )
             for cls in discovered_classes
         )
 
-    def __validate_scheme(self, scheme: SchemeT):
-        for idx in range(scheme.feature_map.key_arity):
-            symbols_set = set(scheme.feature_map.get_key_columns(idx))
+    def __validate_scheme(self, scheme: S):
+        for idx in range(len(scheme.pattern_map.key_labels)):
+            symbols_set = scheme.pattern_map.key_transpose[idx]
             phonology_items = map(itemgetter(idx), self.phonology)
             required_set = set(filter(lambda x: x is not ..., phonology_items))
 
@@ -68,22 +80,22 @@ class Language(ABC, Generic[SchemeT, IntermediateRepresentationT]):
                     f"scheme '{scheme.__class__.__name__}' does not meet "
                     f"{self.name.capitalize()} phonology. "
                     f"Add {tuple(sorted(missing_set))} "
-                    f"as {scheme.feature_map.key_labels[idx]}"
+                    f"as {scheme.pattern_map.key_labels[idx]}"
                 )
 
             if overloaded_set := symbols_set - required_set:
                 raise PhonologyError(
                     f"scheme '{scheme.__class__.__name__}' does not meet "
                     f"{self.name.capitalize()} phonology. "
-                    f"Remove {scheme.feature_map.key_labels[idx]} "
+                    f"Remove {scheme.pattern_map.key_labels[idx]} "
                     f"{tuple(sorted(overloaded_set))}"
                 )
 
-    def __validate(self) -> None:
-        if len(self._schemes) != len(self._dictionary):
+    def _validate(self) -> None:
+        if len(self.__schemes) != len(self.__dictionary):
             raise ValueError("scheme names must be unique (case-insensitive)")
 
-        for scheme in self._schemes:
+        for scheme in self.__schemes:
             self.__validate_scheme(scheme)
 
         self.validate()
@@ -101,43 +113,35 @@ class Language(ABC, Generic[SchemeT, IntermediateRepresentationT]):
 
     @property
     @abstractmethod
-    def intermediate_representation_class(self) -> type[IntermediateRepresentationT]:
+    def intermediate_representation_class(self) -> type[IRT]:
         raise NotImplementedError()
 
     @property
     @abstractmethod
-    def phonology(self) -> tuple[FeatureTuple, ...]:
+    def phonology(self) -> tuple[PatternTuple, ...]:
         raise NotImplementedError()
 
     @property
-    def dictionary(self) -> dict[str, SchemeT]:
-        return self._dictionary
+    def dictionary(self) -> dict[str, S]:
+        return self.__dictionary
 
-    def add_scheme(self, scheme_class: type[SchemeT]) -> None:
+    def add_scheme(self, scheme_class: type[S]) -> None:
         scheme = scheme_class(
             intermediate_representation_class=self.intermediate_representation_class
         )
         self.__validate_scheme(scheme)
-        self._schemes.append(scheme)
+        self.__schemes.append(scheme)
 
-    def get_scheme(self, name: str) -> SchemeT:
-        return self._dictionary[name]
+    def get_scheme(self, name: str) -> S:
+        return self.__dictionary[name]
 
     @property
     def schemes(self) -> list[str]:
-        return list(self._dictionary.keys())
+        return list(self.__dictionary.keys())
 
-    def _get_phonology_columns_by_label(self, iter: Sequence, label: str) -> list[str]:
-        axis = self.intermediate_representation_class.get_field_names().index(label)
-        return list(item[axis] for item in iter if item[axis] is not ...)
-
-    def iterate_all_syllables(self) -> Iterable[IntermediateRepresentationT]:
-        symbol_sets: list[list[str]] = [
-            sorted(set(self._get_phonology_columns_by_label(self.phonology, label)))
-            for label in self.intermediate_representation_class.get_field_names()
-        ]
-
-        for combo in itertools.product(*symbol_sets):
+    def iterate_all_syllables(self) -> Iterable[IRT]:
+        key_transpose = [sorted(_) for _ in self.__key_transpose]
+        for combo in itertools.product(*key_transpose):
             try:
                 yield self.intermediate_representation_class.from_features(combo)
             except ValidationError:
@@ -145,7 +149,7 @@ class Language(ABC, Generic[SchemeT, IntermediateRepresentationT]):
             except ValueError:
                 pass
 
-    def get_all_syllables(self) -> list[IntermediateRepresentationT]:
+    def get_all_syllables(self) -> list[IRT]:
         return list(self.iterate_all_syllables())
 
     def get_coverage(self, scheme_name: str) -> float:

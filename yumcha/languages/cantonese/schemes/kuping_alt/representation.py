@@ -47,7 +47,7 @@ class KupingAlternativeRepresentation(Representation):
             )
 
         checked_coda = ("p", "t", "k")
-        checked_tone_number = ("55", "33", "22")
+        checked_tone_number = ("", "55", "33", "22")
         checked_tone = ("^4", "-4", "_4")
 
         if (

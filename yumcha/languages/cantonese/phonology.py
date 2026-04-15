@@ -1,6 +1,6 @@
-from yumcha.language.scheme.feature.types import FeatureTuple
+from yumcha.language.scheme.pattern_map import PatternTuple
 
-PHONOLOGY: tuple[FeatureTuple, ...] = (
+PHONOLOGY: tuple[PatternTuple, ...] = (
     ("p", ..., ..., ...),
     ("pʰ", ..., ..., ...),
     ("m", ..., ..., ...),

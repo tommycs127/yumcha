@@ -48,12 +48,12 @@ class KupingRepresentation(Representation):
             )
 
         checked_coda = ("p", "t", "k")
-        checked_tone_number = ("55", "33", "22")
+        checked_tone_number = ("", "55", "33", "22")
         checked_tone = ("^4", "-4", "_4")
 
         if (
             self.coda in checked_coda
-            and self.tone_number is not None
+            and self.tone_number
             and self.tone_number not in checked_tone_number
         ):
             raise ValidationError(
@@ -61,11 +61,7 @@ class KupingRepresentation(Representation):
                 "Tone sandhi of syllable with checked coda is not supported"
             )
 
-        if (
-            self.coda in checked_coda
-            and self.tone is not None
-            and self.tone not in checked_tone
-        ):
+        if self.coda in checked_coda and self.tone and self.tone not in checked_tone:
             register = self.tone[0]
             _wrong_tone((f"'{register}4'",))
 

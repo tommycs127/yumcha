@@ -1,4 +1,4 @@
-from yumcha.language.scheme.feature.types import FeatureDict, InverseFeatureDict
+from yumcha.language.scheme.pattern_map import PatternDict
 from yumcha.languages.cantonese import CantoneseRepresentation, CantoneseScheme
 
 from .representation import KupingAlternativeRepresentation
@@ -13,11 +13,11 @@ class KupingAlternative(
         return KupingAlternativeRepresentation
 
     @property
-    def map(self) -> FeatureDict:
+    def map(self) -> PatternDict:
         return MAP
 
     @property
-    def inverse_map(self) -> InverseFeatureDict:
+    def inverse_map(self) -> PatternDict:
         return INVERSE_MAP
 
     @property
