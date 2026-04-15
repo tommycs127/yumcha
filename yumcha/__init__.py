@@ -75,13 +75,15 @@ class Yumcha:
 
         with open(file_path, mode="w", encoding="utf-8", newline="") as file:
             writer = csv.writer(file, delimiter="\t")
-            writer.writerow(["-", *language.schemes])
+            writer.writerow(["-", *language.schemes, "COUNT"])
             count = {k: 0 for k in language.schemes}
             total_count = 0
 
             for syllable in all_syllables:
                 rows = [syllable]
                 total_count += 1
+
+                supported_column_count = 0
 
                 for scheme_name in language.schemes:
                     scheme = language.get_scheme(name=scheme_name)
@@ -97,14 +99,16 @@ class Yumcha:
                         else:
                             rows.append(representation)
                             count[scheme_name] += 1
+                            supported_column_count += 1
                     except ValidationError:  # Representable but disallowed
                         rows.append("⊖")
                     except ValueError:  # Unsupported
                         rows.append("△")
-                writer.writerow(rows)
 
-            total_label = ["=====", *count.keys()]
-            total = [total_count, *count.values()]
+                writer.writerow([*rows, supported_column_count])
+
+            total_label = ["=====", *count.keys(), "TOTAL"]
+            total = ["COUNT", *count.values(), total_count]
             writer.writerow(total_label)
             writer.writerow(total)
 
