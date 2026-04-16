@@ -147,9 +147,9 @@ Output:
 ```text
 YaleRepresentation(
     initial='ch',
-    nucleus_before_tone='e',
-    tone='̄',
-    nucleus_after_tone='u',
+    nucleus_before_tone_diacritic='e',
+    tone_diacritic='̄',
+    nucleus_after_tone_diacritic='u',
     coda_vowel='',
     tone_h='',
     coda_consonant='n'
