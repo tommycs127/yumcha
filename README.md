@@ -237,7 +237,9 @@ Output (10,626 items):
 ### Calculating the coverage of a scheme
 
 > [!NOTE]
-> This function may take a few seconds to complete due to the high volume of combinations generated. Because it works by iterating through all valid syllables, refer to the notes in the [Getting all valid syllables](#getting-all-valid-syllables) section for further details.
+>
+> - This function may take a few seconds to complete due to the high volume of combinations generated.
+> - This function iterates through all valid syllables; refer to the notes in the [Getting all valid syllables](#getting-all-valid-syllables) section for further details.
 
 Calculate the phonological coverage of the Meyer–Wempe scheme:
 
