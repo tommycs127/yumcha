@@ -184,7 +184,6 @@ CantoneseRepresentation(
 
 > [!NOTE]
 >
-> - This operation may take a few seconds to complete due to the volume of validated combinations generated.
 > - The output list includes all theoretically valid syllables. While many are rare in common usage, they remain phonologically possible and pronounceable.
 > - As validation rules and syllable constraints are updated during development, the total count of the list may fluctuate.
 
@@ -238,7 +237,7 @@ Output (10,626 items):
 ### Calculating the coverage of a scheme
 
 > [!NOTE]
-> This function is implemented by generating all valid syllables. Refer to the notes in the [Getting all valid syllables](#getting-all-valid-syllables) section for details.
+> This function may take a few seconds to complete due to the high volume of combinations generated. Because it works by iterating through all valid syllables, refer to the notes in the [Getting all valid syllables](#getting-all-valid-syllables) section for further details.
 
 Calculate the phonological coverage of the Meyer–Wempe scheme:
 
