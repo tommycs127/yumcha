@@ -1,10 +1,10 @@
 # 🍵 Yumcha
 
-![status](https://badgen.net/badge/status/Alpha%20development/red)
-![Python](https://badgen.net/badge/python/3.12%2B)
+[![status](https://badgen.net/badge/status/Alpha%20development/red)](#)
+[![Python](https://badgen.net/badge/python/3.12%2B)](https://www.python.org/downloads/release/python-3120/)
 [![License](https://badgen.net/badge/license/MIT/orange)](LICENSE)
-![type](https://badgen.net/badge/type/Romanization%20engine/cyan)
-![made-in](https://badgen.net/badge/made%20in/Hong%20Kong/cc3399)
+[![type](https://badgen.net/badge/type/Transliteration%20engine/cyan)](#)
+[![made-in](https://badgen.net/badge/made%20in/Hong%20Kong/cc3399)](#)
 
 A phonology-oriented transliteration engine for Cantonese and other languages.
 
