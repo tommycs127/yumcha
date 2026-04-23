@@ -187,9 +187,44 @@ graph LR
 
 ### Lookup and Map
 
-Yumcha implements a **context-aware pattern matching mechanism**. if a parsed structure matches a predefined orthographical or phonological context, the system prioritizes a context-specific mapping over a literal symbol-to-symbol translation. This logic is fully reversible, ensuring robust bidirectional conversion between schemes.
+Yumcha implements a **context-aware pattern matching mechanism**. If a parsed structure matches a predefined orthographical or phonological context, the system prioritizes a context-specific mapping over a literal symbol-to-symbol translation.
 
-<small>(🚧 This section is under construction.)</small>
+At runtime, each scheme map is compiled into a `PatternMap` object, where:
+
+- The **key** side represents intermediate features (e.g., initial / nucleus / coda / tone)
+- The **value** side represents scheme-specific features
+- `...` is used as a wildcard, meaning "this part is not constrained by this rule"
+
+This allows a map to express both:
+
+- **General rules** (broad defaults)
+- **Specific overrides** (special cases with extra constraints)
+
+#### Matching priority
+
+When converting, Yumcha:
+
+1. Collects all rules compatible with the query tuple.
+2. Sorts them by specificity (rules with more non-wildcard positions are tried first).
+3. Merges compatible candidate rules left-to-right until all output fields are filled.
+4. Raises an error if no consistent full output can be formed.
+
+This ensures that narrow context rules win over broad defaults while still allowing partial rules to collaborate into one final result.
+
+#### Why this matters
+
+Some orthographies reuse the same symbol for multiple sounds and rely on context to disambiguate. A direct one-to-one table would fail here.
+
+For example, a broad rule may map a tone to a default tone digit, while a more specific checked-syllable rule (e.g., coda `p`, `t` and `k`) overrides that digit to preserve entering-tone categories in a target scheme.
+
+#### One-way and inverse extensions
+
+In addition to the main map, schemes may define:
+
+- **`one_way_map`**: extra forward-only mappings used in intermediate → scheme conversion.
+- **`inverse_map`**: extra reverse-only mappings used in scheme → intermediate conversion.
+
+This is useful when a writing system collapses distinctions (many-to-one) or introduces historical spellings. It lets Yumcha remain practical and reversible where possible, without forcing unrealistic strict bijection for every scheme.
 
 ## 4. Intermediate-to-Scheme Conversion
 
