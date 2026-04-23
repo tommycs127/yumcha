@@ -103,9 +103,9 @@ Output:
         'hangul'
         'ile',
         ...,
-        'slwong_phonetic',
         'slwong_roman',
-        'yale'
+        'yale',
+        'yutyut'
     ]
 }
 ```
