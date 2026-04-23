@@ -12,7 +12,7 @@ class PatternMap(dict):
     def _check_and_return(
         self, obj: Any, type_: type[Any], check_content: bool = True
     ) -> Any:
-        type_name = type_.__class__.__name__
+        type_name = type_.__name__
         if not isinstance(obj, type_):
             raise TypeError(f"not {type_name}")
         if check_content and not obj:
