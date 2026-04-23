@@ -14,7 +14,7 @@ class PatternMap(dict):
     ) -> Any:
         type_name = type_.__name__
         if not isinstance(obj, type_):
-            raise TypeError(f"not {type_name}")
+            raise TypeError(f"expected {type_name}, got {type(obj).__name__}")
         if check_content and not obj:
             raise ValueError(f"empty {type_name}")
         return obj
