@@ -25,7 +25,7 @@ class CantoneseRepresentation(Representation):
                 f"initial '{self.initial}' cannot be with nucleus '{self.nucleus}'"
             )
 
-        invaild_nucleus_coda_comb = {
+        invalid_nucleus_coda_comb = {
             "iː": "i̯",
             "uː": "u̯",
             "yː": "y̯",
@@ -34,8 +34,8 @@ class CantoneseRepresentation(Representation):
         }
 
         if (
-            self.nucleus in invaild_nucleus_coda_comb
-            and self.coda == invaild_nucleus_coda_comb[self.nucleus]
+            self.nucleus in invalid_nucleus_coda_comb
+            and self.coda == invalid_nucleus_coda_comb[self.nucleus]
         ):
             raise ValidationError(
                 f"nucleus '{self.nucleus}' cannot be with coda '{self.coda}'"

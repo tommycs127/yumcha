@@ -25,5 +25,5 @@ class SLWongRoman(CantoneseScheme[SLWongRomanRepresentation, CantoneseRepresenta
 
     @property
     @override
-    def name(self) -> str:
+    def code(self) -> str:
         return "slwong_roman"
