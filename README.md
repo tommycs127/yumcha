@@ -279,6 +279,7 @@ The closer this value is to `1`, the more phonologically complete the scheme's d
 | S. L. Wong (Romanization)                             | `ˈtseun`     | `slwong_roman`    | Conventional numeral tone marking is not implemented.                                             |
 | S. L. Wong (Phonetic)                                 | `ˈtsœn`      | `slwong_phonetic` | Ditto.                                                                                            |
 | Yale                                                  | `chēun`      | `yale`            |                                                                                                   |
+| Yựtyựt                                                | `cơn`        | `yutyut`          |                                                                                                   |
 
 ## ⚙️ How it works
 
@@ -332,7 +333,7 @@ For example, the S. L. Wong Romanization scheme uses `e` for `[ɛː]` and `u` fo
 
 #### Cantonese
 
-![](https://us-central1-progress-markdown.cloudfunctions.net/progress/13?&label=13/17&min=0&max=17)
+![](https://us-central1-progress-markdown.cloudfunctions.net/progress/14?&label=14/17&min=0&max=17)
 
 - [ ] Barnett–Chao
 - [ ] ~~Bopomofo (Zhuyin) by the Commission on the Unification of Pronunciation~~
@@ -352,7 +353,7 @@ For example, the S. L. Wong Romanization scheme uses `e` for `[ɛː]` and `u` fo
 - [x] Sidney Lau
 - [ ] Standard Romanisation
 - [x] Yale
-- [ ] Yựtyựt
+- [x] Yựtyựt
 
 #### Mandarin
 

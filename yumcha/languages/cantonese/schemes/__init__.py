@@ -11,3 +11,4 @@ from .sidneylau import SidneyLau as SidneyLau
 from .slwong_phonetic import SLWongPhonetic as SLWongPhonetic
 from .slwong_roman import SLWongRoman as SLWongRoman
 from .yale import Yale as Yale
+from .yutyut import Yutyut as Yutyut
