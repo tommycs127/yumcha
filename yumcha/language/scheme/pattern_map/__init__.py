@@ -91,7 +91,7 @@ class PatternMap(dict):
 
     def __setitem__(self, key, value):
         if hasattr(self, "_locked"):
-            raise RuntimeError("FeatureMap object is immutable")
+            raise RuntimeError(f"{self.__class__.__name__} object is immutable")
         super().__setitem__(key, value)
 
     def __getitem__(self, key):
