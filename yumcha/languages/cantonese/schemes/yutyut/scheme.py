@@ -1,4 +1,4 @@
-from yumcha.language.scheme.pattern_map import PatternDict
+from yumcha.language.scheme.schema import PatternRegistry
 
 HOOK_ABOVE = chr(0x309)
 ACUTE = chr(0x301)
@@ -10,7 +10,7 @@ BREVE = chr(0x306)
 HORN = chr(0x31B)
 
 
-MAP: PatternDict = {
+MAP: PatternRegistry = {
     ("p", ..., ..., ...): ("b", ..., ..., ..., ...),
     ("pʰ", ..., ..., ...): ("p", ..., ..., ..., ...),
     ("m", ..., ..., ...): ("m", ..., ..., ..., ...),
@@ -70,7 +70,7 @@ MAP: PatternDict = {
     (..., ..., ..., "˨"): (..., ..., DOT_BELOW, ..., ...),
 }
 
-ONE_WAY_MAP: PatternDict = {
+ONE_WAY_MAP: PatternRegistry = {
     (..., "ɿ", "", ...): (..., "i", ..., "", ""),
     (..., ..., ..., "˥˧"): (..., ..., "", ..., ...),
 }

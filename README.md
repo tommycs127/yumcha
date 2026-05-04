@@ -318,7 +318,7 @@ For example, the S. L. Wong Romanization scheme uses `e` for `[ɛː]` and `u` fo
 ### Documentations
 
 - [x] README.md
-- [ ] How it works documentation
+- [x] How it works documentation
 - [ ] Tutorial on adding custom languages
 - [ ] Tutorial on adding custom schemes
 

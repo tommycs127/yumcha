@@ -1,6 +1,6 @@
 from typing import override
 
-from yumcha.language.scheme.pattern_map import PatternDict
+from yumcha.language.scheme.schema import PatternRegistry
 from yumcha.languages.cantonese import CantoneseRepresentation, CantoneseScheme
 
 from .representation import SLWongRomanRepresentation
@@ -15,12 +15,22 @@ class SLWongRoman(CantoneseScheme[SLWongRomanRepresentation, CantoneseRepresenta
 
     @property
     @override
-    def map(self) -> PatternDict:
+    def label_schema(self) -> dict[str, tuple[str, ...]]:
+        return {
+            "initial": ("initial",),
+            "nucleus": ("nucleus",),
+            "coda": ("coda",),
+            "tone": ("tone",),
+        }
+
+    @property
+    @override
+    def map(self) -> PatternRegistry:
         return MAP
 
     @property
     @override
-    def one_way_map(self) -> PatternDict:
+    def one_way_map(self) -> PatternRegistry:
         return ONE_WAY_MAP
 
     @property

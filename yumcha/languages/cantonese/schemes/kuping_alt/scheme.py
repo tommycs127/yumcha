@@ -1,6 +1,6 @@
-from yumcha.language.scheme.pattern_map import PatternDict
+from yumcha.language.scheme.schema import PatternRegistry
 
-MAP: PatternDict = {
+MAP: PatternRegistry = {
     ("p", ..., ..., ...): ("p", ..., ..., ..., ...),
     ("pʰ", ..., ..., ...): ("p'", ..., ..., ..., ...),
     ("m", ..., ..., ...): ("m", ..., ..., ..., ...),
@@ -74,7 +74,7 @@ MAP: PatternDict = {
     (..., ..., "k̚", "˨"): (..., ..., "k", "22", "_4"),
 }
 
-INVERSE_MAP: PatternDict = {
+INVERSE_MAP: PatternRegistry = {
     (..., ..., ..., "55", ""): (..., ..., ..., "˥"),
     (..., ..., ..., "53", ""): (..., ..., ..., "˥˧"),
     (..., ..., ..., "35", ""): (..., ..., ..., "˧˥"),

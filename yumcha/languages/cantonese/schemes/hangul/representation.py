@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from yumcha.language.scheme.representation import Representation, ValidationError
+from yumcha.language.scheme.representation import Representation
 
 
 @dataclass(frozen=True)

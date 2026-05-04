@@ -1,4 +1,4 @@
-from yumcha.language.scheme.pattern_map import PatternDict
+from yumcha.language.scheme.schema import PatternRegistry
 
 CIRCUMFLEX = chr(0x302)
 CARON = chr(0x30C)
@@ -6,7 +6,7 @@ FLAT = chr(0x304)
 DROP = chr(0x300)
 RISE = chr(0x301)
 
-MAP: PatternDict = {
+MAP: PatternRegistry = {
     ("p", ..., ..., ...): ("p", ..., ..., ..., ...),
     ("pʰ", ..., ..., ...): ("p'", ..., ..., ..., ...),
     ("m", ..., ..., ...): ("m", ..., ..., ..., ...),
@@ -71,7 +71,7 @@ MAP: PatternDict = {
     (..., ..., ..., "˨"): (..., ..., ..., FLAT, ...),
 }
 
-ONE_WAY_MAP: PatternDict = {
+ONE_WAY_MAP: PatternRegistry = {
     (..., "ɿ", "", ...): (..., "i", "", ..., ""),
     (..., ..., ..., "˥˧"): (..., ..., ..., "", ...),
 }

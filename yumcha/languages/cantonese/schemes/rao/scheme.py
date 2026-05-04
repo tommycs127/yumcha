@@ -1,10 +1,10 @@
-from yumcha.language.scheme.pattern_map import PatternDict
+from yumcha.language.scheme.schema import PatternRegistry
 
 ACUTE = chr(0x301)
 CIRCUMFLEX = chr(0x302)
 DIAERESIS = chr(0x308)
 
-MAP: PatternDict = {
+MAP: PatternRegistry = {
     ("p", ..., ..., ...): ("b", ..., ..., ...),
     ("pʰ", ..., ..., ...): ("p", ..., ..., ...),
     ("m", ..., ..., ...): ("m", ..., ..., ...),
@@ -45,7 +45,7 @@ MAP: PatternDict = {
     ("t͡sʰ", "ɪ", "ŋ", ...): ("q", "i", "ng", ...),
     ("t͡sʰ", "ɪ", "k̚", ...): ("q", "i", "g", ...),
     ("s", "ɪ", "ŋ", ...): ("x", "i", "ng", ...),
-    ("s", "ɪ", "k̚", ...): ("x", "i", ..., ...),
+    ("s", "ɪ", "k̚", ...): ("x", "i", "k", ...),
     (..., "ɔː", ..., ...): (..., "o", ..., ...),
     (..., "o", "u̯", ...): (..., "o", "u", ...),
     (..., "uː", ..., ...): (..., "u", ..., ...),
@@ -79,7 +79,7 @@ MAP: PatternDict = {
     (..., ..., ..., "˨"): (..., ..., ..., "6"),
 }
 
-ONE_WAY_MAP: PatternDict = {
+ONE_WAY_MAP: PatternRegistry = {
     ("t͡ɕ", ..., ..., ...): ("z", ..., ..., ...),
     ("t͡ɕʰ", ..., ..., ...): ("c", ..., ..., ...),
     ("ɕ", ..., ..., ...): ("s", ..., ..., ...),

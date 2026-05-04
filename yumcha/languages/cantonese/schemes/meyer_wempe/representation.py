@@ -2,8 +2,6 @@ from dataclasses import dataclass
 
 from yumcha.language.scheme.representation import Representation, ValidationError
 
-# TODO: Should be (initial, nucleus, coda_vowel, tone, coda_consonant)
-
 
 @dataclass(frozen=True)
 class MeyerWempeRepresentation(Representation):

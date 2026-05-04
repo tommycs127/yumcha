@@ -3,6 +3,8 @@ from dataclasses import astuple, dataclass, fields
 from functools import cache
 from typing import ClassVar, Self
 
+from .pattern_tuple import PatternTuple
+
 MISSING = object()
 
 
@@ -19,7 +21,7 @@ class Representation:
             value = getattr(self, required_field, MISSING)
             if value is MISSING:
                 raise ValidationError(
-                    f"invalid value for field '{required_field}'. Expected a str object, got '{value}'"
+                    f"invalid value for field '{required_field}'. Expected str, got '{value}'"
                 )
 
         self.validate()
@@ -28,12 +30,15 @@ class Representation:
         pass
 
     @property
-    def features(self) -> tuple[str, ...]:
-        return astuple(self)
+    def patterns(self) -> PatternTuple:
+        return PatternTuple(astuple(self))
 
     @classmethod
-    def from_features(cls, features: tuple) -> Self:
-        return cls(*features)
+    def from_patterns(cls, patterns: tuple[str, ...]) -> Self:
+        for pattern in patterns:
+            if not isinstance(pattern, str):
+                raise TypeError(f"expected str, got {type(pattern).__name__}")
+        return cls(*patterns)
 
     @classmethod
     @cache

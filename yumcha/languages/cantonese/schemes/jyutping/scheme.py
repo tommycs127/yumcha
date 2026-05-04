@@ -1,6 +1,6 @@
-from yumcha.language.scheme.pattern_map import PatternDict
+from yumcha.language.scheme.schema import PatternRegistry
 
-MAP: PatternDict = {
+MAP: PatternRegistry = {
     ("p", ..., ..., ...): ("b", ..., ..., ...),
     ("pʰ", ..., ..., ...): ("p", ..., ..., ...),
     ("m", ..., ..., ...): ("m", ..., ..., ...),
@@ -56,7 +56,7 @@ MAP: PatternDict = {
     (..., ..., ..., "˨"): (..., ..., ..., "6"),
 }
 
-ONE_WAY_MAP: PatternDict = {
+ONE_WAY_MAP: PatternRegistry = {
     ("t͡ɕ", ..., ..., ...): ("z", ..., ..., ...),
     ("t͡ɕʰ", ..., ..., ...): ("c", ..., ..., ...),
     ("ɕ", ..., ..., ...): ("s", ..., ..., ...),

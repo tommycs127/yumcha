@@ -1,8 +1,8 @@
-from yumcha.language.scheme.pattern_map import PatternDict
+from yumcha.language.scheme.schema import PatternRegistry
 
 ACUTE = chr(0x301)
 
-MAP: PatternDict = {
+MAP: PatternRegistry = {
     ("p", ..., ..., ...): ("p", ..., ..., ..., ...),
     ("pʰ", ..., ..., ...): (f"p{ACUTE}", ..., ..., ..., ...),
     ("m", ..., ..., ...): ("m", ..., ..., ..., ...),
@@ -75,7 +75,7 @@ MAP: PatternDict = {
     (..., ..., "k̚", "˨"): (..., ..., "k", "22", "_4"),
 }
 
-INVERSE_MAP: PatternDict = {
+INVERSE_MAP: PatternRegistry = {
     (..., ..., ..., "55", ""): (..., ..., ..., "˥"),
     (..., ..., ..., "53", ""): (..., ..., ..., "˥˧"),
     (..., ..., ..., "35", ""): (..., ..., ..., "˧˥"),

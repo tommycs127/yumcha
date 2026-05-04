@@ -1,7 +1,7 @@
-from yumcha.language.scheme.pattern_map import PatternDict
+from yumcha.language.scheme.schema import PatternRegistry
 
 
-def b2b(binary_input: str):
+def b2b(binary_input: str) -> str:
     """
     Converts a binary string or integer to a Unicode Braille character.
     Input should represent dots 1-8 in order.
@@ -10,7 +10,7 @@ def b2b(binary_input: str):
     return chr(0x2800 + decimal_val)
 
 
-MAP: PatternDict = {
+MAP: PatternRegistry = {
     ("p", ..., ..., ...): (b2b("1111"), ..., ...),
     ("pʰ", ..., ..., ...): (b2b("111101"), ..., ...),
     ("m", ..., ..., ...): (b2b("1011"), ..., ...),
@@ -94,7 +94,7 @@ MAP: PatternDict = {
     (..., ..., ..., "˨"): (..., ..., b2b("01")),
 }
 
-ONE_WAY_MAP: PatternDict = {
+ONE_WAY_MAP: PatternRegistry = {
     ("t͡ɕ", ..., ..., ...): (b2b("1001"), ..., ...),
     ("t͡ɕʰ", ..., ..., ...): (b2b("101101"), ..., ...),
     ("ɕ", ..., ..., ...): (b2b("0111"), ..., ...),

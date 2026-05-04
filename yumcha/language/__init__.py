@@ -5,16 +5,13 @@ from dataclasses import dataclass, field
 from operator import itemgetter
 from typing import get_args
 
+from .schema import Phonology
 from .scheme import Scheme
-from .scheme.pattern_map import PatternTuple
 from .scheme.representation import Representation, ValidationError
 
 
 class PhonologyError(Exception):
     pass
-
-
-type Phonology = tuple[PatternTuple, ...]
 
 
 @dataclass
@@ -59,6 +56,12 @@ class Language[S: Scheme, IRT: Representation](ABC):
                 f"Language '{self.__class__.__name__.capitalize()}'"
                 f"requires a 'schemes' sub-package at {self.__class__.__module__}"
             ) from ie
+        except NotImplementedError as nie:
+            raise RuntimeError(
+                f"Imcomplete scheme in language '{self.__class__.__name__.capitalize()}'"
+            ) from nie
+        except Exception as e:
+            raise e
 
         # 3. Pull from the registry we built in the previous step
         discovered_classes = Scheme._registry.get(target_scheme_base, [])
@@ -70,8 +73,8 @@ class Language[S: Scheme, IRT: Representation](ABC):
         )
 
     def __validate_scheme(self, scheme: S):
-        for idx in range(len(scheme.pattern_map.key_labels)):
-            symbols_set = scheme.pattern_map.key_transpose[idx]
+        for idx in range(len(scheme.label_schema_keys)):
+            symbols_set = scheme.pattern_map.keys_transpose_set[idx]
             phonology_items = map(itemgetter(idx), self.phonology)
             required_set = set(filter(lambda x: x is not ..., phonology_items))
 
@@ -80,14 +83,14 @@ class Language[S: Scheme, IRT: Representation](ABC):
                     f"scheme '{scheme.__class__.__name__}' does not meet "
                     f"{self.name.capitalize()} phonology. "
                     f"Add {tuple(sorted(missing_set))} "
-                    f"as {scheme.pattern_map.key_labels[idx]}"
+                    f"as {scheme.label_schema_keys[idx]}"
                 )
 
             if overloaded_set := symbols_set - required_set:
                 raise PhonologyError(
                     f"scheme '{scheme.__class__.__name__}' does not meet "
                     f"{self.name.capitalize()} phonology. "
-                    f"Remove {scheme.pattern_map.key_labels[idx]} "
+                    f"Remove {scheme.label_schema_keys[idx]} "
                     f"{tuple(sorted(overloaded_set))}"
                 )
 
@@ -118,7 +121,7 @@ class Language[S: Scheme, IRT: Representation](ABC):
 
     @property
     @abstractmethod
-    def phonology(self) -> tuple[PatternTuple, ...]:
+    def phonology(self) -> Phonology:
         raise NotImplementedError()
 
     @property
@@ -143,7 +146,7 @@ class Language[S: Scheme, IRT: Representation](ABC):
         key_transpose = [sorted(_) for _ in self.__key_transpose]
         for combo in itertools.product(*key_transpose):
             try:
-                yield self.intermediate_representation_class.from_features(combo)
+                yield self.intermediate_representation_class.from_patterns(combo)
             except ValidationError:
                 pass
             except ValueError:

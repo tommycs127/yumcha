@@ -1,4 +1,4 @@
-from yumcha.language.scheme.pattern_map import PatternDict
+from yumcha.language.scheme.schema import PatternRegistry
 
 ONE_DOTS_LEFT = chr(0x302E)
 TWO_DOTS_LEFT = chr(0x302F)
@@ -7,7 +7,7 @@ ONE_DOTS_BELOW = chr(0x323)
 TWO_DOTS_BELOW = chr(0x324)
 BAR_BELOW = chr(0x332)
 
-MAP: PatternDict = {
+MAP: PatternRegistry = {
     ("p", ..., ..., ...): ("ᄇ", ..., ...),
     ("pʰ", ..., ..., ...): ("ᄑ", ..., ...),
     ("m", ..., ..., ...): ("ᄆ", ..., ...),
@@ -116,7 +116,7 @@ MAP: PatternDict = {
     (..., ..., ..., "˨"): (..., ..., ONE_DOTS_BELOW),
 }
 
-ONE_WAY_MAP: PatternDict = {
+ONE_WAY_MAP: PatternRegistry = {
     ("t͡ɕ", ..., ..., ...): ("ᄌ", ..., ...),
     ("t͡ɕʰ", ..., ..., ...): ("ᄎ", ..., ...),
     ("ɕ", ..., ..., ...): ("ᄉ", ..., ...),

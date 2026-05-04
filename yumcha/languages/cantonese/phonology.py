@@ -1,6 +1,6 @@
-from yumcha.language.scheme.pattern_map import PatternTuple
+from yumcha.language.schema import Phonology
 
-PHONOLOGY: tuple[PatternTuple, ...] = (
+PHONOLOGY: Phonology = (
     ("p", ..., ..., ...),
     ("pʰ", ..., ..., ...),
     ("m", ..., ..., ...),
