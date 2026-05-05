@@ -324,10 +324,11 @@ For example, the S. L. Wong Romanization scheme uses `e` for `[ɛː]` and `u` fo
 
 ### Functionalities
 
-- [x] Conversion
+- [x] Converting
 - [x] Parsing
 - [x] Generating all valid syllables
-- [x] Calculating the coverage of a scheme
+- [x] Calculating scheme coverage
+- [ ] Loading schemes from TSV files
 
 ### Schemes
 

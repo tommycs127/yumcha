@@ -1,6 +1,6 @@
 import unicodedata
 from dataclasses import astuple, dataclass, fields
-from functools import cache
+from functools import cache, cached_property
 from typing import ClassVar, Self
 
 from .pattern_tuple import PatternTuple
@@ -29,7 +29,7 @@ class Representation:
     def validate(self) -> None:
         pass
 
-    @property
+    @cached_property
     def patterns(self) -> PatternTuple:
         return PatternTuple(astuple(self))
 

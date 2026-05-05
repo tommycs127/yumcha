@@ -4,6 +4,8 @@ from typing import Any
 
 
 class PatternTuple(tuple):
+    _occupancy: int
+
     def __new__(cls, iterable: Iterable[Any]):
         if isinstance(iterable, PatternTuple):
             return iterable
@@ -29,10 +31,11 @@ class PatternTuple(tuple):
 
     @property
     def occupancy(self) -> int:
-        return self._occupancy
+        try:
+            return self._occupancy
+        except AttributeError as ae:
+            raise RuntimeError("occupancy not set (likely a bug in __new__)") from ae
 
     @occupancy.setter
     def occupancy(self, occupancy: int) -> None:
-        if hasattr(self, "_occupancy"):
-            raise RuntimeError("occupancy is read-only after initialization")
-        self._occupancy = occupancy
+        object.__setattr__(self, "_occupancy", occupancy)

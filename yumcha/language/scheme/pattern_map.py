@@ -11,7 +11,7 @@ class PatternMap(dict):
         *args,
         key_tuple_length: int,
         value_tuple_length: int,
-        label_indexes_list: list[tuple[int, ...]] = list(),
+        label_indexes_list: list[tuple[int, ...]],
         one_way_map: PatternRegistry = dict(),
         inverse_map: PatternRegistry = dict(),
         inversed: bool = False,
