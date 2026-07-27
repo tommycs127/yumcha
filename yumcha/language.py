@@ -185,10 +185,13 @@ class Language[PR: Representation, SR: Representation]:
             from_scheme_id, parsed_from_scheme, validate, strict
         )
         if intermediate:
-            to_scheme = self.to_scheme(to_scheme_id, intermediate, strict)
-            return self.schemes[to_scheme_id].cls(*to_scheme)
+            to_scheme = self.to_scheme(to_scheme_id, intermediate, validate, strict)
         else:
             return None
+
+        if to_scheme:
+            return self.schemes[to_scheme_id].cls(*to_scheme)
+        return None
 
     def validate(
         self,
