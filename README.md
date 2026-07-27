@@ -55,9 +55,6 @@ cantonese = yumcha.load_language("cantonese")
 
 # From a directory folder path
 colang = yumcha.load_language("colang/")
-
-# From an installed module path
-fake_cantonese = yumcha.load_language("fake_languages.fake_cantonese")
 ```
 
 The `yumcha.load_language()` method traverses the provided resource directory, parses internal TSV files as phonology rules or schemes, and compiles them into a `Language` instance.
