@@ -1,5 +1,8 @@
 # ⚙️ How it works
 
+> [!Note]
+> This document is currently outdated due to recent breaking changes and is undergoing updates.
+
 ## 1. Phonology Definition
 
 The best way to understand how Yumcha works is to look at how we represent the sounds of a language—specifically, which sounds exist and under what conditions they are pronounced.

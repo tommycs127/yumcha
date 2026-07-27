@@ -1,172 +1,74 @@
 import csv
-import os
-from collections.abc import Iterable, Sequence
+from importlib import resources
+from importlib.resources.abc import Traversable
+from pathlib import Path
 
+from .core.exceptions import ParseError, ReadError
+from .core.models import Representation
+from .core.tsv.loader import load_phonology
 from .language import Language
-from .language.scheme import ValidationError
-from .language.scheme.representation import Representation
+from .syllable_table import ProgressBarWrapper
 
 
-class Yumcha:
-    def __init__(self, languages: Sequence[Language]) -> None:
-        self._languages = list(languages)
-        self._dictionary = {lang.code: lang for lang in self._languages}
-        self._menu = {
-            lang_k: lang_v.schemes for lang_k, lang_v in self._dictionary.items()
-        }
-        if len(self._languages) != len(self._dictionary):
-            raise ValueError("language names must be unique (case-insensitive)")
+def load_language(
+    language: str,
+    directory: str | Traversable | None = None,
+    phonology_file_name: str = "phonology.tsv",
+    schemes_folder_name: str = "schemes",
+) -> Language[Representation, Representation]:
+    if directory is None:
+        directory = resources.files("yumcha") / "languages"
+    elif isinstance(directory, str):
+        directory = Path(directory)
 
-    @property
-    def languages(self) -> list[Language]:
-        return self._languages
+    lang_dir = directory / language
 
-    @property
-    def dictionary(self) -> dict[str, Language]:
-        return self._dictionary
+    phonology_resource = lang_dir / phonology_file_name
 
-    def get_language(self, name: str) -> Language:
-        return self._dictionary[name]
+    try:
+        phonology = load_phonology(phonology_resource)
+    except OSError as e:
+        raise ReadError(phonology_file_name, cause=e) from e
+    except ValueError as e:
+        raise ParseError(phonology_file_name, cause=e) from e
 
-    @property
-    def menu(self) -> dict[str, list[str]]:
-        return self._menu
+    lang = Language(phonology)
 
-    def iterate_all_syllables(
-        self, language_name: str, scheme_name: str | None = None
-    ) -> Iterable[Representation]:
-        language = self.get_language(name=language_name.lower())
+    schemes_dir = lang_dir / schemes_folder_name
 
-        if scheme_name is None:
-            yield from language.iterate_all_syllables()
-        else:
-            scheme = language.get_scheme(name=scheme_name.lower())
-            yield from scheme.iterate_all_syllables()
+    if schemes_dir.is_dir():
+        for scheme_resource in schemes_dir.iterdir():
+            if not scheme_resource.is_file():
+                continue
 
-    def get_all_syllables(
-        self, language_name: str, scheme_name: str | None = None
-    ) -> list[Representation]:
-        language = self.get_language(name=language_name.lower())
+            lang.add_scheme(scheme_resource)
 
-        if scheme_name is None:
-            return language.get_all_syllables()
-        else:
-            scheme = language.get_scheme(name=scheme_name.lower())
-            return scheme.get_all_syllables()
+    return lang
 
-    def get_coverage(self, language_name: str, scheme_name: str) -> float:
-        language = self.get_language(name=language_name.lower())
-        return language.get_coverage(scheme_name=scheme_name.lower())
 
-    def generate_syllable_table(
-        self,
-        language_name: str,
-        file_directory: str,
-        file_name: str | None = None,
-    ) -> None:
-        language = self.get_language(name=language_name.lower())
-        if file_name is None:
-            file_name = f"{language.code}_syllables"
+def write_syllable_table(
+    language: Language[Representation, Representation],
+    output_path: str | Path,
+    progress_bar: ProgressBarWrapper | None = None,
+):
+    path = Path(output_path)
+    if path.suffix.lower() != ".tsv":
+        path = path.with_suffix(".tsv")
 
-        file_name = file_name.split(".")[0] + ".tsv"  # Force to be .tsv file
-        file_path = os.path.join(file_directory, file_name)
+    path.parent.mkdir(parents=True, exist_ok=True)
 
-        all_syllables = language.get_all_syllables()
+    table = language.syllable_table(progress_bar)
 
-        with open(file_path, mode="w", encoding="utf-8", newline="") as file:
-            writer = csv.writer(file, delimiter="\t")
-            writer.writerow(["-", *language.schemes, "COUNT"])
-            count = {k: 0 for k in language.schemes}
-            total_count = 0
+    with open(path, mode="w", encoding="utf-8", newline="") as f:
+        writer = csv.writer(f, delimiter="\t")
+        writer.writerow(table.headers)
 
-            for syllable in all_syllables:
-                rows = [syllable]
-                total_count += 1
+        for row in table:
+            writer.writerow(row)
 
-                supported_column_count = 0
+        footers = table.footers
+        total_rows = table.total_rows
+        coverages = [f"{rows / total_rows:.2%}" for rows in footers[1:]]
 
-                for scheme_name in language.schemes:
-                    scheme = language.get_scheme(name=scheme_name)
-                    try:
-                        representation = scheme.from_intermediate(syllable)
-                        representation_roundtrip = scheme.to_intermediate(
-                            representation
-                        )
-                        if representation_roundtrip != syllable:
-                            rows.append(
-                                f"↦ {representation} [{representation_roundtrip}]"
-                            )
-                        else:
-                            rows.append(representation)
-                            count[scheme_name] += 1
-                            supported_column_count += 1
-                    except ValidationError:  # Representable but disallowed
-                        rows.append("⊖")
-                    except ValueError:  # Unsupported
-                        rows.append("△")
-
-                writer.writerow([*rows, supported_column_count])
-
-            total_label = ["=====", *count.keys(), "TOTAL"]
-            total = ["COUNT", *count.values(), total_count]
-            writer.writerow(total_label)
-            writer.writerow(total)
-
-    def parse(self, language_name: str, scheme_name: str, text: str) -> Representation:
-        language = self.get_language(name=language_name.lower())
-        scheme = language.get_scheme(name=scheme_name.lower())
-        return scheme.parse(text=text)
-
-    def parse_intermediate(
-        self, language_name: str, scheme_name: str, text: str
-    ) -> Representation:
-        language = self.get_language(name=language_name.lower())
-        scheme = language.get_scheme(name=scheme_name.lower())
-        return scheme.parse_intermediate(text=text)
-
-    def parse_to_intermediate(
-        self, language_name: str, scheme_name: str, text: str
-    ) -> Representation:
-        language = self.get_language(name=language_name.lower())
-        scheme = language.get_scheme(name=scheme_name.lower())
-        parsed = scheme.parse(text=text)
-        return scheme.to_intermediate(parsed=parsed)
-
-    def parse_from_intermediate(
-        self, language_name: str, scheme_name: str, text: str
-    ) -> Representation:
-        language = self.get_language(name=language_name.lower())
-        scheme = language.get_scheme(name=scheme_name.lower())
-        parsed_intermediate = scheme.parse_intermediate(text=text)
-        return scheme.from_intermediate(parsed=parsed_intermediate)
-
-    def convert_as_representation(
-        self,
-        language_name: str,
-        from_scheme_name: str,
-        to_scheme_name: str,
-        text: str,
-    ) -> Representation:
-        language = self.get_language(name=language_name.lower())
-        from_scheme = language.get_scheme(name=from_scheme_name.lower())
-        to_scheme = language.get_scheme(name=to_scheme_name.lower())
-        parsed = from_scheme.parse(text=text)
-        parsed_intermediate = from_scheme.to_intermediate(parsed=parsed)
-        to_scheme_repr = to_scheme.from_intermediate(parsed=parsed_intermediate)
-        return to_scheme_repr
-
-    def convert(
-        self,
-        language_name: str,
-        from_scheme_name: str,
-        to_scheme_name: str,
-        text: str,
-    ) -> str:
-        return str(
-            self.convert_as_representation(
-                language_name=language_name,
-                from_scheme_name=from_scheme_name,
-                to_scheme_name=to_scheme_name,
-                text=text,
-            )
-        )
+        writer.writerow(["TOTAL", *coverages])
+        writer.writerow(footers)
