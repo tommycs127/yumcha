@@ -1,6 +1,7 @@
 from collections.abc import Iterable
 from importlib.resources.abc import Traversable
 from pathlib import Path
+from types import MappingProxyType
 from typing import Literal, overload
 
 from .core.exceptions import (
@@ -24,11 +25,14 @@ from .validator import Validator
 
 class Language[PR: Representation, SR: Representation]:
     phonology: Phonology[PR]
-    schemes: dict[str, Scheme[SR]]
 
     def __init__(self, phonology: Phonology[PR]) -> None:
         self.phonology = phonology
-        self.schemes = {}
+        self._schemes: dict[str, Scheme[SR]] = {}
+
+    @property
+    def schemes(self) -> MappingProxyType[str, Scheme[SR]]:
+        return MappingProxyType(self._schemes)
 
     def add_scheme(self, scheme: str | Traversable | Scheme[SR]) -> None:
         if not isinstance(scheme, Scheme):
@@ -43,7 +47,7 @@ class Language[PR: Representation, SR: Representation]:
 
         self.validate_scheme(scheme)
         scheme.intermediate_indexer.build_invalid_masks(self.phonology.invalid_patterns)
-        self.schemes[scheme.id] = scheme
+        self._schemes[scheme.id] = scheme
 
     def validate_scheme(self, scheme: Scheme[SR]) -> None:
         for idx, phonology_charset in enumerate(self.phonology.charset_dicts):
@@ -65,13 +69,13 @@ class Language[PR: Representation, SR: Representation]:
                 )
 
     def pop_scheme(self, scheme_id: str) -> Scheme[SR]:
-        return self.schemes.pop(scheme_id)
+        return self._schemes.pop(scheme_id)
 
     def parse_as_intermediate(self, text: str) -> PR:
         return self.phonology.cls(*self.phonology.regexer.tokenize(text))
 
     def parse_as_scheme(self, scheme_id: str, text: str) -> SR:
-        scheme = self.schemes[scheme_id]
+        scheme = self._schemes[scheme_id]
         return scheme.cls(*scheme.regexer.tokenize(text))
 
     @overload
@@ -146,7 +150,7 @@ class Language[PR: Representation, SR: Representation]:
         result = self._convert_representation(
             scheme_id, pattern_tuple, "intermediate", validate, strict
         )
-        return self.schemes[scheme_id].cls(*result) if result else None
+        return self._schemes[scheme_id].cls(*result) if result else None
 
     @overload
     def scheme_to_scheme(
@@ -190,7 +194,7 @@ class Language[PR: Representation, SR: Representation]:
             return None
 
         if to_scheme:
-            return self.schemes[to_scheme_id].cls(*to_scheme)
+            return self._schemes[to_scheme_id].cls(*to_scheme)
         return None
 
     def validate(
@@ -371,7 +375,7 @@ class Language[PR: Representation, SR: Representation]:
         validate: bool = False,
         strict: bool = True,
     ) -> PatternTuple | None:
-        scheme = self.schemes[scheme_id]
+        scheme = self._schemes[scheme_id]
 
         result, used_indexes = self._find_best_result(
             scheme, pattern_tuple, as_, strict

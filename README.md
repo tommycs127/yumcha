@@ -194,7 +194,7 @@ The exported TSV contains a standard header row and two summary rows at the bott
 #### Tracking progress
 
 > [!NOTE]
-> Compatible with progress bar wrappers (such as [`tqdm`](https://tqdm.github.io/) or [`rich.progress`](https://rich.readthedocs.io/en/latest/progress.html)) that accept a `total` keyword argument.
+> Only compatible with progress bar wrappers (such as [`tqdm`](https://tqdm.github.io/) or [`rich.progress`](https://rich.readthedocs.io/en/latest/progress.html)) that accept a `total` keyword argument.
 
 Pass a progress wrapper to the `progress_bar` argument to track generation progress:
 
