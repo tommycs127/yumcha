@@ -414,7 +414,7 @@ class Language[PR: Representation, SR: Representation]:
             if not strict:
                 return (), None
             raise NoMatchError(
-                f"invalid pattern tuple {pattern_tuple} (as {as_}) for scheme '{scheme}'"
+                f"invalid pattern tuple {pattern_tuple} (as {as_}) for scheme '{scheme.id}'"
             )
 
         else:
@@ -432,7 +432,7 @@ class Language[PR: Representation, SR: Representation]:
             matches_str = "\n".join(formatted_matches)
 
             raise AmbiguousMatchError(
-                f"Ambiguous pattern tuple {pattern_tuple} for scheme '{scheme}'.\n"
+                f"Ambiguous pattern tuple {pattern_tuple} for scheme '{scheme.id}'.\n"
                 f"Possible matches found at TSV line numbers:\n{matches_str}\n"
                 "Review the scheme design to resolve this ambiguity."
             )
@@ -462,7 +462,7 @@ class Language[PR: Representation, SR: Representation]:
         as_: Literal["intermediate", "scheme"],
         strict: bool = True,
     ) -> tuple[PatternTuple | None, set[int]]:
-        """Merges matching scheme rows into a complete target pattern tuple.
+        """Merges matching scheme rows into a complete target pattern tuple using DFS.
 
         Args:
             scheme: Target `Scheme` object.
@@ -482,40 +482,58 @@ class Language[PR: Representation, SR: Representation]:
         best_match_indexes, _ = self._get_best_match(scheme, pattern_tuple, as_, strict)
 
         if not best_match_indexes:
-            return None, set()
+            if not strict:
+                return None, set()
+            raise NoMatchError(
+                f"invalid pattern tuple {pattern_tuple} for scheme '{scheme.id}'."
+            )
 
         target_indexer = (
             scheme.intermediate_indexer if as_ == "scheme" else scheme.indexer
         )
 
-        result = PatternTuple((...,)) * target_indexer.pattern_tuple_length
-        used_indexes: set[int] = set()
+        initial_result = PatternTuple((...,)) * target_indexer.pattern_tuple_length
 
-        for idx in best_match_indexes:
-            try:
-                result_new = result.merge(target_indexer.pattern_tuples_raw[idx])
+        def _dfs(
+            start_i: int,
+            current_tuple: PatternTuple,
+            current_used: set[int],
+        ) -> tuple[PatternTuple, set[int]] | None:
+            if current_tuple.is_complete():
+                return current_tuple, current_used
 
-                # No need to add index if nothing is changed in the merged result
-                if result_new.occupancy == result.occupancy:
+            for i in range(start_i, len(best_match_indexes)):
+                idx = best_match_indexes[i]
+                pattern_raw = target_indexer.pattern_tuples_raw[idx]
+
+                try:
+                    merged = current_tuple.merge(pattern_raw)
+                except ValueError:
+                    # Slot conflict - skip this candidate
                     continue
 
-                result = result_new
-                used_indexes.add(idx)
-            except ValueError:
-                # Cannot merge because the target tuples
-                # have different components in the same slot
-                continue  # Skip to try the rest
+                # Prune branch if this candidate fills no new slots
+                if merged.occupancy == current_tuple.occupancy:
+                    continue
 
-        if not result.is_complete():
+                res = _dfs(i + 1, merged, current_used | {idx})
+                if res is not None:
+                    return res  # Return first complete match in priority order
+
+            return None
+
+        result = _dfs(0, initial_result, set())
+
+        if result is None:
             if not strict:
-                return None, used_indexes
+                return None, set()
             raise NoMatchError(
                 f"invalid pattern tuple {pattern_tuple} for scheme '{scheme.id}'.\n"
                 f"Review the {'intermediate' if as_ == 'scheme' else 'scheme'} columns "
                 "for potential merge conflicts."
             )
 
-        return result, used_indexes
+        return result
 
     @overload
     def _convert_representation(
