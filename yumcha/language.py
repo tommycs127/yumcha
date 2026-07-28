@@ -107,7 +107,7 @@ class Language[PR: Representation, SR: Representation]:
                     f"remove {sorted(redundant_charset)}"
                 )
 
-    def pop_scheme(self, scheme_id: str) -> Scheme[SR]:
+    def remove_scheme(self, scheme_id: str) -> Scheme[SR]:
         """Removes and returns a registered scheme by ID.
 
         Args:
