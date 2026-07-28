@@ -5,11 +5,29 @@ from .models import Pattern, SchemeRowDirective
 from .pattern_tuple import PatternTuple
 
 type IndexedEntry = tuple[int, PatternTuple, int]
+"""Type alias for indexed pattern entries: `(original_index, pattern_tuple, priority)`."""
 
 ELLIPSIS = ...
 
 
 class Indexer:
+    """Bitmask-accelerated indexer for fast pattern tuple matching.
+
+    Maps characters per slot index to bitmasks, allowing set intersection operations
+    via bitwise `&` across sequence positions to quickly locate matching pattern rules.
+
+    Attributes:
+        pattern_tuple_length (int): The required length for all pattern tuples in this indexer.
+        pattern_tuples_raw (list[PatternTuple]): The original un-sorted pattern tuples.
+        pattern_tuples_length (int): The total count of indexed pattern tuples.
+        indexed_entries (list[IndexedEntry]): Entries sorted in descending order of priority.
+        full_mask (int): Bitmask integer with all pattern bits enabled (`(1 << count) - 1`).
+        char_masks_dicts (list[dict[Pattern, int]]): A list (one per slot position) mapping each
+            character/wildcard to its combined match bitmask.
+        charsets (list[set[str]]): A list of character sets representing all concrete non-wildcard
+            characters accepted at each slot position.
+    """
+
     pattern_tuple_length: int
     pattern_tuples_raw: list[PatternTuple]
     pattern_tuples_length: int
@@ -24,6 +42,17 @@ class Indexer:
         directions: tuple[SchemeRowDirective, ...],
         allowed_directions: set[SchemeRowDirective],
     ) -> None:
+        """Initializes and builds the bitmask index from a collection of pattern sequences.
+
+        Args:
+            patterns: A sequence of pattern element sequences to index.
+            directions: Directives associated with each row in `patterns`.
+            allowed_directions: Set of `SchemeRowDirective` directives that determine which
+                rows are eligible for inclusion in the index.
+
+        Raises:
+            ValueError: If `patterns` is empty, or if any pattern sequence varies in length.
+        """
         if not patterns:
             raise ValueError("at least one pattern sequence is required")
 
@@ -64,6 +93,20 @@ class Indexer:
         self.charsets = charsets
 
     def find_matches(self, pattern_tuple: PatternTuple) -> list[IndexedEntry]:
+        """Finds all candidate entries in the index matching the given input pattern tuple.
+
+        Performs bitwise `AND` across character masks for every slot in `pattern_tuple`,
+        iterating set bits to collect matched entries in descending order of priority.
+
+        Args:
+            pattern_tuple: The input `PatternTuple` to evaluate against the index.
+
+        Returns:
+            A list of matching `IndexedEntry` tuples sorted by priority.
+
+        Raises:
+            ValueError: If `pattern_tuple` length does not match `pattern_tuple_length`.
+        """
         if len(pattern_tuple) != self.pattern_tuple_length:
             raise ValueError(
                 f"expecting pattern tuple length of {self.pattern_tuple_length}, "
@@ -99,6 +142,19 @@ class Indexer:
         directions: tuple[SchemeRowDirective, ...],
         allowed_directions: set[SchemeRowDirective],
     ) -> list[dict[Pattern, int]]:
+        """Constructs bitmask dictionaries for each slot position.
+
+        Args:
+            pattern_tuples_idx: Priority-sorted list of indexed entries.
+            directions: Row directives corresponding to original raw indices.
+            allowed_directions: Set of allowed directives to include.
+
+        Returns:
+            A list of dictionaries mapping characters/wildcards to bitmask integers.
+
+        Raises:
+            ValueError: If all patterns contain a wildcard at any given slot index.
+        """
         char_masks_dicts: list[dict[Pattern, int]] = [
             {} for _ in range(self.pattern_tuple_length)
         ]
@@ -134,9 +190,21 @@ class Indexer:
 
 
 class IntermediateIndexer(Indexer):
+    """An indexer extension supporting validation against invalid pattern masks.
+
+    Attributes:
+        invalid_masks (list[int]): A list of bitmasks corresponding to invalid pattern
+            rules, where set bits indicate which indexed patterns conflict with a given rule.
+    """
+
     invalid_masks: list[int]
 
     def build_invalid_masks(self, invalid_patterns: tuple[PatternTuple, ...]) -> None:
+        """Precomputes bitmasks indicating which indexed pattern tuples violate invalid rules.
+
+        Args:
+            invalid_patterns: A tuple of `PatternTuple` objects defining forbidden feature combinations.
+        """
         invalid_masks: list[int] = []
 
         for invalid_pattern in invalid_patterns:

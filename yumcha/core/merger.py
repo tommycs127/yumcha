@@ -2,12 +2,28 @@ from .indexer import IndexedEntry
 from .pattern_tuple import PatternTuple
 
 type Solution = tuple[tuple[int, ...], PatternTuple]
+"""Type alias for a merger solution: `(tuple_of_original_indices, merged_pattern_tuple)`."""
+
 type PriorityKey = tuple[int, ...]
+"""Type alias for a priority distribution key tracking frequency of rule priorities."""
 
 
 def merge(
     matches: list[IndexedEntry],
 ) -> list[Solution]:
+    """Finds optimal combinations of matches that produce complete pattern tuples.
+
+    Uses a backtracking search accelerated by precomputed suffix priority lookahead
+    vector pruning. Candidate combinations are evaluated by their priority distributions,
+    favoring combinations with higher counts of high-priority matches.
+
+    Args:
+        matches: A list of `IndexedEntry` candidate rules returned from index matching.
+
+    Returns:
+        A list of optimal `Solution` tuples containing the indices of chosen rules
+        and the resulting fully merged `PatternTuple`.
+    """
     if not matches:
         return []
 
@@ -40,6 +56,13 @@ def merge(
         current_pattern_tuple: PatternTuple,
         chosen_indexes: list[int],
     ) -> None:
+        """Recursively explores valid pattern tuple merges using lookahead branch pruning.
+
+        Args:
+            start_idx: The starting index in `matches` for candidate exploration.
+            current_pattern_tuple: The accumulated `PatternTuple` built so far.
+            chosen_indexes: Running list of selected match raw indices.
+        """
         nonlocal best_priority_key
 
         if current_pattern_tuple.is_complete():

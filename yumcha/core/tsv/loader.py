@@ -20,6 +20,24 @@ def load_phonology(
     resource: Traversable,
     lang_id: str | None = None,
 ) -> Phonology:
+    """Loads and compiles a phonology specification from a TSV resource.
+
+    Parses table data to build character sets, validation rules, regex tokenization,
+    and a dynamically generated `Representation` subclass representing language phone
+    structures.
+
+    Args:
+        resource: A `Traversable` resource pointing to the phonology TSV file.
+        lang_id: Optional language identifier string. If `None`, it is inferred from the
+            parent folder name of the resource.
+
+    Returns:
+        A compiled `Phonology` instance containing character sets, regex tokenizers,
+        invalid pattern constraints, and dynamic representation classes.
+
+    Raises:
+        ValueError: If `lang_id` is empty or not a valid Python identifier.
+    """
     if lang_id is None:
         lang_id = PurePath(str(resource)).parent.name
 
@@ -56,6 +74,23 @@ def load_scheme(
     resource: Traversable,
     scheme_id: str | None = None,
 ) -> Scheme:
+    """Loads and compiles a orthographic/romanization scheme mapping from a TSV resource.
+
+    Parses mapping definitions to construct forward and reverse indexers, regex pattern
+    matchers, and a dynamically generated `Representation` subclass for the scheme's field structure.
+
+    Args:
+        resource: A `Traversable` resource pointing to the scheme TSV file.
+        scheme_id: Optional scheme identifier string. If `None`, it is inferred from the
+            resource filename (without extension).
+
+    Returns:
+        A compiled `Scheme` instance containing field maps, forward/reverse indexers,
+        and regex tokenizers.
+
+    Raises:
+        ValueError: If `scheme_id` is not a valid Python identifier.
+    """
     if scheme_id is None:
         filename = resource.name
         scheme_id = filename.rsplit(".", 1)[0]

@@ -228,7 +228,7 @@ yumcha.write_syllable_table(
 | Kuping                                                | `tśeon55^1`  | `kuping`          | A romanization scheme I designed!                                  |
 | Kuping (Alternative)                                  | `ts'eon55^1` | `kuping_alt`      | Ditto.                                                             |
 | Meyer–Wempe                                           | `ts'un`      | `meyer_wempe`     |                                                                    |
-| Pênkyämp                                              | `cönt`       | `penkyamp`        | Glottal stop coda (`q`) is not currently implemented.              |
+| Pênkyämp                                              | `cönt`       | `penkyamp`        | Glottal stop coda (`q`) is not implemented.                        |
 | Cantonese Transliteration Scheme (Rao's Romanization) | `cên1`       | `rao`             |                                                                    |
 | Sidney Lau                                            | `chun1°`     | `sidneylau`       | Tone degree symbol is not superscripted.                           |
 | S. L. Wong (Romanization)                             | `ˈtseun`     | `slwong_roman`    | Conventional numeral tone marking is not implemented.              |
@@ -267,8 +267,7 @@ Tone sandhi depends on linguistic context (e.g., phonological environment) and i
 
 - [x] README.md
 - [x] How it works documentation
-- [ ] Tutorial on adding custom languages
-- [ ] Tutorial on adding custom schemes
+- [ ] Tutorial on adding custom languages and schemes
 
 ### Features & Core Engine
 

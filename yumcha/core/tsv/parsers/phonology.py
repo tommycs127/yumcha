@@ -7,6 +7,15 @@ from ...models import CharsetDict, PhonologyRowDirective
 
 @dataclass(frozen=True)
 class ParsedContext:
+    """Container holding parsed phonology table data.
+
+    Attributes:
+        fields: Tuple of header field names.
+        charsets: List of character sets (one set per field position).
+        charset_dicts: List of dictionaries mapping characters to their row directives per field.
+        invalid_patterns: List of tuples representing invalid feature pattern wildcards/strings.
+    """
+
     fields: tuple[str, ...]
     charsets: list[set[str]]
     charset_dicts: list[CharsetDict]
@@ -16,6 +25,20 @@ class ParsedContext:
 def parse_headers(
     headers: list[str],
 ) -> tuple[str, ...]:
+    """Extracts and validates intermediate feature field names from TSV headers.
+
+    The first column header (directive column) is ignored. Remaining headers are cleaned
+    and verified to ensure there are no empty field names or duplicate headers.
+
+    Args:
+        headers: List of raw header strings from the input table.
+
+    Returns:
+        A tuple of cleaned field name strings.
+
+    Raises:
+        ValueError: If any field name is empty or if duplicate field names are present.
+    """
     intermediate_fields = tuple(s.strip() for s in headers[1:])
     intermediate_fields_dict = {s: idx for idx, s in enumerate(intermediate_fields)}
 
@@ -38,6 +61,22 @@ def parse_data(
     list[CharsetDict],  # charset_dicts
     list[tuple[str | EllipsisType, ...]],  # invalid_patterns
 ]:
+    """Parses phonology table rows into character sets, directives, and invalid patterns.
+
+    Args:
+        data: List of raw TSV data rows (excluding headers).
+        expected_columns_len: Total number of expected columns per row.
+
+    Returns:
+        A tuple containing:
+            - `charsets`: List of character sets for each field position.
+            - `charset_dicts`: List of maps from character to `PhonologyRowDirective` per field.
+            - `invalid_patterns`: List of pattern tuples denoting invalid combinations.
+
+    Raises:
+        ValueError: If a row has an unexpected column count, or if a non-comment/non-invalid
+            row contains no concrete character value.
+    """
     tuple_len = expected_columns_len - 1
     charsets: list[set[str]] = [set() for _ in range(tuple_len)]
     charset_dicts: list[CharsetDict] = [{} for _ in range(tuple_len)]
@@ -82,6 +121,16 @@ def parse(
     headers: list[str],
     data: list[list[str]],
 ) -> ParsedContext:
+    """Parses raw TSV header and data rows into a structured `ParsedContext`.
+
+    Args:
+        headers: Header row containing directive column and field names.
+        data: Collection of data rows.
+
+    Returns:
+        A `ParsedContext` dataclass populated with fields, charsets, directives,
+        and invalid patterns.
+    """
     intermediate_fields = parse_headers(headers=headers)
     (
         charsets,

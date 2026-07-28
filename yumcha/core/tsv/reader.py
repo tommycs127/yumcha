@@ -9,6 +9,25 @@ def read(
     encoding: str = "utf-8",
     newline: str = "",
 ) -> tuple[list[str], list[list[str]]]:
+    """Reads and parses a TSV (tab-separated values) file or stream into headers and data rows.
+
+    Supports reading from file paths (string or `Path`), `Traversable` resource objects,
+    or open text streams (`IO[str]`).
+
+    Args:
+        source: File path, `Traversable` resource, or open readable text stream.
+        encoding: Text encoding to use when opening file paths or traversables. Defaults to "utf-8".
+        newline: Newline processing control when opening files. Defaults to "".
+
+    Returns:
+        A tuple containing:
+        - `headers`: A list of strings representing the header row.
+        - `data`: A list of rows, where each row is a list of cell string values.
+
+    Raises:
+        ValueError: If the file or stream contains no non-empty rows.
+    """
+
     def _parse_stream(stream: IO[str]) -> tuple[list[str], list[list[str]]]:
         tsv_reader = csv.reader(stream, delimiter="\t")
         clean_rows = [row for row in tsv_reader if row]

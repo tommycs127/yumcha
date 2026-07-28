@@ -16,6 +16,23 @@ def load_language(
     phonology_file_name: str = "phonology.tsv",
     schemes_folder_name: str = "schemes",
 ) -> Language[Representation, Representation]:
+    """Loads a language definition and its associated schemes from disk or package resources.
+
+    Args:
+        language: Name of the language directory to load.
+        directory: Root directory or `Traversable` containing language folders.
+            If `None`, defaults to built-in package resources under `yumcha.languages`.
+        phonology_file_name: Name of the phonology TSV file. Defaults to "phonology.tsv".
+        schemes_folder_name: Subfolder name containing scheme TSV definitions.
+            Defaults to "schemes".
+
+    Returns:
+        A fully initialized `Language` object loaded with phonology and registered schemes.
+
+    Raises:
+        ReadError: If reading the phonology or scheme files fails.
+        ParseError: If parsing phonology or scheme TSV structures fails.
+    """
     if directory is None:
         directory = resources.files("yumcha") / "languages"
     elif isinstance(directory, str):
@@ -51,6 +68,15 @@ def write_syllable_table(
     output_path: str | Path,
     progress_bar: ProgressBarWrapper | None = None,
 ):
+    """Generates a complete syllable table for a language and writes it to a TSV file.
+
+    Includes header names, generated combination rows, coverage percentages, and total count footers.
+
+    Args:
+        language: Initialized `Language` instance used to generate syllable data.
+        output_path: Destination file path for the output TSV file. Appends `.tsv` if omitted.
+        progress_bar: Optional progress bar wrapper function or iterable context.
+    """
     path = Path(output_path)
     if path.suffix.lower() != ".tsv":
         path = path.with_suffix(".tsv")

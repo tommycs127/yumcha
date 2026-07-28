@@ -6,14 +6,29 @@ from types import EllipsisType
 from ...models import Pattern, PrePatternTuple, SchemeRowDirective
 
 ID_PATTERN = r"[^\d\W]\w*"
+"""Regex pattern string matching valid Python-style identifier names."""
+
 SCHEME_COLUMN_PATTERN = (
     rf"^\s*{ID_PATTERN}\s*=\s*{ID_PATTERN}\s*(,\s*{ID_PATTERN}\s*)*$"
 )
+"""Regex pattern string for validating scheme header definitions (e.g., 'scheme=intermediate')."""
+
 SCHEME_COLUMN_RE = re.compile(SCHEME_COLUMN_PATTERN)
+"""Compiled regular expression for matching scheme column header syntax."""
 
 
 @dataclass(frozen=True)
 class ParsedContext:
+    """Container holding parsed TSV schema context.
+
+    Attributes:
+        intermediate_fields: Tuple of intermediate field names extracted from headers.
+        scheme_fields: Map of scheme field names to sets of intermediate field index mappings.
+        directions: Tuple of row directive directions across data rows.
+        intermediate_tuples: Collection of parsed intermediate pattern tuples per row.
+        scheme_tuples: Collection of parsed scheme pattern tuples per row.
+    """
+
     intermediate_fields: tuple[str, ...]
     scheme_fields: dict[str, frozenset[int]]
     directions: tuple[SchemeRowDirective, ...]
@@ -28,6 +43,21 @@ def parse_headers(
     tuple[str, ...],  # intermediate_fields
     dict[str, frozenset[int]],  # scheme_fields
 ]:
+    """Parses TSV table headers into intermediate fields and scheme field mappings.
+
+    Args:
+        headers: List of header cell strings from the input TSV file.
+        headers_split_index: The column index separating intermediate fields from scheme fields.
+
+    Returns:
+        A tuple containing:
+            - `intermediate_fields`: Cleaned tuple of intermediate field names.
+            - `scheme_fields`: Map of target scheme names to frozensets of source field indices.
+
+    Raises:
+        ValueError: If intermediate fields are empty or duplicated, or if scheme syntax/references
+            are invalid or leave intermediate fields unmapped.
+    """
     # Parse intermediate fields
 
     intermediate_fields = tuple(s.strip() for s in headers[1:headers_split_index])
@@ -90,6 +120,14 @@ def parse_headers(
 
 
 def parse_data_cell(s: str) -> Pattern:
+    """Parses a single TSV data cell into a pattern value or Ellipsis wildcard.
+
+    Args:
+        s: Raw string contents of a table cell.
+
+    Returns:
+        The string cell content, or `Ellipsis` (`...`) if the cell represents a wildcard.
+    """
     stripped = s.strip()
     return ... if stripped == "..." else stripped
 
@@ -99,6 +137,17 @@ def validate_mapping(
     row_scheme: PrePatternTuple,
     scheme_fields: dict[str, frozenset[int]],
 ) -> None:
+    """Validates structural type consistency between intermediate and scheme tuple values.
+
+    Args:
+        row_intermediate: Intermediate pattern tuple for a single row.
+        row_scheme: Scheme pattern tuple for a single row.
+        scheme_fields: Map of scheme field names to intermediate field index mappings.
+
+    Raises:
+        TypeError: If an intermediate slot expected to be active contains an ellipsis,
+            or if an inactive slot contains a string value.
+    """
     active_indices: set[int] = {
         idx
         for scheme_pattern, mapping in zip(row_scheme, scheme_fields.values())
@@ -128,6 +177,25 @@ def parse_data(
     tuple[PrePatternTuple, ...],  # parsed_intermediate_tuples
     tuple[PrePatternTuple, ...],  # parsed_scheme_tuples
 ]:
+    """Parses TSV data rows into directives and tuple sequences.
+
+    Args:
+        data: List of raw TSV row cell lists (excluding headers).
+        headers_split_index: Column index where scheme definitions begin.
+        expected_columns_len: Total expected columns per row.
+        scheme_fields: Field mapping specification from intermediate to scheme slots.
+
+    Returns:
+        A tuple containing:
+            - `parsed_directions`: Tuple of row directive direction flags.
+            - `parsed_intermediate_tuples`: Parsed intermediate pattern tuples.
+            - `parsed_scheme_tuples`: Parsed scheme pattern tuples.
+
+    Raises:
+        ValueError: If row lengths differ from expectations or if duplicate entries conflict
+            with direction rules.
+        TypeError: If intermediate and scheme pattern types fail validation constraints.
+    """
     parsed_directions: list[SchemeRowDirective] = []
     parsed_intermediate_tuples: list[PrePatternTuple] = []
     parsed_scheme_tuples: list[PrePatternTuple] = []
@@ -168,14 +236,14 @@ def parse_data(
             if row_intermediate in seen_intermediate_tuples:
                 raise ValueError(
                     f"conflict at line {line_no}: "
-                    f"duplicated intermediate tuple {row_intermediate}"
+                    f"duplicated intermediate tuple {row_intermediate!r}"
                 )
             seen_intermediate_tuples.add(row_intermediate)
 
         if row_directive in CHECK_SCHEME:
             if row_scheme in seen_scheme_tuples:
                 raise ValueError(
-                    f"conflict at line {line_no}: duplicated scheme tuple {row_scheme}"
+                    f"conflict at line {line_no}: duplicated scheme tuple {row_scheme!r}"
                 )
             seen_scheme_tuples.add(row_scheme)
 
@@ -191,6 +259,15 @@ def parse_data(
 
 
 def get_headers_split_index(headers: list[str]) -> int:
+    """Finds the column index in header row where scheme field definitions begin.
+
+    Args:
+        headers: List of header cell strings.
+
+    Returns:
+        The 0-based column index of the first scheme definition header, or `len(headers)`
+        if no scheme definitions were found.
+    """
     return next(
         (i for i, s in enumerate(headers) if SCHEME_COLUMN_RE.fullmatch(s.strip())),
         len(headers),
@@ -201,6 +278,18 @@ def parse(
     headers: list[str],
     data: list[list[str]],
 ) -> ParsedContext:
+    """Parses raw TSV headers and data rows into a structured `ParsedContext`.
+
+    Args:
+        headers: Header row cell strings from the TSV file.
+        data: Collection of data row cell strings.
+
+    Returns:
+        A fully constructed `ParsedContext` dataclass.
+
+    Raises:
+        ValueError: If TSV header layout is malformed or missing scheme definitions.
+    """
     headers_split_index = get_headers_split_index(headers)
 
     if headers_split_index < 2:
