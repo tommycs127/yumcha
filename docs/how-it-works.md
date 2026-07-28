@@ -1,269 +1,229 @@
 # ⚙️ How it works
 
-> [!Note]
-> This document is currently outdated due to recent breaking changes and is undergoing updates.
+> [!NOTE]
+> This document describes the current codebase and may still evolve as the project grows.
 
-## 1. Phonology Definition
+Yumcha is built around one idea: represent syllables as structured feature tuples first, then convert between writing systems through that shared structure.
 
-The best way to understand how Yumcha works is to look at how we represent the sounds of a language—specifically, which sounds exist and under what conditions they are pronounced.
+Instead of treating transliteration as string replacement, Yumcha works in three layers:
 
-By organizing these sounds into a structured system, we establish a language's phonology, where phonemes are recorded and ordered. This structure is the core concept behind Yumcha.
+1. **Phonology** — the language’s intermediate feature space and its constraints.
+2. **Scheme definitions** — how a writing system maps onto that shared feature space.
+3. **Conversion and validation** — parsing, matching, merging, and roundtrip checking.
 
-In Yumcha, the first step is to define the inventory of sounds in a language and their respective positions. This is achieved by defining a tuple that contains all individual sounds as nested tuples.
+The current implementation is centered on the `Language` class, which bundles a phonology with any number of registered schemes. Each scheme can be converted to the language’s intermediate representation, and the intermediate representation can then be converted into any other registered scheme.
 
-Throughout this documentation, we will use **Cantonese** as our primary example.
+## 1. Core data model
 
-### Syllable Structure
+### Representation
 
-A Cantonese syllable typically consists of four parts: an **initial**, a **nucleus**, a **coda**, and a **tone**. While the nucleus and tone are required to form a valid syllable, all four parts are conventionally defined in this specific sequence for clarity. Yumcha implements this concept directly into code:
+The basic unit in Yumcha is a `Representation` dataclass.
 
-```py
-from dataclasses import dataclass
+A `Representation` is an immutable tuple-like object whose fields are stored in definition order. Its string form is the NFC-normalized concatenation of those fields, and iterating over it yields each field value in order.
 
-from yumcha.language.scheme.representation import Representation
+This makes it usable both as a structured object and as a printable string.
 
+### Phonology
 
-@dataclass(frozen=True)
-class CantoneseRepresentation(Representation):
-    REQUIRED = ("nucleus", "tone")
-    initial: str
-    nucleus: str
-    coda: str
-    tone: str
-```
+A `Phonology` describes the intermediate sound system of a language.
 
-By leveraging Python’s built-in `dataclass` library and Yumcha’s core modules, this concise definition is sufficient to build the foundation for Cantonese phonology.
+It stores:
+
+- an identifier
+- the `Representation` subclass used for intermediate forms
+- ordered field names
+- valid character sets per field
+- row directives for those character sets
+- invalid patterns
+- a regex parser for turning text into the representation class
+
+The phonology is loaded from a TSV file, and the class used for the intermediate representation is generated dynamically from the TSV field names.
+
+### Scheme
+
+A `Scheme` describes one surface transcription system.
+
+Like phonology, it has:
+
+- an identifier
+- a dynamically generated `Representation` subclass
+- ordered intermediate fields
+- ordered scheme fields
+- an indexer for matching parsed input to pattern rules
+- a regex parser
+- row directives describing whether each rule is bidirectional, forward-only, or reverse-only
+
+A scheme contains enough information to:
+
+- parse written text into a structured form
+- map that structured form into intermediate features
+- map intermediate features back into the scheme
+
+## 2. Loading a language
+
+The top-level helper is `yumcha.load_language()`.
+
+It loads a language directory, reads the phonology TSV, then loads every scheme TSV in the scheme folder.
+
+By default, it looks under the bundled `yumcha/languages/` resources. It can also load from a filesystem path or any `Traversable` resource.
+
+If a scheme does not match the phonology requirements, loading fails early.
+
+That validation step is important: the project does not allow an arbitrary scheme to be attached to an arbitrary language.
+
+## 3. Parsing text
+
+A `Language` exposes two parsing entry points:
+
+- `parse_as_intermediate(text)`
+- `parse_as_scheme(scheme_id, text)`
+
+Each one uses the relevant regex parser to split input text into the field structure defined by the matching `Representation` class.
+
+This is where written text becomes a structured object that the engine can reason about.
+
+For example, a scheme syllable may be parsed into parts such as:
+
+- initial
+- nucleus
+- coda
+- tone
+
+The actual component names depend on the scheme definition.
+
+## 4. Matching and conversion
+
+### From scheme to intermediate
+
+When converting from a scheme to intermediate form, Yumcha does not simply substitute one symbol for another.
+
+Instead, it:
+
+1. tokenizes the source text into a parsed representation
+2. turns that into a `PatternTuple`
+3. searches the scheme’s index for the best matching rule set
+4. merges compatible rules into a full intermediate tuple
+5. optionally validates the result
+
+### From intermediate to scheme
+
+Conversion in the other direction follows the same general flow, but uses the scheme’s forward mapping rules.
+
+The matcher can work with:
+
+- exact strings
+- existing `Representation` objects
+- iterables of field values
+
+### Scheme to scheme
+
+`scheme_to_scheme()` is implemented as a two-step conversion:
+
+1. source scheme → intermediate
+2. intermediate → target scheme
+
+This keeps the conversion logic centralised in the phonology layer instead of forcing every scheme pair to have its own manual bridge.
+
+### Strict and non-strict conversion
+
+The conversion methods support a `strict` flag.
+
+- `strict=True` raises an error when conversion fails.
+- `strict=False` returns `None` instead.
+
+That allows the caller to choose between fail-fast behaviour and softer probing.
 
 ### Validation
 
-Cantonese has `[m]` as both an initial and a coda, and a syllabic consonant `[m̩]` as a nucleus. While it is technically possible to combine these into `[mm̩]` or `[m̩m]`, such combinations are redundant in most linguistic analyses.
+The `validate()` method checks whether a given input can be converted cleanly under the current language and scheme rules.
 
-To handle these rules, the `Representation` class provides a `validate` method to check the legitimacy of a syllable:
+It runs the same conversion machinery, but treats failure as a validation problem rather than a simple lookup problem.
 
-```py
-from dataclasses import dataclass
+## 5. How rule matching works
 
-from yumcha.language.scheme.representation import Representation, ValidationError
+The engine uses a bitmask-based indexer for fast rule lookup.
 
+Each row in a scheme TSV becomes an indexed pattern tuple. The indexer stores those tuples in a way that makes it possible to find matching candidates quickly with bitwise operations rather than repeated linear scans.
 
-@dataclass(frozen=True)
-class CantoneseRepresentation(Representation):
-    REQUIRED = ("nucleus", "tone")
-    initial: str
-    nucleus: str
-    coda: str
-    tone: str
+When a pattern tuple is queried:
 
-    def validate(self) -> None:
-        invalid_initial_nucleus_comb = {
-            "m": "m̩",
-            "ŋ": "ŋ̍",
-        }
+- all compatible candidates are found
+- the best matches are merged
+- conflicts are rejected
+- ambiguous matches raise explicit errors
 
-        if (
-            self.initial in invalid_initial_nucleus_comb
-            and self.nucleus == invalid_initial_nucleus_comb[self.initial]
-        ):
-            raise ValidationError(
-                f"initial '{self.initial}' cannot be with nucleus '{self.nucleus}'"
-            )
+This is the part of the engine that makes context-sensitive mappings practical.
 
-        # Additional checks...
-```
+Some mappings are not one-to-one. A single field value may depend on neighbouring components or on special-case orthographic rules. The indexer and merger are designed to keep those rules expressive without turning the system into a giant handwritten table.
 
-With this method, an exception is raised whenever a `CantoneseRepresentation` is initialized with an invalid combination.
+## 6. Validation logic
 
-### Scheme Definition
+Validation is handled in `yumcha.validator`.
 
-At first glance, the `CantoneseRepresentation` class may look like any other method for transcribing Cantonese syllables. However, because it allows for the exhaustive listing of every phonemic combination (modern or historical), it functions as an **intermediate scheme** to bridge different transcription systems—much like the International Phonetic Alphabet (IPA) does for global languages.
+The validation path checks two things:
 
-We can define the scheme for this representation as follows:
+1. **Phonotactics** — whether the tuple violates invalid phonological combinations.
+2. **Roundtrip stability** — whether converting the result back and forth preserves the expected match set.
 
-```py
-from typing import Generic
+If a rule combination is phonologically impossible, validation fails.
 
-from yumcha.language.scheme import Scheme
-from yumcha.language.scheme.representation import (
-    IntermediateRepresentationT,
-    RepresentationT,
-)
+If a mapping is unstable or ambiguous in a way that cannot be resolved cleanly, validation also fails.
 
-from .representation import CantoneseRepresentation
+This is why schemes can be loaded safely: their internal mappings are checked against the language’s phonology, not just against syntax.
 
+## 7. Syllable table generation
 
-class CantoneseScheme(Scheme, Generic[RepresentationT, IntermediateRepresentationT]):
-    @property
-    def intermediate_representation_class(self) -> type[CantoneseRepresentation]:
-        return CantoneseRepresentation
-```
+`Language.syllable_table()` returns a `SyllableTable` iterator.
 
-With the `intermediate_representation_class` property acting as an anchor, the `CantoneseScheme` class becomes the foundation for all Cantonese transcription schemes within Yumcha.
+The table iterates over every possible phonological combination in the language’s intermediate space and tries to convert each one into every registered scheme.
 
-### Listing Phonemes
+Rows that cannot be represented in a given scheme are left blank for that scheme column.
 
-Once the scheme is established, listing the sounds for every part of the language becomes straightforward:
+The top-level helper `yumcha.write_syllable_table()` writes that table to a TSV file.
 
-```py
-from yumcha.language.scheme.feature.types import FeatureTuple
+It also appends summary rows at the bottom:
 
-PHONOLOGY: tuple[FeatureTuple, ...] = (
-    ("p", ..., ..., ...),
-    ("pʰ", ..., ..., ...),
-    ("m", ..., ..., ...),
-    ("f", ..., ..., ...),
-    # Skipping remaining initials...
-    (..., "aː", ..., ...),
-    (..., "ɐ", ..., ...),
-    (..., "ɛː", ..., ...),
-    (..., "e", ..., ...),
-    # Skipping remaining nuclei...
-    (..., ..., "", ...),
-    (..., ..., "i̯", ...),
-    (..., ..., "y̯", ...),
-    (..., ..., "u̯", ...),
-    # Skipping remaining codas...
-    (..., ..., ..., "˥"),
-    (..., ..., ..., "˥˧"),
-    (..., ..., ..., "˧˥"),
-    (..., ..., ..., "˧"),
-    (..., ..., ..., "˩"),
-    (..., ..., ..., "˩˧"),
-    (..., ..., ..., "˨"),
-)
-```
+- the total number of intermediate combinations
+- the number of rows that each scheme can represent
+- coverage percentages per scheme
 
-In this structure, every nested tuple contains four values, each corresponding to the sequential parts defined in the `CantoneseRepresentation` class.
+This makes it useful both as a debugging tool and as a way to inspect scheme coverage.
 
-> [!NOTE]
-> The intermediate format is not strictly limited to IPA. Conventional non-IPA symbol sets may be used, provided they consistently and uniquely identify the phonological components within the engine's internal mapping logic.
+## 8. Loading and writing helpers
 
-## 2. Text Parsing
+Two helper functions are exposed at package level:
 
-Yumcha utilizes Python’s built-in `re` (regular expression) library to parse input text into a **scheme-specific structured representation** that explicitly identifies orthographical components.
+- `load_language(language, directory=None, phonology_file_name="phonology.tsv", schemes_folder_name="schemes")`
+- `write_syllable_table(language, output_path, progress_bar=None)`
 
-For example, the syllable `chēun` in Cantonese Yale is parsed into the following structure:
+The first one builds a `Language` instance from TSV resources.
 
-| Component                      | Content (`str` object) |
-| ------------------------------ | ---------------------- |
-| **Initial**                    | `ch`                   |
-| **Nucleus** (before diacritic) | `e`                    |
-| **Tone** (diacritic)           | ` ̄`                    |
-| **Nucleus** (after diacritic)  | `u`                    |
-| **Coda** (vowel)               | _(empty string)_       |
-| **Tone** (letter `h`)          | _(empty string)_       |
-| **Coda** (consonant)           | `n`                    |
+The second one exports the full syllable table for a loaded language.
 
-> [!NOTE]
-> As previously mentioned, components must be defined in **sequential (left-to-right) order** to ensure correct parsing. Because Yumcha decomposes combining characters for fine-grained parsing, schemes that include combining characters must have their diacritics extracted as **a single component**.
+## 9. Design summary
 
-## 3. Scheme-to-Intermediate Conversion
+In practical terms, Yumcha behaves like this:
 
-The structured representation is converted into an intermediate format by the defined map.
+- load a language from TSV resources
+- parse text into structured representations
+- match each structured input against indexed scheme rules
+- convert through the intermediate phonology
+- validate the result against phonological and roundtrip constraints
+- optionally export the full syllable space as TSV
 
-The graph below shows the mapping from the Cantonese Yale scheme to the intermediates:
+That gives the project a single conversion core that can support multiple Cantonese and non-Cantonese transcription systems without having to hard-code pairwise conversion tables everywhere.
 
-```mermaid
-graph LR
-  subgraph CantoneseYale["Cantonese Yale"]
-    I_["Initial"]
-    NBD_["Nucleus (before diacritic)"]
-    TD_["Tone (diacritic)"]
-    NAD_["Nucleus (after diacritic)"]
-    CV_["Coda (vowel)"]
-    TH_["Tone (letter h)"]
-    CC_["Coda (consonant)"]
-  end
-  subgraph Intermediates["Intermediates"]
-    _I_["Initial"]
-    _N_["Nucleus"]
-    _C_["Coda"]
-    _T_["Tone"]
-  end
-  I_ --> _I_
-  NBD_ --> _N_
-  TD_ --> _T_
-  NAD_ --> _N_
-  CV_ --> _C_
-  TH_ --> _T_
-  CC_ --> _C_
-```
+## 10. Why this structure matters
 
-### Lookup and Map
+The reason for the intermediate layer is simplicity of maintenance.
 
-Yumcha implements a **context-aware pattern matching mechanism**. If a parsed structure matches a predefined orthographical or phonological context, the system prioritizes a context-specific mapping over a literal symbol-to-symbol translation.
+If every scheme had to directly map to every other scheme, the number of pairwise conversion tables would grow quickly and edge cases would become unmanageable. By routing everything through the intermediate representation, the project keeps the logic local to each scheme and the language’s phonology.
 
-At runtime, each scheme map is compiled into a `PatternMap` object, where:
+That also makes the system easier to extend:
 
-- The **key** side represents intermediate features (e.g., initial / nucleus / coda / tone)
-- The **value** side represents scheme-specific features
-- `...` is used as a wildcard, meaning "this part is not constrained by this rule"
+- add a phonology
+- define its intermediate representation
+- add scheme TSVs that map to it
+- let the engine reuse the same conversion machinery
 
-This allows a map to express both:
-
-- **General rules** (broad defaults)
-- **Specific overrides** (special cases with extra constraints)
-
-#### Matching priority
-
-When converting, Yumcha:
-
-1. Collects all rules compatible with the query tuple.
-2. Sorts them by specificity (rules with more non-wildcard positions are tried first).
-3. Merges compatible candidate rules left-to-right until all output fields are filled.
-4. Raises an error if no consistent full output can be formed.
-
-This ensures that narrow context rules win over broad defaults while still allowing partial rules to collaborate into one final result.
-
-#### Why this matters
-
-Some orthographies reuse the same symbol for multiple sounds and rely on context to disambiguate. A direct one-to-one table would fail here.
-
-For example, a broad rule may map a tone to a default tone digit, while a more specific checked-syllable rule (e.g., coda `p`, `t` and `k`) overrides that digit to preserve entering-tone categories in a target scheme.
-
-#### One-way and inverse extensions
-
-In addition to the main map, schemes may define:
-
-- **`one_way_map`**: extra forward-only mappings used in intermediate → scheme conversion.
-- **`inverse_map`**: extra reverse-only mappings used in scheme → intermediate conversion.
-
-This is useful when a writing system collapses distinctions (many-to-one) or introduces historical spellings. It lets Yumcha remain practical and reversible where possible, without forcing unrealistic strict bijection for every scheme.
-
-## 4. Intermediate-to-Scheme Conversion
-
-Finally, the intermediate representation is mapped to the target scheme, trying to preserve all phonological information expressible by the target format.
-
-The graph below shows the mapping from the intermediates to the Meyer–Wempe scheme:
-
-```mermaid
-graph LR
-  subgraph Intermediates["Intermediates"]
-    _I_["Initial"]
-    _N_["Nucleus"]
-    _C_["Coda"]
-    _T_["Tone"]
-  end
-  subgraph MeyerWempe["Meyer–Wempe"]
-    _I["Initial"]
-    _N["Nucleus"]
-    _CV["Coda (vowel)"]
-    _T["Tone (diacritic)"]
-    _CC["Coda (consonant)"]
-  end
-  _I_ --> _I
-  _N_ --> _N
-  _C_ --> _CV & _CC
-  _T_ --> _T
-```
-
-This process results in the following structure:
-
-| Component            | Content (`str` object) |
-| -------------------- | ---------------------- |
-| **Initial**          | `ts'`                  |
-| **Nucleus**          | `u`                    |
-| **Coda** (vowel)     | _(empty string)_       |
-| **Tone** (diacritic) | _(empty string)_       |
-| **Coda** (consonant) | `n`                    |
-
-Consequently, the final output text is `ts'un`.
+That is the current architectural direction of the project.

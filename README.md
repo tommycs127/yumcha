@@ -19,9 +19,9 @@ A phonology-oriented transliteration engine for Cantonese and other languages.
 - [**Scheme-to-Scheme Conversion**](#conversion): Convert seamlessly between different transcription and phonetic schemes within the same language.
 - [**Scheme Parsing**](#parsing): Parse strings to identify their phonological components and their intermediate representations.
 - [**Syllable Table Generation**](#getting-a-full-syllable-table): Get all valid syllables of every scheme via the phonology of the language.
+- [**Modular & Extensible**](#/docs/custom-phonology-and-schemes.md): Add new language by defining its phonology, and add new schemes by simply defining the representation structure and an intermediate-to-symbol map!
 - **Zero Third-Party Dependencies:** Lightweight and easy to integrate into any project.
 - **Type-hinted**: Built with modern Python 3.12+ type hints for better IDE support and readability.
-- **Modular & Extensible**: Add new language by defining its phonology, and add new schemes by simply defining the representation structure and an intermediate-to-symbol map!
 
 ## 🤔 Why Yumcha?
 
@@ -54,7 +54,7 @@ import yumcha
 cantonese = yumcha.load_language("cantonese")
 
 # From a directory folder path
-colang = yumcha.load_language("colang/")
+colang = yumcha.load_language("/path/to/colang/")
 ```
 
 The `yumcha.load_language()` method traverses the provided resource directory, parses internal TSV files as phonology rules or schemes, and compiles them into a `Language` instance.
@@ -67,7 +67,7 @@ The `yumcha.load_language()` method traverses the provided resource directory, p
 Use `Language.add_scheme()` method to add custom schemes:
 
 ```python
-cantonese.add_scheme("new_scheme.tsv")
+cantonese.add_scheme("/path/to/new_scheme.tsv")
 ```
 
 ### Getting available schemes
@@ -238,17 +238,7 @@ yumcha.write_syllable_table(
 
 ## ⚙️ How it works
 
-Yumcha functions as a bridge between diverse transcription systems by utilizing a structured, phonology-driven engine. Instead of simple string replacement, it processes language through four distinct layers:
-
-- **Phonology Definition**: Languages are defined by their internal sound structures. This creates a universal format that bridges different schemes much like IPA.
-
-- **Sequential Text Parsing**: Input text is decomposed into its orthographical components using fine-grained regular expressions. This ensures that even complex diacritics and combining characters are identified accurately.
-
-- **Context-Aware Conversion**: Yumcha maps these parsed components to the Intermediate Representation. This process is context-aware, meaning it can prioritize specific phonological or orthographical rules over literal translations, ensuring linguistic accuracy.
-
-- **Bidirectional Mapping**: Because the system is built on reversible logic, the intermediate format can be seamlessly converted into any supported target scheme, preserving all relevant phonological information.
-
-For a detailed breakdown of the code implementation and mapping logic, please refer to the [How it works](/docs/how-it-works.md) documentation.
+Please refer to the [How it works](/docs/how-it-works.md) documentation.
 
 ## 🚫 Limitations
 
@@ -267,7 +257,7 @@ Tone sandhi depends on linguistic context (e.g., phonological environment) and i
 
 - [x] README.md
 - [x] How it works documentation
-- [ ] Tutorial on adding custom languages and schemes
+- [x] Tutorial on adding custom languages and schemes
 
 ### Features & Core Engine
 
