@@ -50,7 +50,7 @@ class Language[PR: Representation, SR: Representation]:
         """Gets a read-only mapping view of registered scheme IDs to `Scheme` instances.
 
         Returns:
-            A `MappingProxyType` dictionary mapping scheme names to `Scheme` objects.
+            A read-only mapping view of scheme names to `Scheme` objects.
         """
         return MappingProxyType(self._schemes)
 
@@ -344,13 +344,18 @@ class Language[PR: Representation, SR: Representation]:
         self,
         progress_bar: ProgressBarWrapper | None = None,
     ) -> SyllableTable:
-        """Instantiates a `SyllableTable` generator for combinatorial matrix analysis.
+        """Creates an iterator that generates the full syllable table.
+
+        The iterator yields rows for the language's full phonological space and
+        attempts conversion into each registered scheme.
 
         Args:
-            progress_bar: Optional callable conforming to `ProgressBarWrapper` to wrap iteration.
+            progress_bar: Optional progress wrapper used while iterating through
+            the table. The wrapper should accept an iterable and may accept a
+            `total` keyword argument.
 
         Returns:
-            A configured `SyllableTable` iterator instance.
+            A `SyllableTable` iterator for the current `Language`.
         """
         return SyllableTable(self, progress_bar)
 

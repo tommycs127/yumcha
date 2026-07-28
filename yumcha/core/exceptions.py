@@ -2,7 +2,7 @@ from importlib.resources.abc import Traversable
 
 
 class FileError(Exception):
-    """Base class for errors raised during file processing operations.
+    """Base class for errors raised while reading or parsing file-backed resources.
 
     Attributes:
         verb (str): The operational action verb used when formatting exception messages.
