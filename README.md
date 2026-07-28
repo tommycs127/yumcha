@@ -19,7 +19,7 @@ A phonology-oriented transliteration engine for Cantonese and other languages.
 - [**Scheme-to-Scheme Conversion**](#conversion): Convert seamlessly between different transcription and phonetic schemes within the same language.
 - [**Scheme Parsing**](#parsing): Parse strings to identify their phonological components and their intermediate representations.
 - [**Syllable Table Generation**](#getting-a-full-syllable-table): Get all valid syllables of every scheme via the phonology of the language.
-- [**Modular & Extensible**](#/docs/custom-phonology-and-schemes.md): Add new language by defining its phonology, and add new schemes by simply defining the representation structure and an intermediate-to-symbol map!
+- [**Modular & Extensible**](/docs/custom-phonology-and-schemes.md): Add new language by defining its phonology, and add new schemes by simply defining the representation structure and an intermediate-to-symbol map!
 - **Zero Third-Party Dependencies:** Lightweight and easy to integrate into any project.
 - **Type-hinted**: Built with modern Python 3.12+ type hints for better IDE support and readability.
 
