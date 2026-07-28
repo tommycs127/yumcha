@@ -29,7 +29,7 @@ class Indexer:
     """
 
     pattern_tuple_length: int
-    pattern_tuples_raw: list[PatternTuple]
+    pattern_tuples_raw: list[PatternTuple[Pattern]]
     pattern_tuples_length: int
     indexed_entries: list[IndexedEntry]
     full_mask: int
@@ -57,7 +57,7 @@ class Indexer:
             raise ValueError("at least one pattern sequence is required")
 
         pattern_tuple_length = len(patterns[0])
-        pattern_tuples_raw: list[PatternTuple] = []
+        pattern_tuples_raw: list[PatternTuple[Pattern]] = []
         indexed_entries: list[IndexedEntry] = []
 
         for raw_idx, pattern in enumerate(patterns):
@@ -92,7 +92,7 @@ class Indexer:
         self.char_masks_dicts = char_masks_dicts
         self.charsets = charsets
 
-    def find_matches(self, pattern_tuple: PatternTuple) -> list[IndexedEntry]:
+    def find_matches(self, pattern_tuple: PatternTuple[Pattern]) -> list[IndexedEntry]:
         """Finds all candidate entries in the index matching the given input pattern tuple.
 
         Performs bitwise `AND` across character masks for every slot in `pattern_tuple`,
@@ -199,7 +199,10 @@ class IntermediateIndexer(Indexer):
 
     invalid_masks: list[int]
 
-    def build_invalid_masks(self, invalid_patterns: tuple[PatternTuple, ...]) -> None:
+    def build_invalid_masks(
+        self,
+        invalid_patterns: tuple[PatternTuple[Pattern], ...],
+    ) -> None:
         """Precomputes bitmasks indicating which indexed pattern tuples violate invalid rules.
 
         Args:
