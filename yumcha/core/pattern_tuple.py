@@ -180,7 +180,7 @@ class PatternTuple(Sequence[P]):
         if len(s_data) != len(o_data):
             raise ValueError(f"expected length of {len(s_data)}, got {len(o_data)}")
 
-        if overlap := (self.occupancy & other.occupancy) and s_data != o_data:
+        if (overlap := self.occupancy & other.occupancy) and s_data != o_data:
             temp_overlap = overlap
 
             while temp_overlap:
