@@ -54,7 +54,7 @@ from yumcha.loader.tsv import load_language
 cantonese = load_language("cantonese")
 
 # From a directory folder path
-colang = load_language("colang", directory="/path/to")
+colang = load_language("colang", directory="/path/to/directory")
 ```
 
 The `load_language()` method traverses the provided resource directory, parses internal TSV files as phonology rules or schemes, and compiles them into a `Language` instance.
