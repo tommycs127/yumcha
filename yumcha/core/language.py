@@ -7,7 +7,6 @@ from typing import TYPE_CHECKING, Literal, overload
 
 from .conversion_pipeline import ConversionPipeline
 from .exceptions import ParseError, SchemeError
-from .iterator import LanguageIterator
 from .primitives.directives import PhonologyDirective
 from .solver import CSPSolver, LinearSolver
 
@@ -48,7 +47,6 @@ class Language[PhonologyRepresentationT: PhonologyRepresentation]:
         }
         self._solver_to_use: dict[str, SupportedSolvers] = {}
         self._pipeline = ConversionPipeline(self)
-        self._iterator = LanguageIterator(self)
 
     @property
     def phonology(self) -> Phonology[PhonologyRepresentationT]:
