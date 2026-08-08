@@ -1,7 +1,7 @@
 # ⚙️ How it works
 
-> [!NOTE]
-> This document describes the current codebase and may still evolve as the project grows.
+> [!CAUTION]
+> This document is outdated due to recent updates and will be updated soon.
 
 Yumcha is built around one idea: represent syllables as structured feature tuples first, then convert between writing systems through that shared structure.
 

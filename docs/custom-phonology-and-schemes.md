@@ -12,7 +12,7 @@ A standard language folder follows this layout:
 
 ```text
 yumcha/
-  languages/
+  data/
     cantonese/
       phonology.tsv
       schemes/
@@ -20,23 +20,23 @@ yumcha/
         jyutping.tsv
         yale.tsv
         sidneylau.tsv
+        ...
 ```
 
 Custom languages use the exact same structure:
 
 ```text
-my_languages/
-  my_language/
-    phonology.tsv
-    schemes/
-      my_scheme.tsv
-      another_scheme.tsv
+my_language/
+  phonology.tsv
+  schemes/
+    my_scheme.tsv
+    another_scheme.tsv
 ```
 
-When you call `yumcha.load_language("my_language", directory="/path/to/my_languages")`, Yumcha expects:
+When you call `yumcha.load_language("my_language", directory="/path/to")`, Yumcha expects:
 
-- `/path/to/my_languages/my_language/phonology.tsv`
-- `/path/to/my_languages/my_language/schemes/*.tsv`
+- `/path/to/my_language/phonology.tsv`
+- `/path/to/my_language/schemes/*.tsv`
 
 Every `.tsv` file inside `schemes/` will be loaded automatically.
 
@@ -45,7 +45,7 @@ Every `.tsv` file inside `schemes/` will be loaded automatically.
 Language directory names and scheme file names **must be valid Python identifiers**.
 
 - **Valid:** `my_language`, `scheme1`, `jyutping`, `slwong_roman`
-- **Invalid:** `my-language`, `scheme-1`, `jyutping.tsv.backup`
+- **Invalid:** `my-language`, `scheme-1`, `jyutping.tsv.backup`, `123lang`, `@$#!`, `class`
 
 Yumcha uses the directory name as the language ID and the TSV file name as the scheme ID. Invalid Python identifiers will cause loading errors.
 
@@ -67,14 +67,14 @@ The first row is the header. The first cell (directive column) is left blank. Su
 
 Every data row starts with a directive character in column 1:
 
-| Directive | Meaning             |
-| --------- | ------------------- |
-| `*`       | Valid value/feature |
-| `?`       | Optional value      |
-| `x`       | Invalid combination |
-| `#`       | Comment (ignored)   |
+| Directive | Meaning                         |
+| --------- | ------------------------------- |
+| `*`       | Valid value                     |
+| `?`       | Optional value                  |
+| `x`       | Invalid combination             |
+| `#`       | Comment (ignored by the parser) |
 
-Use `...` in a cell to leave that field unconstrained.
+Use `...` in a cell to leave the field unconstrained (i.e., as a wildcard).
 
 ### Example Rows (Cantonese)
 
@@ -88,7 +88,7 @@ Use `...` in a cell to leave that field unconstrained.
 * 	...	...	...	˧
 ```
 
-### Constraint Rules
+### PatternTuple Rules
 
 Every non-comment (`#`) and non-invalid (`x`) row in `phonology.tsv` **must contain exactly one concrete value**. Yumcha uses single-value rows to map values to their corresponding field position. Define phonologies using one-slot rows for each initial, nucleus, coda, and tone.
 
@@ -168,6 +168,7 @@ Each row after the header contains a directive in column 1, followed by intermed
 | `=`       | Bidirectional mapping (default for reversible rules) |
 | `>`       | Forward-only (mapping from intermediate to scheme)   |
 | `<`       | Reverse-only (mapping from scheme to intermediate)   |
+| `x`       | Invalid combination in the scheme                    |
 | `#`       | Comment (ignored by the parser)                      |
 
 ## 7. Minimal Custom Language Example
@@ -201,12 +202,9 @@ Each row after the header contains a directive in column 1, followed by intermed
 ### Loading a Language
 
 ```python
-import yumcha
+from yumcha.loader.tsv import load_language
 
-lang = yumcha.load_language(
-    "my_language",
-    directory="/path/to/my_languages",
-)
+my_language = load_language("my_language", directory="/path/to")
 
 # List registered schemes
 print(list(lang.schemes))
@@ -216,7 +214,7 @@ print(list(lang.schemes))
 
 ```python
 # Parse a surface string into internal structures or convert between schemes
-parsed = lang.parse_as_scheme("simplelatin", "paH")
+parsed = lang.scheme_to_scheme("simplelatin", "paH")
 intermediate = lang.to_intermediate("simplelatin", "paH")
 converted = lang.to_scheme("another_scheme", intermediate)
 ```
@@ -226,7 +224,18 @@ converted = lang.to_scheme("another_scheme", intermediate)
 To verify coverage and inspect all generated combinations across your schemes, export a table:
 
 ```python
-yumcha.write_syllable_table(lang, "/path/to/my_syllable_table.tsv")
+from yumcha.exporter import Exporter
+from yumcha.loader.tsv import load_language
+
+language_id = "my_language"
+directory = "/path/to"
+
+exporter = Exporter(
+    my_language,
+    loader_fn=load_language,
+    loader_args=(language_id, directory),
+)
+exporter.export("/path/to/my_syllable_table.tsv")
 ```
 
 This outputs a TSV containing every valid intermediate combination, its mapped value in each scheme, and overall coverage metrics.

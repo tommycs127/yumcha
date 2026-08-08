@@ -1,10 +1,10 @@
 # 🍵 Yumcha
 
-[![status](https://badgen.net/badge/status/Alpha%20development/red)](#)
-[![Python](https://badgen.net/badge/python/3.12%2B)](https://www.python.org/downloads/release/python-3120/)
-[![License](https://badgen.net/badge/license/MIT/orange)](LICENSE)
-[![type](https://badgen.net/badge/type/Transliteration%20engine/cyan)](#)
-[![made-in](https://badgen.net/badge/made%20in/Hong%20Kong/cc3399)](#)
+[![status](https://img.shields.io/badge/status-Alpha_development-red)](#)
+[![Python](https://img.shields.io/badge/python-3.12%2B-blue)](https://www.python.org/downloads/release/python-3120/)
+[![License](https://img.shields.io/badge/license-MIT-orange)](LICENSE)
+[![type](https://img.shields.io/badge/type-Transliteration_engine-cyan)](#)
+[![made-in](https://img.shields.io/badge/made_in-Hong_Kong-cc3399)](#)
 
 A phonology-oriented transliteration engine for Cantonese and other languages.
 
@@ -12,11 +12,11 @@ A phonology-oriented transliteration engine for Cantonese and other languages.
 > Just as tea brings people together, this engine aims to bridge different transcription and phonetic schemes!
 
 > [!CAUTION]
-> This project is in its **early stages** and undergoing active development. The API and functionality are **highly unstable** and subject to breaking changes without notice. **Do not use this in production environments.**
+> This project is in its **early stages** and undergoing active development. The API and functionality are **highly unstable** and subject to breaking changes without notice. Outputs are **not guaranteed to be correct** and manual verification is advised. **Use at your own risk.**
 
 ## ✨ Highlights
 
-- [**Scheme-to-Scheme Conversion**](#conversion): Convert seamlessly between different transcription and phonetic schemes within the same language.
+- [**Scheme-to-Scheme Conversion**](#conversion): Convert a syllable seamlessly between different transcription and phonetic schemes within the same language.
 - [**Scheme Parsing**](#parsing): Parse strings to identify their phonological components and their intermediate representations.
 - [**Syllable Table Generation**](#getting-a-full-syllable-table): Get all valid syllables of every scheme via the phonology of the language.
 - [**Modular & Extensible**](/docs/custom-phonology-and-schemes.md): Add new language by defining its phonology, and add new schemes by simply defining the representation structure and an intermediate-to-symbol map!
@@ -48,26 +48,32 @@ pip install git+https://github.com/tommycs127/yumcha.git
 Import `yumcha` and load a language by its bundled name or by providing a path to a custom language directory/package:
 
 ```python
-import yumcha
+from yumcha.loader.tsv import load_language
 
 # Bundled in the package
-cantonese = yumcha.load_language("cantonese")
+cantonese = load_language("cantonese")
 
 # From a directory folder path
-colang = yumcha.load_language("/path/to/colang/")
+colang = load_language("colang", directory="/path/to")
 ```
 
-The `yumcha.load_language()` method traverses the provided resource directory, parses internal TSV files as phonology rules or schemes, and compiles them into a `Language` instance.
+The `load_language()` method traverses the provided resource directory, parses internal TSV files as phonology rules or schemes, and compiles them into a `Language` instance.
 
 #### Adding custom schemes
 
 > [!NOTE]
-> Custom schemes must conform to the language's underlying phonology; otherwise, `yumcha` will raise an exception during initialization. Consult the `Language.phonology` object for required phonemes and constraints.
+> Custom schemes must conform to the language’s underlying phonology; otherwise, Yumcha will raise an exception during initialization. Consult the `Language.phonology` object or its source file for required phonemes and constraints.
 
-Use `Language.add_scheme()` method to add custom schemes:
+Use the `Language.add_scheme()` method to add custom schemes:
 
 ```python
-cantonese.add_scheme("/path/to/new_scheme.tsv")
+from yumcha.loader.tsv import load_scheme_from_tsv
+
+# Load the custom scheme
+my_scheme = load_scheme_from_tsv("/path/to/my_scheme.tsv")
+
+# Add the scheme by passing the loaded object
+cantonese.add_scheme(my_scheme)
 ```
 
 ### Getting available schemes
@@ -97,7 +103,7 @@ Output:
 Parse a Yale syllable into components:
 
 ```python
-parsed = cantonese.parse_as_scheme(
+parsed = cantonese.parse_to_scheme(
     scheme_id="yale",
     text="chēun",
 )
@@ -127,10 +133,10 @@ print(parsed.coda_consonant)  # Output: 'n'
 
 #### Intermediate representation
 
-Parse an intermediate representation (usually IPA) into components:
+Parse an intermediate representation (usually [IPA](https://en.wikipedia.org/wiki/International_Phonetic_Alphabet)) into components:
 
 ```python
-parsed = cantonese.parse_as_intermediate(
+parsed = cantonese.parse_to_intermediate(
     text="tɪŋ˧˥",
 )
 print(repr(parsed))
@@ -149,16 +155,18 @@ Cantonese(
 
 ### Conversion
 
+#### Scheme to Scheme
+
 > [!NOTE]
 > Converting methods **do not return a `str` object**, but an instance of a `Representation` subclass. To get a string, simply wrap the object in `str()`.
 
 Convert a Jyutping syllable to ILE:
 
 ```python
-converted = cantonese.scheme_to_scheme(
+converted = cantonese.convert_scheme_to_scheme(
+    source="seot1",
     from_scheme_id="jyutping",
     to_scheme_id="ile",
-    source="seot1",
 )
 print(str(converted))  # Output: 'soet7'
 print(repr(converted))
@@ -175,18 +183,75 @@ Ile(
 )
 ```
 
+#### Scheme to Intermediate
+
+Convert a Sidney Lau syllable to intermediate representation:
+
+```python
+converted = cantonese.convert_scheme_to_intermediate(
+    source="fei1°",
+    scheme_id="sidneylau",
+)
+print(repr(converted))
+```
+
+Output:
+
+```python
+Cantonese(
+    initial='f',
+    nucleus='e',
+    coda='i̯',
+    tone='˥'
+)
+```
+
+#### Intermediate to Scheme
+
+Convert an intermediate representation to Meyer–Wempe:
+
+```python
+converted = cantonese.convert_intermediate_to_scheme(
+    source="lɛːm˧˥",
+    scheme_id="meyer_wempe",
+)
+print(repr(converted))
+```
+
+Output:
+
+```python
+MeyerWempe(
+    initial='l',
+    nucleus='e',
+    coda_vowel='',
+    tone='́',
+    coda_consonant='m'
+)
+```
+
 ### Getting a full syllable table
 
 > [!NOTE]
-> Generating and validating the full dataset may take anywhere from a few seconds to a minute depending on your hardware and the number of active schemes.
+> Generating and validating the full dataset may take anywhere from a few seconds to a minute depending on your hardware, active schemes, and exporter settings.
+>
+> Pass `loader_fn` and `loader_args` to Exporter to enable multi-process parallel generation; omitting them runs the export in single-process mode.
 
 Write the full syllable table in TSV format:
 
 ```python
-yumcha.write_syllable_table(
-    language=cantonese,
-    output_path="cantonese_syllables.tsv",
+from yumcha.exporter import Exporter
+from yumcha.loader.tsv import load_language
+
+language_id = "cantonese"
+cantonese = load_language(language_id)
+
+exporter = Exporter(
+    cantonese,
+    loader_fn=load_language,
+    loader_args=(language_id,),  # For non-bundled languages: (language_id, "/path/to/directory")
 )
+exporter.export("/path/to/cantonese_syllables.tsv")
 ```
 
 The exported TSV contains a standard header row and two summary rows at the bottom displaying overall syllable counts and scheme coverage percentages.
@@ -201,19 +266,15 @@ Pass a progress wrapper to the `progress_bar` argument to track generation progr
 ```python
 from tqdm import tqdm
 
-yumcha.write_syllable_table(
-    language=cantonese,
-    output_path="cantonese_syllables.tsv",
-    progress_bar=tqdm,
-)
+exporter.export("/path/to/cantonese_syllables.tsv", progress_bar=tqdm)
 ```
 
 ## 🔤 Supported schemes
 
 > [!NOTE]
-> While supported schemes strive to remain faithful to their original designs, some syllables may present edge-case constraints.
+> While supported scheme files strive to remain faithful to their original designs, some syllables may present edge-case constraints.
 >
-> You can review the pre-generated syllable tables in [this directory](https://github.com/tommycs127/yumcha/tree/main/syllable_tables). These tables are produced by the `yumcha.write_syllable_table()` method.
+> You can review the pre-generated syllable tables in [this directory](https://github.com/tommycs127/yumcha/tree/main/syllable_tables). These tables are produced by the [`Exporter.export()`](#getting-a-full-syllable-table) method.
 >
 > If you spot any discrepancies, please [open an issue](https://github.com/tommycs127/yumcha/issues/new). Any help is welcome and appreciated!
 
@@ -253,7 +314,7 @@ Tone sandhi depends on linguistic context (e.g., phonological environment) and i
 
 ## 🛣️ Roadmap
 
-### Documentations
+### Documentation
 
 - [x] README.md
 - [x] How it works documentation
@@ -269,7 +330,7 @@ Tone sandhi depends on linguistic context (e.g., phonological environment) and i
 
 #### Cantonese
 
-![](https://us-central1-progress-markdown.cloudfunctions.net/progress/14?&label=14/17&min=0&max=17)
+![Cantonese Progress](<https://img.shields.io/badge/14%2F17_(82%25)-green>)
 
 - [x] Braille
 - [x] Cantonese Hangul (T. S. Wong Scheme)
@@ -293,7 +354,7 @@ Tone sandhi depends on linguistic context (e.g., phonological environment) and i
 
 #### Mandarin
 
-![](https://us-central1-progress-markdown.cloudfunctions.net/progress/0?&label=0/7&min=0&max=7)
+![Mandarin Progress](<https://img.shields.io/badge/0%2F7_(0%25)-red>)
 
 - [ ] Bopomofo (Zhuyin)
 - [ ] Gwoyeu Romatzyh
@@ -305,7 +366,7 @@ Tone sandhi depends on linguistic context (e.g., phonological environment) and i
 
 #### Hokkien
 
-![](https://us-central1-progress-markdown.cloudfunctions.net/progress/0?&label=0/4&min=0&max=4)
+![Hokkien Progress](<https://img.shields.io/badge/0%2F4_(0%25)-red>)
 
 - [ ] Pe̍h-ōe-jī
 - [ ] Phofsit Daibuun
