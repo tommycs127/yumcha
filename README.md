@@ -15,7 +15,7 @@ Rather than maintaining $O(n^2)$ conversion tables between every combination of 
 
 ```mermaid
 graph LR
-    JP[Jyutping] <--> LP ((Standard Cantonese Phonology))
+    JP[Jyutping] <--> LP((Standard Cantonese Phonology))
     ILE["Institute of Language in Education (ILE) Scheme"] <--> LP
     BR[Braille] <--> LP
     PY[Pênkyämp] <--> LP
