@@ -6,28 +6,79 @@
 [![type](https://img.shields.io/badge/type-Transliteration_engine-cyan)](#)
 [![made-in](https://img.shields.io/badge/made_in-Hong_Kong-cc3399)](#)
 
-A phonology-oriented transliteration engine for Cantonese and other languages.
-
-> "Yumcha" is a play on Cantonese words. While it traditionally means "drinking tea" (<ruby>飲<rt>jam2</rt>茶<rt>caa4</rt>), it also sounds like a "phonological lookup" (<ruby>音<rt>jam1</rt>查<rt>caa4</rt>).
-> Just as tea brings people together, this engine aims to bridge different transcription and phonetic schemes!
-
 > [!CAUTION]
 > This project is in its **early stages** and undergoing active development. The API and functionality are **highly unstable** and subject to breaking changes without notice. Outputs are **not guaranteed to be correct** and manual verification is advised. **Use at your own risk.**
 
-## ✨ Highlights
+**Yumcha** is a declarative, phonology-oriented transliteration engine for Cantonese and other languages.
 
-- [**Scheme-to-Scheme Conversion**](#conversion): Convert a syllable seamlessly between different transcription and phonetic schemes within the same language.
-- [**Scheme Parsing**](#parsing): Parse strings to identify their phonological components and their intermediate representations.
-- [**Syllable Table Generation**](#getting-a-full-syllable-table): Get all valid syllables of every scheme via the phonology of the language.
-- [**Modular & Extensible**](/docs/custom-phonology-and-schemes.md): Add new language by defining its phonology, and add new schemes by simply defining the representation structure and an intermediate-to-symbol map!
-- **Zero Third-Party Dependencies:** Lightweight and easy to integrate into any project.
-- **Type-hinted**: Built with modern Python 3.12+ type hints for better IDE support and readability.
+Rather than maintaining $O(n^2)$ conversion tables between every combination of transcription systems, Yumcha maps schemes to a shared intermediate phonological representation. This allows any supported scheme to be converted into any other with zero glue code.
+
+```mermaid
+graph LR
+    JP[Jyutping] <--> LP ((Standard Cantonese Phonology))
+    ILE["Institute of Language in Education (ILE) Scheme"] <--> LP
+    BR[Braille] <--> LP
+    PY[Pênkyämp] <--> LP
+    LP <--> Y[Yale]
+    LP <--> SL[Sidney Lau]
+    LP <--> SLW[S. L. Wong]
+    LP <--> MW[Meyer–Wempe]
+```
+
+Each scheme is defined independently against the language's phonological representation. Adding a new scheme therefore does not require implementing a separate conversion path for every existing scheme.
+
+> "Yumcha" is a play on Cantonese words. While it traditionally means "drinking tea" (<ruby>飲<rt>jam2</rt>茶<rt>caa4</rt>), it also sounds like a "phonological lookup" (<ruby>音<rt>jam1</rt>查<rt>caa4</rt>).
+>
+> Just as tea brings people together, this engine aims to bridge different transcription and phonetic schemes!
+
+## ✨ Features
+
+- **Shared intermediate representation** — Convert between schemes without maintaining pairwise conversion tables.
+- **Declarative scheme definitions** — Define phonologies and transcription schemes as data rather than implementing language-specific conversion logic.
+- **Bidirectional conversion** — Convert between a scheme and its intermediate representation in either direction.
+- **Scheme-to-scheme conversion** — Convert directly between different schemes within the same language.
+- **Constraint-based matching** — Resolve ambiguous and context-dependent representations using indexed constraints.
+- **Phonological validation** — Reject combinations that do not conform to the language's defined phonology.
+- **Syllable table generation** — Enumerate the valid syllable space and inspect coverage across schemes.
+- **Modular & extensible** — Add languages and schemes without modifying the conversion engine.
+- **Zero runtime dependencies** — The core engine uses only the Python standard library.
+- **Type-hinted** — Built with modern Python 3.12+ type hints for IDE support and readability.
 
 ## 🤔 Why Yumcha?
 
-Sinitic transcription is fragmented and converting between systems often requires large handwritten mapping tables, which break down for edge cases such as unusual spellings and tone markings.
+Transcription systems rarely differ only by symbol substitution. They may:
 
-Yumcha provides a unified API to convert these schemes without requiring the user to write complex mapping logic or maintaining large mapping tables that can miss edge cases.
+- divide syllables into different components;
+- encode tone in different positions or forms;
+- distinguish phonological features that another scheme merges;
+- use different representations for the same sound;
+- impose scheme-specific restrictions on which combinations can be written.
+
+As a result, maintaining pairwise conversion tables becomes increasingly difficult as the number of schemes grows.
+
+For example, with four schemes, a pairwise approach requires relationships such as:
+
+```mermaid
+graph LR
+    A1[A] <--> B1[B]
+    A1[A] <--> C1[C]
+    A1[A] <--> D1[D]
+    B1[B] <--> C1[C]
+    B1[B] <--> D1[D]
+    C1[C] <--> D1[D]
+```
+
+Yumcha instead gives each scheme a relationship with the language's intermediate representation:
+
+```mermaid
+graph LR
+    A2[A] <--> LP((Phonology))
+    B2[B] <--> LP
+    LP <--> C2[C]
+    LP <--> D2[D]
+```
+
+This allows the conversion engine to remain generic while the linguistic details live in the language and scheme definitions.
 
 ## 📋 Requirements
 
@@ -35,17 +86,57 @@ Python 3.12 or above.
 
 ## 📦 Installation
 
-Install Yumcha using `pip`:
+Yumcha is currently under active development and is not yet a stable release. Install the development version directly from GitHub:
 
 ```bash
 pip install git+https://github.com/tommycs127/yumcha.git
 ```
 
-## 🚀 Usage
+## 🚀 Quick start
 
-### Initialization
+Load a bundled language and convert a syllable between schemes:
 
-Import `yumcha` and load a language by its bundled name or by providing a path to a custom language directory/package:
+```python
+from yumcha.loader.tsv import load_language
+
+cantonese = load_language("cantonese")
+
+converted = cantonese.convert_scheme_to_scheme(
+    source="seot1",
+    from_scheme_id="jyutping",
+    to_scheme_id="ile",
+)
+
+print(str(converted))  # Output: 'soet7'
+```
+
+Yumcha performs the conversion through the Cantonese intermediate representation:
+
+```mermaid
+graph LR
+    J[Jyutping] --> P["Cantonese intermediate representation"] --> ILE[ILE]
+```
+
+Conversion results are structured Representation objects rather than plain strings, so their components can also be inspected:
+
+```python
+print(repr(converted))
+```
+
+Output:
+
+```python
+Ile(
+    initial='s',
+    nucleus='oe',
+    coda='t',
+    tone='7'
+)
+```
+
+## 🔧 Loading languages
+
+Import `load_language()` and load a bundled language by name, or provide a directory containing a custom language definition:
 
 ```python
 from yumcha.loader.tsv import load_language
@@ -53,30 +144,181 @@ from yumcha.loader.tsv import load_language
 # Bundled in the package
 cantonese = load_language("cantonese")
 
-# From a directory folder path
-colang = load_language("colang", directory="/path/to/directory")
+# From a custom language directory
+colang = load_language(
+    "colang",
+    directory="/path/to/directory",
+)
 ```
 
-The `load_language()` method traverses the provided resource directory, parses internal TSV files as phonology rules or schemes, and compiles them into a `Language` instance.
+`load_language()` reads the language's phonology and scheme definitions from the supplied resource directory and compiles them into a Language instance.
 
-#### Adding custom schemes
+See [Adding a language and custom schemes](/docs/custom-phonology-and-schemes.md) for the file format and a complete example.
 
-> [!NOTE]
-> Custom schemes must conform to the language’s underlying phonology; otherwise, Yumcha will raise an exception during initialization. Consult the `Language.phonology` object or its source file for required phonemes and constraints.
+### Adding custom schemes
 
-Use the `Language.add_scheme()` method to add custom schemes:
+A custom scheme can be loaded from a TSV file and added to an existing language:
 
 ```python
 from yumcha.loader.tsv import load_scheme_from_tsv
 
-# Load the custom scheme
-my_scheme = load_scheme_from_tsv("/path/to/my_scheme.tsv")
+my_scheme = load_scheme_from_tsv(
+  "/path/to/my_scheme.tsv"
+)
 
-# Add the scheme by passing the loaded object
 cantonese.add_scheme(my_scheme)
 ```
 
-### Getting available schemes
+> [!NOTE]
+> Custom schemes must conform to the language's underlying phonology. Otherwise, Yumcha will raise an exception when the scheme is added. Consult `Language.phonology` property or the language's source files for the required phonemes and constraints.
+
+## 📚 Working with representations
+
+### Parsing a scheme
+
+`parse_to_scheme()` parses a scheme string into its structured representation:
+
+```python
+parsed = cantonese.parse_to_scheme(
+    text="chēun",
+    scheme_id="yale",
+)
+
+print(repr(parsed))
+```
+
+Output:
+
+```python
+Yale(
+    initial='ch',
+    nucleus_before_tone_diacritic='e',
+    tone_diacritic='̄',
+    nucleus_after_tone_diacritic='u',
+    coda_vowel='',
+    tone_h='',
+    coda_consonant='n'
+)
+```
+
+Individual components can then be accessed directly:
+
+```python
+print(parsed.initial) # Output: 'ch'
+print(parsed.coda_consonant) # Output: 'n'
+```
+
+### Parsing the intermediate representation
+
+A language's intermediate representation is usually phonological and may use IPA symbols:
+
+```python
+parsed = cantonese.parse_to_intermediate(
+    text="tɪŋ˧˥",
+)
+
+print(repr(parsed))
+```
+
+Output:
+
+```python
+Cantonese(
+    initial='t',
+    nucleus='ɪ',
+    coda='ŋ',
+    tone='˧˥'
+)
+```
+
+## 🔄 Conversion
+
+### Scheme to scheme
+
+Convert directly between two schemes:
+
+```python
+converted = cantonese.convert_scheme_to_scheme(
+    source="seot1",
+    from_scheme_id="jyutping",
+    to_scheme_id="ile",
+)
+
+print(str(converted))  # Output: 'soet7'
+```
+
+The result remains a structured representation:
+
+```python
+print(repr(converted))
+```
+
+Output:
+
+```python
+Ile(
+    initial='s',
+    nucleus='oe',
+    coda='t',
+    tone='7'
+)
+```
+
+### Scheme to intermediate
+
+Convert a scheme representation into the language's intermediate representation:
+
+```python
+converted = cantonese.convert_scheme_to_intermediate(
+    source="fei1°",
+    scheme_id="sidneylau",
+)
+
+print(repr(converted))
+```
+
+Output:
+
+```python
+Cantonese(
+    initial='f',
+    nucleus='e',
+    coda='i̯',
+    tone='˥'
+)
+```
+
+### Intermediate to scheme
+
+Convert an intermediate representation into a scheme:
+
+```python
+converted = cantonese.convert_intermediate_to_scheme(
+    source="lɛːm˧˥",
+    scheme_id="meyer_wempe",
+)
+
+print(repr(converted))
+```
+
+Output:
+
+```python
+MeyerWempe(
+    initial='l',
+    nucleus='e',
+    coda_vowel='',
+    tone='́',
+    coda_consonant='m'
+)
+```
+
+> [!NOTE]
+> Conversion methods return a `Representation` subclass rather than a `str`. Use `str()` when a textual representation is needed.
+
+## 📋 Getting available schemes
+
+The schemes registered for a language are available through `Language.schemes`:
 
 ```python
 print(list(cantonese.schemes))
@@ -96,146 +338,19 @@ Output:
 ]
 ```
 
-### Parsing
-
-#### Scheme representation
-
-Parse a Yale syllable into components:
-
-```python
-parsed = cantonese.parse_to_scheme(
-    scheme_id="yale",
-    text="chēun",
-)
-print(repr(parsed))
-```
-
-Output:
-
-```python
-Yale(
-    initial='ch',
-    nucleus_before_tone_diacritic='e',
-    tone_diacritic='̄',
-    nucleus_after_tone_diacritic='u',
-    coda_vowel='',
-    tone_h='',
-    coda_consonant='n'
-)
-```
-
-Access individual components directly as attributes:
-
-```python
-print(parsed.initial)  # Output: 'ch'
-print(parsed.coda_consonant)  # Output: 'n'
-```
-
-#### Intermediate representation
-
-Parse an intermediate representation (usually [IPA](https://en.wikipedia.org/wiki/International_Phonetic_Alphabet)) into components:
-
-```python
-parsed = cantonese.parse_to_intermediate(
-    text="tɪŋ˧˥",
-)
-print(repr(parsed))
-```
-
-Output:
-
-```python
-Cantonese(
-    initial='t',
-    nucleus='ɪ',
-    coda='ŋ',
-    tone='˧˥'
-)
-```
-
-### Conversion
-
-#### Scheme to Scheme
-
 > [!NOTE]
-> Converting methods **do not return a `str` object**, but an instance of a `Representation` subclass. To get a string, simply wrap the object in `str()`.
+> `Language.schemes` returns a read-only `dict` view. Avoid printing it directly, as it contains verbose scheme objects.
 
-Convert a Jyutping syllable to ILE:
+## 📊 Generating syllable tables
 
-```python
-converted = cantonese.convert_scheme_to_scheme(
-    source="seot1",
-    from_scheme_id="jyutping",
-    to_scheme_id="ile",
-)
-print(str(converted))  # Output: 'soet7'
-print(repr(converted))
-```
+Yumcha can enumerate the valid syllable space defined by a language's phonology and generate representations for its registered schemes.
 
-Output:
+This is useful for:
 
-```python
-Ile(
-    initial='s',
-    nucleus='oe',
-    coda='t',
-    tone='7'
-)
-```
-
-#### Scheme to Intermediate
-
-Convert a Sidney Lau syllable to intermediate representation:
-
-```python
-converted = cantonese.convert_scheme_to_intermediate(
-    source="fei1°",
-    scheme_id="sidneylau",
-)
-print(repr(converted))
-```
-
-Output:
-
-```python
-Cantonese(
-    initial='f',
-    nucleus='e',
-    coda='i̯',
-    tone='˥'
-)
-```
-
-#### Intermediate to Scheme
-
-Convert an intermediate representation to Meyer–Wempe:
-
-```python
-converted = cantonese.convert_intermediate_to_scheme(
-    source="lɛːm˧˥",
-    scheme_id="meyer_wempe",
-)
-print(repr(converted))
-```
-
-Output:
-
-```python
-MeyerWempe(
-    initial='l',
-    nucleus='e',
-    coda_vowel='',
-    tone='́',
-    coda_consonant='m'
-)
-```
-
-### Getting a full syllable table
-
-> [!NOTE]
-> Generating and validating the full dataset may take anywhere from a few seconds to a minute depending on your hardware, active schemes, and exporter settings.
->
-> Pass `loader_fn` and `loader_args` to Exporter to enable multi-process parallel generation; omitting them runs the export in single-process mode.
+- inspecting the syllable inventory;
+- comparing scheme coverage;
+- finding combinations that a scheme cannot represent;
+- validating and reviewing scheme definitions.
 
 Write the full syllable table in TSV format:
 
@@ -249,51 +364,70 @@ cantonese = load_language(language_id)
 exporter = Exporter(
     cantonese,
     loader_fn=load_language,
-    loader_args=(language_id,),  # For non-bundled languages: (language_id, "/path/to/directory")
+    loader_args=(language_id,),
 )
+
 exporter.export("/path/to/cantonese_syllables.tsv")
 ```
 
-The exported TSV contains a standard header row and two summary rows at the bottom displaying overall syllable counts and scheme coverage percentages.
+For non-bundled languages, loader_args can include the custom language directory:
 
-#### Tracking progress
+```python
+exporter = Exporter(
+    cantonese,
+    loader_fn=load_language,
+    loader_args=(
+        language_id,
+        "/path/to/directory",
+    )
+)
+```
+
+The exported TSV contains a standard header row and summary rows showing overall syllable counts and scheme coverage percentages.
 
 > [!NOTE]
-> Only compatible with progress bar wrappers (such as [`tqdm`](https://tqdm.github.io/) or [`rich.progress`](https://rich.readthedocs.io/en/latest/progress.html)) that accept a `total` keyword argument.
+> Generating and validating the full dataset may take anywhere from a few seconds to a minute depending on your hardware, active schemes, and exporter settings.
 
-Pass a progress wrapper to the `progress_bar` argument to track generation progress:
+### Tracking progress
+
+A progress-bar wrapper can be passed to `progress_bar`:
 
 ```python
 from tqdm import tqdm
 
-exporter.export("/path/to/cantonese_syllables.tsv", progress_bar=tqdm)
+exporter.export(
+    "/path/to/cantonese_syllables.tsv",
+    progress_bar=tqdm,
+)
 ```
+
+The wrapper must accept a total keyword argument. Libraries such as [`tqdm`](https://tqdm.github.io/) or [`rich.progress`](https://rich.readthedocs.io/en/latest/progress.html) can be used for this purpose.
 
 ## 🔤 Supported schemes
 
 > [!NOTE]
-> While supported scheme files strive to remain faithful to their original designs, some syllables may present edge-case constraints.
+> Supported scheme definitions strive to remain faithful to their original designs, but some features and edge cases are not yet implemented.
 >
-> You can review the pre-generated syllable tables in [this directory](https://github.com/tommycs127/yumcha/tree/main/syllable_tables). These tables are produced by the [`Exporter.export()`](#getting-a-full-syllable-table) method.
+> Pre-generated syllable tables are available in the [`/syllable_tables`](https://github.com/tommycs127/yumcha/tree/main/syllable_tables) directory. These tables are produced by `Exporter.export()` and can be useful for reviewing scheme coverage.
 >
-> If you spot any discrepancies, please [open an issue](https://github.com/tommycs127/yumcha/issues/new). Any help is welcome and appreciated!
+> If you spot an error or discrepancy, please [open an issue](https://github.com/tommycs127/yumcha/issues/new). Any help is welcome and appreciated!
 
 ### Cantonese
 
-| Scheme name                                           | Example      | Scheme code       | Note                                                               |
+| Scheme name                                           | Example      | Scheme ID         | Note                                                               |
 | ----------------------------------------------------- | ------------ | ----------------- | ------------------------------------------------------------------ |
 | Braille                                               | `⠭⠎⠀`        | `braille`         |                                                                    |
 | Hangul (T. S. Wong Scheme)                            | `츈`         | `hangul`          | Display may vary depending on Unicode combining character support. |
 | Institute of Language in Education Scheme             | `tsoen1`     | `ile`             |                                                                    |
 | Jyutping                                              | `ceon1`      | `jyutping`        |                                                                    |
 | Kuping                                                | `tśeon55^1`  | `kuping`          | A romanization scheme I designed!                                  |
-| Kuping (Alternative)                                  | `ts'eon55^1` | `kuping_alt`      | Ditto.                                                             |
+| Kuping (Alternative)                                  | `ts'eon55^1` | `kuping_alt`      | An alternative Kuping representation.                              |
 | Meyer–Wempe                                           | `ts'un`      | `meyer_wempe`     |                                                                    |
 | Pênkyämp                                              | `cönt`       | `penkyamp`        | Glottal stop coda (`q`) is not implemented.                        |
 | Cantonese Transliteration Scheme (Rao's Romanization) | `cên1`       | `rao`             |                                                                    |
 | Sidney Lau                                            | `chun1°`     | `sidneylau`       | Tone degree symbol is not superscripted.                           |
 | S. L. Wong (Romanization)                             | `ˈtseun`     | `slwong_roman`    | Conventional numeral tone marking is not implemented.              |
-| S. L. Wong (Phonetic)                                 | `ˈtsœn`      | `slwong_phonetic` | Ditto.                                                             |
+| S. L. Wong (Phonetic)                                 | `ˈtsœn`      | `slwong_phonetic` | Conventional numeral tone marking is not implemented.              |
 | Yale                                                  | `chēun`      | `yale`            |                                                                    |
 | Yựtyựt                                                | `cơn`        | `yutyut`          |                                                                    |
 
@@ -301,24 +435,98 @@ exporter.export("/path/to/cantonese_syllables.tsv", progress_bar=tqdm)
 
 Please refer to the [How it works](/docs/how-it-works.md) documentation.
 
-## 🚫 Limitations
+## ⚠️ Limitations
 
-### No Tone Sandhi
+Yumcha currently has limitations at several different levels.
 
-Tone sandhi depends on linguistic context (e.g., phonological environment) and is therefore out of scope for this project.
+### Linguistic limitations
 
-### Scheme-Specific Limitations
+#### No Tone Sandhi
 
-- **Information Loss during Conversion:** Certain schemes track historical phonemes or granular tone contours. For example, the Sidney Lau scheme distinguishes high-flat (`1°`) from high-falling (`1`), whereas Jyutping uses `1` for both. Converting through a less granular scheme may lose tone contour specifics.
-- **Unrepresentable Syllables:** Some orthographies cannot represent every phonological combination. For example, S. L. Wong Romanization uses `eu` for `[yː]`, making `[ɛːu̯]` unrepresentable. Converting inputs like `deu6` (Jyutping) to S. L. Wong Romanization will return no valid output.
+Tone sandhi depends on linguistic context, such as the surrounding phonological environment. Yumcha currently operates on individual representations and therefore does not model tone sandhi.
+
+### Representational limitations
+
+#### Information loss during conversion
+
+Different schemes may preserve different amounts of phonological information.
+
+For example, Sidney Lau distinguishes high-flat (`1°`) from high-falling (`1`), whereas Jyutping uses `1` for both. Converting from Sidney Lau to Jyutping therefore loses information:
+
+```mermaid
+graph LR
+    subgraph SL ["Sidney Lau"]
+        SL_HFLAT["1°"]
+        SL_HFALL["1"]
+    end
+
+    subgraph IR ["Intermediate representation"]
+        IR_HFLAT["[˥]"]
+        IR_HFALL["[˥˧]"]
+    end
+
+    subgraph JP ["Jyutping"]
+        JP_HFLAT["1"]
+    end
+
+    SL_HFLAT --> IR_HFLAT
+    SL_HFALL --> IR_HFALL
+    IR_HFLAT --> JP_HFLAT
+    IR_HFALL --> JP_HFLAT
+```
+
+Once that distinction has been lost, converting the Jyutping representation back to Sidney Lau cannot determine which original form was intended.
+
+#### Unrepresentable syllables
+
+A scheme may not have a representation for every phonological combination.
+
+For example, S. L. Wong Romanization uses `eu` for `[yː]`, making `[ɛːu̯]` unrepresentable. Converting an input such as `deu6` (Jyutping) to S. L. Wong Romanization therefore produces no valid output.
+
+### Implementation limitations
+
+Some supported schemes are still incomplete. Their individual limitations are noted in the supported-schemes table above and in their scheme definitions.
+
+## ⚙️ How it works
+
+At a high level, Yumcha separates linguistic data from conversion logic.
+
+Language and scheme definitions describe:
+
+- the structure of representations;
+- the values allowed in each field;
+- phonological constraints;
+- mappings between symbols and intermediate forms.
+
+The engine then compiles these definitions into indexed constraints and uses specialized or constraint-based solvers to resolve conversions. This separation means that adding linguistic data does not require writing new conversion algorithms for each language or scheme.
+
+For a detailed explanation of the internal architecture, see [How it works](/docs/how-it-works.md).
+
+## 🧩 Extending Yumcha
+
+Yumcha is designed so that new languages and schemes can primarily be added through data definitions rather than changes to the conversion engine.
+
+### Adding a language
+
+A language definition describes its phonological structure, valid combinations, and available schemes.
+
+See the [tutorial on adding a language](/docs/custom-phonology-and-schemes.md#3-writing-phonologytsv).
+
+### Adding a scheme
+
+A scheme definition describes its representation structure and the mapping between its symbols and the language's intermediate representation.
+
+See the [tutorial on adding a custom scheme](/docs/custom-phonology-and-schemes.md#4-writing-schemestsv).
 
 ## 🛣️ Roadmap
 
 ### Documentation
 
-- [x] README.md
-- [x] How it works documentation
+- [x] Basic README
+- [ ] Architecture documentation
 - [x] Tutorial on adding custom languages and schemes
+- [ ] Scheme definition reference
+- [ ] API reference
 
 ### Features & Core Engine
 
