@@ -36,7 +36,7 @@ class LanguageIterator[PhonologyRepresentationT: PhonologyRepresentation]:
             progress_bar: Optional wrapper function for reporting iteration progress.
         """
         self.language = language
-        self._scheme_item_counts = [0] * len(self.language.schemes)
+        self._scheme_item_counts = [0] * len(language.schemes)
         self._scheme_item_counts_view = SequenceProxy(self._scheme_item_counts)
 
         self.progress_bar = progress_bar
@@ -71,17 +71,20 @@ class LanguageIterator[PhonologyRepresentationT: PhonologyRepresentation]:
             else:
                 intermediate_pattern_tuples = progress_bar(intermediate_pattern_tuples)
 
+        convert_intermediate_to_scheme = self.language.convert_intermediate_to_scheme
+        _scheme_item_counts = self._scheme_item_counts
+
         for intermediate_pattern_tuple in intermediate_pattern_tuples:
             pattern_tuple_str = "".join(intermediate_pattern_tuple)
             row = [pattern_tuple_str]
 
             for idx, scheme_id in enumerate(scheme_ids):
-                converted = self.language.convert_intermediate_to_scheme(
+                converted = convert_intermediate_to_scheme(
                     pattern_tuple_str, scheme_id, True, False
                 )
                 if converted:
                     row.append(str(converted))
-                    self._scheme_item_counts[idx] += 1
+                    _scheme_item_counts[idx] += 1
                 else:
                     row.append("")
 

@@ -15,7 +15,7 @@ from ..models.solution import Solution
 from ..primitives.pattern_tuple import PatternTuple
 from ..utils.bit import iterate_bits
 from .base import BaseSolver
-from .helpers import merge_if_compatible
+from .helpers import union_if_compatible
 from .models import (
     Candidate,
     SearchState,
@@ -176,7 +176,7 @@ class CSPSolver[PhonologyRepresentationT: PhonologyRepresentation](BaseSolver):
                     _,
                 ) = source_registrants[registrant_index]
 
-                merged = merge_if_compatible(known_source, source_pattern_tuple)
+                merged = union_if_compatible(known_source, source_pattern_tuple)
                 if (merged is None) or (merged is known_source):
                     continue
                 known_source = merged
@@ -185,7 +185,7 @@ class CSPSolver[PhonologyRepresentationT: PhonologyRepresentation](BaseSolver):
                     origin_index
                 )[1]
 
-                merged = merge_if_compatible(known_target, target_pattern_tuple)
+                merged = union_if_compatible(known_target, target_pattern_tuple)
                 if (merged is None) or (merged is known_target):
                     continue
                 known_target = merged

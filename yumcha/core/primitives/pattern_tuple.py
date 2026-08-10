@@ -96,10 +96,12 @@ class PatternTuple(Sequence[PatternT_co]):
             else:
                 raise TypeError(f"expected str or ellipsis, got {type(item).__name__}")
 
-        self._data = tuple(items)
+        items_as_tuple = tuple(items)
+
+        self._data = items_as_tuple
         self.mask = mask
         self.weight = mask.bit_count()
-        self.full_mask = (1 << len(self._data)) - 1
+        self.full_mask = (1 << len(items_as_tuple)) - 1
 
     def __len__(self) -> int:
         """Returns the total number of slots, including wildcards."""
@@ -121,9 +123,12 @@ class PatternTuple(Sequence[PatternT_co]):
             The pattern/wildcard element at the index, or a sliced `PatternTuple` instance.
         """
         result = self._data[index]
+
         if type(index) is slice:
-            s_data = self._data
-            data_len = len(s_data)
+            mask = self.mask
+            _data = self._data
+
+            data_len = len(_data)
             start, stop, step = index.indices(data_len)
 
             slice_len = len(result)
@@ -133,12 +138,12 @@ class PatternTuple(Sequence[PatternT_co]):
             if step == 1:
                 instance = object.__new__(PatternTuple)
                 instance._data = result
-                instance.mask = (self.mask >> start) & ((1 << slice_len) - 1)
+                instance.mask = (mask >> start) & ((1 << slice_len) - 1)
                 instance.weight = instance.mask.bit_count()
                 instance.full_mask = (1 << slice_len) - 1
                 return instance
 
-            old_mask = self.mask
+            old_mask = mask
             new_mask = 0
 
             for destination_idx, source_idx in enumerate(range(start, stop, step)):
@@ -189,19 +194,28 @@ class PatternTuple(Sequence[PatternT_co]):
         Returns:
             A new `PatternTuple` instance with repeated data.
         """
-        raw_tuple = self._data * int(count)
+        count_as_int = int(count)
+        if count_as_int <= 0:
+            instance = object.__new__(PatternTuple)
+            instance._data = ()
+            instance.mask = 0
+            instance.weight = 0
+            instance.full_mask = 0
+            return instance
+
+        _data = self._data
+        raw_tuple = _data * count_as_int
+        mask = self.mask
+
+        if mask != 0:
+            shift = len(_data)
+            repeater = ((1 << (shift * count_as_int)) - 1) // ((1 << shift) - 1)
+            new_mask = mask * repeater
+        else:
+            new_mask = 0
 
         instance = object.__new__(PatternTuple)
         instance._data = raw_tuple
-
-        new_mask = 0
-        if (multiplier := int(count)) > 0:
-            bit_shift_distance = len(self._data)
-
-            for segment_idx in range(multiplier):
-                shifted_mask = self.mask << (segment_idx * bit_shift_distance)
-                new_mask |= shifted_mask
-
         instance.mask = new_mask
         instance.weight = new_mask.bit_count()
         instance.full_mask = (1 << len(raw_tuple)) - 1
@@ -232,7 +246,7 @@ class PatternTuple(Sequence[PatternT_co]):
         raw_str = "".join(c for c in self._data if type(c) is str)
         return unicodedata.normalize(form, raw_str) if form else raw_str
 
-    def merge(
+    def union(
         self, other: Iterable[PatternT]
     ) -> "PatternTuple[PatternT_co | PatternT]":
         """Combines two PatternTuple slot-by-slot, filling wildcards from either side.
@@ -309,8 +323,9 @@ class PatternTuple(Sequence[PatternT_co]):
         separated = set()
         _ellipsis = ELLIPSIS
         s_data = self._data
+        s_mask = self.mask
 
-        for idx, lowest_bit in iterate_bits(self.mask, yield_lowest_bit=True):
+        for idx, lowest_bit in iterate_bits(s_mask, yield_lowest_bit=True):
             items: list[PatternT_co | EllipsisType] = list(_get_wildcard_tuple(length))
             items[idx] = s_data[idx]
 
@@ -346,7 +361,9 @@ class PatternTuple(Sequence[PatternT_co]):
         if len(s_data) != len(o_data):
             raise ValueError(f"expected length of {len(s_data)}, got {len(o_data)}")
 
-        overlap = self.mask & other.mask
+        s_mask = self.mask
+        o_mask = other.mask
+        overlap = s_mask & o_mask
 
         if not overlap:
             return True
@@ -385,7 +402,9 @@ class PatternTuple(Sequence[PatternT_co]):
         if data_len != len(o_data):
             raise ValueError(f"expected length of {data_len}, got {len(o_data)}")
 
-        overlap = self.mask & other.mask
+        s_mask = self.mask
+        o_mask = other.mask
+        overlap = s_mask & o_mask
 
         if not overlap:
             instance = object.__new__(PatternTuple)
@@ -441,13 +460,14 @@ class PatternTuple(Sequence[PatternT_co]):
         if s_len != len(o_data):
             raise ValueError(f"expected length of {s_len}, got {len(o_data)}")
 
-        overlap = self.mask & other.mask
+        s_mask = self.mask
+        o_mask = other.mask
 
-        # If there are no overlapping populated slots, subtracting 'other' leaves 'self' unchanged
+        overlap = s_mask & o_mask
+
         if not overlap:
             return self
 
-        # Verify that overlapping slots contain matching values before subtracting
         for idx in iterate_bits(overlap):
             if s_data[idx] != o_data[idx]:
                 raise ValueError(
@@ -455,13 +475,11 @@ class PatternTuple(Sequence[PatternT_co]):
                     f"'{s_data[idx]}' and '{o_data[idx]}'"
                 )
 
-        # The new mask keeps only the slots set in self that were NOT set in other
-        new_mask = self.mask & ~other.mask
+        new_mask = s_mask & ~o_mask
 
-        if new_mask == self.mask:
+        if new_mask == s_mask:
             return self
 
-        # Rebuild the _data tuple with wildcards at cleared positions
         new_items: list[Pattern] = list(_get_wildcard_tuple(s_len))
         for idx in iterate_bits(new_mask):
             new_items[idx] = s_data[idx]
@@ -484,9 +502,10 @@ class PatternTuple(Sequence[PatternT_co]):
         Returns:
             A new `PatternTuple` retaining elements matching the mask.
         """
-        target_mask = mask & self.mask
+        s_mask = self.mask
+        target_mask = mask & s_mask
 
-        if target_mask == self.mask:
+        if target_mask == s_mask:
             return self
 
         data = self._data

@@ -84,7 +84,7 @@ class RegisteredPatternTuples:
         pattern_tuples: Sequence[Sequence[Pattern]],
         directions: Sequence[SchemeDirective],
         allowed_directions: set[SchemeDirective],
-    ):
+    ) -> None:
         """Loads, registers, compiles bitmasks, and indexes a set of pattern sequences.
 
         Args:
@@ -99,10 +99,18 @@ class RegisteredPatternTuples:
         if not pattern_tuples:
             raise ValueError("at least one pattern tuple is required")
 
+        self._reset()
         self._register(pattern_tuples, directions)
         self._compile(allowed_directions)
         self._extract_explicit_charsets()
         self._index()
+
+    def _reset(self) -> None:
+        """Clears all compiled pattern data while preserving its read-only views."""
+        self._registrants.clear()
+        self._pattern_masks_by_fields.clear()
+        self._charsets.clear()
+        self._moved_indexes.clear()
 
     def _register(
         self,
@@ -235,21 +243,11 @@ class RegisteredPatternTupleWithInvalidMasks(RegisteredPatternTuples):
         """SequenceProxy[int]: Read-only view of bitmasks representing invalid pattern tuples keyed by registrant index."""
         return self._invalid_registrant_masks_view
 
-    def load(
-        self,
-        pattern_tuples: Sequence[Sequence[Pattern]],
-        directions: Sequence[SchemeDirective],
-        allowed_directions: set[SchemeDirective],
-    ) -> None:
-        """Clears stale invalid registrant masks and loads pattern_tuples.
-
-        Args:
-            pattern_tuples: Sequences of pattern sequences representing constraint rules.
-            directions: Directives corresponding to each pattern sequence.
-            allowed_directions: Set of directives permitted during bitmask compilation.
-        """
+    def _reset(self) -> None:
+        """Clears all compiled pattern and invalid-mask data."""
+        super()._reset()
+        self._invalid_origin_masks.clear()
         self._invalid_registrant_masks.clear()
-        super().load(pattern_tuples, directions, allowed_directions)
 
     def build_invalid_masks(
         self,

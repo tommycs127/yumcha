@@ -10,7 +10,7 @@ if TYPE_CHECKING:
     from ..primitives.pattern_tuple import PatternTuple
 
 
-def merge_if_compatible(
+def union_if_compatible(
     known_pattern_tuple: PatternTuple,
     pattern_tuple: PatternTuple,
 ) -> PatternTuple | None:
@@ -33,4 +33,4 @@ def merge_if_compatible(
             if pattern_tuple[idx] != known_pattern_tuple[idx]:
                 return None
 
-    return known_pattern_tuple.merge(pattern_tuple)
+    return known_pattern_tuple.union(pattern_tuple)

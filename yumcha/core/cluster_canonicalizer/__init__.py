@@ -82,6 +82,7 @@ class ClusterCanonicalizer:
             ValueError: If a cluster key maps to two conflicting cluster representations.
         """
         seen_sources: dict[ClusterKey, str] = {}
+        _cluster_map = self._cluster_map
 
         for charset in charsets_nfd:
             for token in charset:
@@ -90,9 +91,9 @@ class ClusterCanonicalizer:
                     if key is None:
                         continue
 
-                    learned_key = self._cluster_map.get(key)
+                    learned_key = _cluster_map.get(key)
                     if learned_key is None:
-                        self._cluster_map[key] = cluster
+                        _cluster_map[key] = cluster
                         seen_sources[key] = token
                     elif learned_key != cluster:
                         raise ValueError(
@@ -106,16 +107,19 @@ class ClusterCanonicalizer:
 
         Clusters starting with a combining mark are skipped.
         """
-        for cluster in self._cluster_map.values():
+        _cluster_map = self._cluster_map
+        _mark_rank = self._mark_rank
+
+        for cluster in _cluster_map.values():
             base = cluster[0]
             if unicodedata.combining(base) != 0:
                 continue
 
             marks = cluster[1:]
             for pos, mark in enumerate(marks):
-                old_rank = self._mark_rank.get(mark)
+                old_rank = _mark_rank.get(mark)
                 if old_rank is None or pos < old_rank:
-                    self._mark_rank[mark] = pos
+                    _mark_rank[mark] = pos
 
     def canonicalize(self, text: str) -> str:
         """Reorders combining marks in a string to match learned canonical orders.
@@ -163,7 +167,8 @@ class ClusterCanonicalizer:
 
         base = cluster[0]
         marks = list(cluster[1:])
+        _mark_rank = self._mark_rank
 
-        marks.sort(key=lambda mark: (self._mark_rank.get(mark, INF), mark))
+        marks.sort(key=lambda mark: (_mark_rank.get(mark, INF), mark))
 
         return base + "".join(marks)
