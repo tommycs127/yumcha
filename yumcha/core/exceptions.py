@@ -21,13 +21,21 @@ class ConversionError(CoreError):
     """Base exception for errors during conversion operations."""
 
 
-class PhonologicalError(ConversionError):
-    """Raised when a phonological rule violation or invalid feature sequence is encountered."""
-
-
 class NoMatchError(ConversionError):
     """Raised when no matching pattern rule can be resolved for a given sequence or query."""
 
 
-class NotSupportedError(ConversionError):
-    """Raised when validation reveals that the scheme does not support the given sequence."""
+class ValidationError(CoreError):
+    """Base exception for errors during post-conversion operations."""
+
+
+class PhonologicalError(ValidationError):
+    """Raised when a phonological rule violation or invalid feature sequence is encountered."""
+
+
+class RoundtripError(ValidationError):
+    """Raised when result text fails to convert back to its original form inside the solver."""
+
+
+class CollisionError(ValidationError):
+    """Raised when a component collision occurs during round-trip validation."""
