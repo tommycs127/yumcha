@@ -59,23 +59,18 @@ As a result, maintaining pairwise conversion tables becomes increasingly difficu
 For example, with four schemes, a pairwise approach requires relationships such as:
 
 ```mermaid
-graph LR
-    A1[A] <--> B1[B]
-    A1[A] <--> C1[C]
-    A1[A] <--> D1[D]
-    B1[B] <--> C1[C]
-    B1[B] <--> D1[D]
-    C1[C] <--> D1[D]
+flowchart LR
+    A <--> B <--> C <--> D
+    B <--> D
+    A <--> C
+    A <--> D
 ```
 
 Yumcha instead gives each scheme a relationship with the language's intermediate representation:
 
 ```mermaid
 graph LR
-    A2[A] <--> LP((Phonology))
-    B2[B] <--> LP
-    LP <--> C2[C]
-    LP <--> D2[D]
+    A & B <--> LP((Phonology)) <--> C & D
 ```
 
 This allows the conversion engine to remain generic while the linguistic details live in the language and scheme definitions.
@@ -414,22 +409,22 @@ The wrapper must accept a total keyword argument. Libraries such as [`tqdm`](htt
 
 ### Cantonese
 
-| Scheme name                                           | Example      | Scheme ID         | Note                                                               |
-| ----------------------------------------------------- | ------------ | ----------------- | ------------------------------------------------------------------ |
-| Braille                                               | `⠭⠎⠀`        | `braille`         |                                                                    |
-| Hangul (T. S. Wong Scheme)                            | `츈`         | `hangul`          | Display may vary depending on Unicode combining character support. |
-| Institute of Language in Education Scheme             | `tsoen1`     | `ile`             |                                                                    |
-| Jyutping                                              | `ceon1`      | `jyutping`        |                                                                    |
+| Scheme name                                           | Example      | Scheme ID         | Note                                                               | Reference                                                                                                                                                                                                        |
+| ----------------------------------------------------- | ------------ | ----------------- | ------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Braille                                               | `⠭⠎⠀`        | `braille`         |                                                                    | [Cantonese Braille](https://en.wikipedia.org/wiki/Cantonese_Braille)                                                                                                                                             |
+| Hangul (T. S. Wong Scheme)                            | `츈`         | `hangul`          | Display may vary depending on Unicode combining character support. | [“訓民粵音”──以諺文書寫廣州話之嘗試](http://wongtaksum.no-ip.info:81/index.files/WOC-9_abs.pdf) ([Archive](http://web.archive.org/web/20230522125939/http://wongtaksum.no-ip.info:81/index.files/WOC-9_abs.pdf)) |
+| Institute of Language in Education Scheme             | `tsoen1`     | `ile`             |                                                                    | [ILE romanization of Cantonese](https://en.wikipedia.org/wiki/ILE_romanization_of_Cantonese)                                                                                                                     |
+| Jyutping                                              | `ceon1`      | `jyutping`        |                                                                    | [Jyutping Cantonese Romanization Scheme](https://lshk.org/jyutping-scheme)                                                                                                                                       |
 | Kuping                                                | `tśeon55^1`  | `kuping`          | A romanization scheme I designed!                                  |
 | Kuping (Alternative)                                  | `ts'eon55^1` | `kuping_alt`      | An alternative Kuping representation.                              |
-| Meyer–Wempe                                           | `ts'un`      | `meyer_wempe`     |                                                                    |
-| Pênkyämp                                              | `cönt`       | `penkyamp`        | Glottal stop coda (`q`) is not implemented.                        |
-| Cantonese Transliteration Scheme (Rao's Romanization) | `cên1`       | `rao`             |                                                                    |
-| Sidney Lau                                            | `chun1°`     | `sidneylau`       | Tone degree symbol is not superscripted.                           |
-| S. L. Wong (Romanization)                             | `ˈtseun`     | `slwong_roman`    | Conventional numeral tone marking is not implemented.              |
-| S. L. Wong (Phonetic)                                 | `ˈtsœn`      | `slwong_phonetic` | Conventional numeral tone marking is not implemented.              |
-| Yale                                                  | `chēun`      | `yale`            |                                                                    |
-| Yựtyựt                                                | `cơn`        | `yutyut`          |                                                                    |
+| Meyer–Wempe                                           | `ts'un`      | `meyer_wempe`     |                                                                    | [Meyer–Wempe](https://en.wikipedia.org/wiki/Meyer%E2%80%93Wempe)                                                                                                                                                 |
+| Pênkyämp                                              | `cönt`       | `penkyamp`        | Glottal stop coda (`q`) is not implemented.                        | [Penkyamp 方案](https://zh-yue.wikipedia.org/wiki/Penkyamp%E6%96%B9%E6%A1%88)                                                                                                                                    |
+| Cantonese Transliteration Scheme (Rao's Romanization) | `cên1`       | `rao`             |                                                                    | [Cantonese Transliteration Scheme](https://en.wikipedia.org/wiki/Cantonese_Transliteration_Scheme)                                                                                                               |
+| Sidney Lau                                            | `chun1°`     | `sidneylau`       | Tone degree symbol is not superscripted.                           | [Sidney Lau Cantonese Romanization System](https://sidneylau.com/en/sidney-lau-cantonese-romanization-system-pronunciation-guide-initials.htm)                                                                   |
+| S. L. Wong (Romanization)                             | `ˈtseun`     | `slwong_roman`    | Conventional numeral tone marking is not implemented.              | [S. L. Wong (romanisation)](<https://en.wikipedia.org/wiki/S._L._Wong_(romanisation)>)                                                                                                                           |
+| S. L. Wong (Phonetic)                                 | `ˈtsœn`      | `slwong_phonetic` | Conventional numeral tone marking is not implemented.              | [S. L. Wong (phonetic symbols)](<https://en.wikipedia.org/wiki/S._L._Wong_(phonetic_symbols)>)                                                                                                                   |
+| Yale                                                  | `chēun`      | `yale`            |                                                                    | [Yale romanization of Cantonese](https://en.wikipedia.org/wiki/Yale_romanization_of_Cantonese)                                                                                                                   |
+| Yựtyựt                                                | `cơn`        | `yutyut`          |                                                                    | [Yựtyựt (越式粵拼)](https://www.omniglot.com/chinese/yutyu.htm)                                                                                                                                                  |
 
 ## ⚙️ How it works
 
@@ -473,6 +468,8 @@ graph LR
     SL_HFALL --> IR_HFALL
     IR_HFLAT --> JP_HFLAT
     IR_HFALL --> JP_HFLAT
+    JP_HFLAT --> IR_HFLAT
+    IR_HFLAT --> SL_HFLAT
 ```
 
 Once that distinction has been lost, converting the Jyutping representation back to Sidney Lau cannot determine which original form was intended.
