@@ -522,7 +522,7 @@ See the [tutorial on adding a custom scheme](/docs/custom-phonology-and-schemes.
 - [x] Basic README
 - [ ] Architecture documentation
 - [x] Tutorial on adding custom languages and schemes
-- [ ] Scheme definition reference
+- [x] Scheme definition reference
 - [ ] API reference
 
 ### Features & Core Engine
