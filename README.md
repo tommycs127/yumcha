@@ -13,17 +13,7 @@
 
 Rather than maintaining $O(n^2)$ conversion tables between every combination of transcription systems, Yumcha maps schemes to a shared intermediate phonological representation. This allows any supported scheme to be converted into any other with zero glue code.
 
-```mermaid
-graph LR
-    JP[Jyutping] <--> LP((Standard Cantonese Phonology))
-    ILE["Institute of Language in Education (ILE) Scheme"] <--> LP
-    BR[Braille] <--> LP
-    PY[Pênkyämp] <--> LP
-    LP <--> Y[Yale]
-    LP <--> SL[Sidney Lau]
-    LP <--> SLW[S. L. Wong]
-    LP <--> MW[Meyer–Wempe]
-```
+![Introduction](/docs/media/readme/intro.svg)
 
 Each scheme is defined independently against the language's phonological representation. Adding a new scheme therefore does not require implementing a separate conversion path for every existing scheme.
 
@@ -58,20 +48,11 @@ As a result, maintaining pairwise conversion tables becomes increasingly difficu
 
 For example, with four schemes, a pairwise approach requires relationships such as:
 
-```mermaid
-flowchart LR
-    A <--> B <--> C <--> D
-    B <--> D
-    A <--> C
-    A <--> D
-```
+![Pairwise approach](/docs/media/readme/why-pairwise-approach.svg)
 
 Yumcha instead gives each scheme a relationship with the language's intermediate representation:
 
-```mermaid
-graph LR
-    A & B <--> LP((Phonology)) <--> C & D
-```
+![Yumcha approach](/docs/media/readme/why-yumcha-approach.svg)
 
 This allows the conversion engine to remain generic while the linguistic details live in the language and scheme definitions.
 
@@ -105,12 +86,9 @@ converted = cantonese.convert_scheme_to_scheme(
 print(str(converted))  # Output: 'soet7'
 ```
 
-Yumcha performs the conversion through the Cantonese intermediate representation:
+Yumcha performs the conversion through the Cantonese phonology (intermediate representation):
 
-```mermaid
-graph LR
-    J[Jyutping] --> P["Cantonese intermediate representation"] --> ILE[ILE]
-```
+![Conversion](/docs/media/readme/quickstart-conversion.svg)
 
 Conversion results are structured Representation objects rather than plain strings, so their components can also be inspected:
 
@@ -448,29 +426,7 @@ Different schemes may preserve different amounts of phonological information.
 
 For example, Sidney Lau distinguishes high-flat (`1°`) from high-falling (`1`), whereas Jyutping uses `1` for both. Converting from Sidney Lau to Jyutping therefore loses information:
 
-```mermaid
-graph LR
-    subgraph SL ["Sidney Lau"]
-        SL_HFLAT["1°"]
-        SL_HFALL["1"]
-    end
-
-    subgraph IR ["Intermediate representation"]
-        IR_HFLAT["[˥]"]
-        IR_HFALL["[˥˧]"]
-    end
-
-    subgraph JP ["Jyutping"]
-        JP_HFLAT["1"]
-    end
-
-    SL_HFLAT --> IR_HFLAT
-    SL_HFALL --> IR_HFALL
-    IR_HFLAT --> JP_HFLAT
-    IR_HFALL --> JP_HFLAT
-    JP_HFLAT --> IR_HFLAT
-    IR_HFLAT --> SL_HFLAT
-```
+![Information loss during conversion](/docs/media/readme/limitations-information-loss.svg)
 
 Once that distinction has been lost, converting the Jyutping representation back to Sidney Lau cannot determine which original form was intended.
 
@@ -535,7 +491,8 @@ See the [tutorial on adding a custom scheme](/docs/custom-phonology-and-schemes.
 
 #### Cantonese
 
-![Cantonese Progress](<https://img.shields.io/badge/14%2F17_(82%25)-green>)
+![Cantonese Phonology Progress](https://img.shields.io/badge/Phonology%20file-OK-green)
+![Cantonese Progress](<https://img.shields.io/badge/Schemes-14%2F17_(82%25)-gold>)
 
 - [x] Braille
 - [x] Cantonese Hangul (T. S. Wong Scheme)
@@ -559,7 +516,8 @@ See the [tutorial on adding a custom scheme](/docs/custom-phonology-and-schemes.
 
 #### Mandarin
 
-![Mandarin Progress](<https://img.shields.io/badge/0%2F7_(0%25)-red>)
+![Mandarin Phonology Progress](https://img.shields.io/badge/Phonology%20file-Pending-red)
+![Mandarin Progress](<https://img.shields.io/badge/Schemes-0%2F7_(0%25)-red>)
 
 - [ ] Bopomofo (Zhuyin)
 - [ ] Gwoyeu Romatzyh
@@ -571,8 +529,12 @@ See the [tutorial on adding a custom scheme](/docs/custom-phonology-and-schemes.
 
 #### Hokkien
 
-![Hokkien Progress](<https://img.shields.io/badge/0%2F4_(0%25)-red>)
+![Hokkien Phonology Progress](https://img.shields.io/badge/Phonology%20file-Pending-red)
+![Hokkien Progress](<https://img.shields.io/badge/Schemes-0%2F7_(0%25)-red>)
 
+- [ ] Bbánlám pìngyīm
+- [ ] Daī-ghî tōng-iōng pīng-im
+- [ ] Modern Literal Taiwanese
 - [ ] Pe̍h-ōe-jī
 - [ ] Phofsit Daibuun
 - [ ] Taiwanese Language Phonetic Alphabet
