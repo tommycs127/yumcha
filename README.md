@@ -46,13 +46,9 @@ Transcription systems rarely differ only by symbol substitution. They may:
 
 As a result, maintaining pairwise conversion tables becomes increasingly difficult as the number of schemes grows.
 
-For example, with four schemes, a pairwise approach requires relationships such as:
+For example, with 4 schemes, a pairwise approach requires 6 relationships, while Yumcha's hub-and-spoke approach gives each scheme a relationship with the language's intermediate representation:
 
-![Pairwise approach](/docs/media/readme/why-pairwise-approach.svg)
-
-Yumcha instead gives each scheme a relationship with the language's intermediate representation:
-
-![Yumcha approach](/docs/media/readme/why-yumcha-approach.svg)
+![Comparison](/docs/media/readme/why-comparison.svg)
 
 This allows the conversion engine to remain generic while the linguistic details live in the language and scheme definitions.
 
