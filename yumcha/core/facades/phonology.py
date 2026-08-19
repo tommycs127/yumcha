@@ -15,7 +15,6 @@ if TYPE_CHECKING:
     from ..cluster_canonicalizer import ClusterCanonicalizer
     from ..models.representation import Representation
     from ..primitives.directives import PhonologyDirective, PhonologyDirectiveMap
-    from ..primitives.pattern import Pattern
     from ..primitives.pattern_tuple import PatternTuple
 
 
@@ -38,7 +37,7 @@ class Phonology[Representation_co: Representation]:
     fields: tuple[str, ...]
     charsets: tuple[set[str], ...]
     phonology_directive_maps: tuple[PhonologyDirectiveMap, ...]
-    invalid_pattern_tuples: tuple[PatternTuple[Pattern], ...]
+    invalid_pattern_tuples: tuple[PatternTuple, ...]
     canonicalizer: ClusterCanonicalizer
 
     def __post_init__(self) -> None:

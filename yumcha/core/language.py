@@ -34,19 +34,29 @@ class Language[PhonologyRepresentationT: PhonologyRepresentation]:
         Args:
             phonology: `Phonology` instance containing character sets and phonotactic rules.
         """
-        self._phonology = phonology
+        self._phonology: Phonology[PhonologyRepresentationT] = phonology
 
         self._schemes: dict[str, Scheme[SchemeRepresentation]] = {}
         self._schemes_view: MappingProxyType[str, Scheme[SchemeRepresentation]] = (
             MappingProxyType(self._schemes)
         )
 
-        self._solvers: dict[str, BaseSolver] = {
+        self._solvers: dict[str, BaseSolver[PhonologyRepresentationT]] = {
             "csp": CSPSolver(self),
             "linear": LinearSolver(self),
         }
+        self._solvers_view: MappingProxyType[
+            str, BaseSolver[PhonologyRepresentationT]
+        ] = MappingProxyType(self._solvers)
+
         self._solver_to_use: dict[str, SupportedSolvers] = {}
-        self._pipeline = ConversionPipeline(self)
+        self._solver_to_use_view: MappingProxyType[str, SupportedSolvers] = (
+            MappingProxyType(self._solver_to_use)
+        )
+
+        self._pipeline: ConversionPipeline[PhonologyRepresentationT] = (
+            ConversionPipeline(self)
+        )
 
     @property
     def phonology(self) -> Phonology[PhonologyRepresentationT]:
@@ -61,6 +71,14 @@ class Language[PhonologyRepresentationT: PhonologyRepresentation]:
             MappingProxyType mapping scheme ID strings to Scheme instances.
         """
         return self._schemes_view
+
+    @property
+    def solvers(self) -> MappingProxyType[str, BaseSolver[PhonologyRepresentationT]]:
+        return self._solvers_view
+
+    @property
+    def solver_to_use(self) -> MappingProxyType[str, SupportedSolvers]:
+        return self._solver_to_use_view
 
     def add_scheme(self, scheme: Scheme[SchemeRepresentation]) -> None:
         """Loads, validates, and registers a scheme mapping.
@@ -102,13 +120,13 @@ class Language[PhonologyRepresentationT: PhonologyRepresentation]:
             if missing_charset := (phonology_required.difference(scheme_charset)):
                 raise SchemeError(
                     f"missing phonemes for {self.phonology.fields[idx]}: "
-                    f"add {sorted(missing_charset)}"
+                    + f"add {sorted(missing_charset)}"
                 )
 
             if redundant_charset := (scheme_charset.difference(set(phonology_charset))):
                 raise SchemeError(
                     f"redundant phonemes for {self.phonology.fields[idx]}: "
-                    f"remove {sorted(redundant_charset)}"
+                    + f"remove {sorted(redundant_charset)}"
                 )
 
     def remove_scheme(self, scheme_id: str) -> Scheme[SchemeRepresentation]:
@@ -123,7 +141,7 @@ class Language[PhonologyRepresentationT: PhonologyRepresentation]:
         Raises:
             KeyError: If `scheme_id` is not registered.
         """
-        self._solver_to_use.pop(scheme_id)
+        _ = self._solver_to_use.pop(scheme_id)
         return self._schemes.pop(scheme_id)
 
     def parse_to_intermediate(self, text: str) -> PhonologyRepresentationT:

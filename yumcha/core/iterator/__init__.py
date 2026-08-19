@@ -35,17 +35,21 @@ class LanguageIterator[PhonologyRepresentationT: PhonologyRepresentation]:
             language: Language facade instance to iterate over.
             progress_bar: Optional wrapper function for reporting iteration progress.
         """
-        self.language = language
-        self._scheme_item_counts = [0] * len(language.schemes)
-        self._scheme_item_counts_view = SequenceProxy(self._scheme_item_counts)
+        self.language: Language[PhonologyRepresentationT] = language
+        self._scheme_item_counts: list[int] = [0] * len(language.schemes)
+        self._scheme_item_counts_view: SequenceProxy[int] = SequenceProxy(
+            self._scheme_item_counts
+        )
 
-        self.progress_bar = progress_bar
-        self._progress_bar_supports_arg_total = False
+        self.progress_bar: ProgressBarWrapper | None = progress_bar
+
+        progress_bar_supports_arg_total: bool = False
         if progress_bar is not None:
             sig = inspect.signature(progress_bar)
-            self._progress_bar_supports_arg_total = "total" in sig.parameters or any(
+            progress_bar_supports_arg_total = "total" in sig.parameters or any(
                 p.kind == p.VAR_KEYWORD for p in sig.parameters.values()
             )
+        self._progress_bar_supports_arg_total: bool = progress_bar_supports_arg_total
 
     def __iter__(self) -> Iterator[Sequence[str]]:
         """Yields table rows mapping intermediate phonology to scheme conversions.

@@ -23,7 +23,7 @@ class BasicExporter[PhonologyRepresentationT: PhonologyRepresentation]:
         Args:
             language: The `Language` instance to export data from.
         """
-        self.language = language
+        self.language: Language[PhonologyRepresentationT] = language
 
     def export(
         self,

@@ -31,7 +31,7 @@ class ConversionValidator[PhonologyRepresentationT: PhonologyRepresentation]:
         Args:
             language: Language facade instance.
         """
-        self._language = language
+        self._language: Language[PhonologyRepresentationT] = language
 
     def validate(
         self,
@@ -105,9 +105,9 @@ class ConversionValidator[PhonologyRepresentationT: PhonologyRepresentation]:
             target_debug_str = collided_target_pattern_tuple.to_debug_msg()
             raise CollisionError(
                 f"colliding pattern tuples {source_debug_str} and {target_debug_str} "
-                f"for scheme {scheme.id!r}\n"
-                "To resolve this, inspect the scheme design for potential collisions and "
-                "explicitly mark them as invalid."
+                + f"for scheme {scheme.id!r}\n"
+                + "To resolve this, inspect the scheme design for potential collisions and "
+                + "explicitly mark them as invalid."
             )
 
         return True
@@ -126,7 +126,7 @@ class ConversionValidator[PhonologyRepresentationT: PhonologyRepresentation]:
         Returns:
             `True` if any bitwise mask overlap indicates an illegal feature pattern, `False` otherwise.
         """
-        invalid_origin_masks = scheme.intermediate_pattern_tuples._invalid_origin_masks
+        invalid_origin_masks = scheme.intermediate_pattern_tuples.invalid_origin_masks
         origin_mask = sum(1 << origin_index for origin_index in solution.origin_indexes)
         return any(
             (origin_mask & invalid_mask) == origin_mask

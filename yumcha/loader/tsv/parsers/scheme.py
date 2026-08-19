@@ -14,6 +14,7 @@ from ...utils.text import parse_data_cell
 
 if TYPE_CHECKING:
     from ....core.primitives.directives import SchemeDirective
+    from ....core.primitives.pattern import Pattern
     from ...primitives.pre_pattern_tuple import PrePatternTuple
 
 
@@ -51,12 +52,12 @@ def parse(
     if headers_split_index < 2:
         raise ValueError(
             "invalid header layout: "
-            "must have at least two header cells before scheme definitions begin"
+            + "must have at least two header cells before scheme definitions begin"
         )
     if headers_split_index == len(headers):
         raise ValueError(
             "invalid header layout: at least one scheme field must be present "
-            "(e.g. 'initial=initial' at the first column of scheme headers)"
+            + "(e.g. 'initial=initial' at the first column of scheme headers)"
         )
 
     (
@@ -117,7 +118,7 @@ def _parse_headers(
 
     scheme_cells = headers[headers_split_index:]
     parsed_scheme_fields: dict[str, frozenset[int]] = {}
-    seen_scheme_fields = set()
+    seen_scheme_fields: set[str] = set()
     unused_intermediate_fields_set = set(intermediate_fields)
 
     for scheme_cell in scheme_cells:
@@ -144,7 +145,7 @@ def _parse_headers(
             if source not in intermediate_fields_dict:
                 raise ValueError(
                     f"invalid intermediate field {source!r} "
-                    f"used for scheme field {field!r}"
+                    + f"used for scheme field {field!r}"
                 )
 
             unused_intermediate_fields_set.discard(source)
@@ -200,12 +201,12 @@ def _validate_mapping(
     for idx, intermediate_pattern in enumerate(row_intermediate):
         expected_type = str if idx in active_indices else EllipsisType
 
-        if not isinstance(intermediate_pattern, expected_type):
+        if type(intermediate_pattern) is not expected_type:
             got_type = type(intermediate_pattern).__name__
             exp_name = expected_type.__name__
             raise TypeError(
                 f"index {idx} of intermediate tuple {row_intermediate!r}: "
-                f"expecting {exp_name}, got {got_type}"
+                + f"expecting {exp_name}, got {got_type}"
             )
 
 
@@ -245,9 +246,9 @@ def _parse_data(
     parsed_pattern_tuples: list[PatternTuple] = []
     parsed_invalid_pattern_tuples: list[PatternTuple] = []
 
-    seen_intermediate_pattern_tuples = set()
-    seen_pattern_tuples = set()
-    seen_invalid_pattern_tuples = set()
+    seen_intermediate_pattern_tuples: set[tuple[Pattern, ...]] = set()
+    seen_pattern_tuples: set[tuple[Pattern, ...]] = set()
+    seen_invalid_pattern_tuples: set[tuple[Pattern, ...]] = set()
 
     CHECK_INTERMEDIATE = {
         SchemeRowDirective.BIDIRECTIONAL,
@@ -262,7 +263,7 @@ def _parse_data(
         if len(row) != expected_columns_len:
             raise ValueError(
                 f"malformed data at line {line_no}: "
-                f"expecting columns length of {expected_columns_len}, got {len(row)}"
+                + f"expecting columns length of {expected_columns_len}, got {len(row)}"
             )
 
         row_directive = SchemeRowDirective(row[0].strip())
@@ -287,7 +288,7 @@ def _parse_data(
             if row_intermediate in seen_intermediate_pattern_tuples:
                 raise ValueError(
                     f"conflict at line {line_no}: "
-                    f"duplicated intermediate tuple {row_intermediate!r}"
+                    + f"duplicated intermediate tuple {row_intermediate!r}"
                 )
             seen_intermediate_pattern_tuples.add(row_intermediate)
 

@@ -7,7 +7,7 @@ enabling normalized string generation and iteration over field slots.
 import unicodedata
 from collections.abc import Iterable, Iterator
 from dataclasses import dataclass, fields
-from typing import ClassVar
+from typing import ClassVar, override
 
 
 @dataclass(frozen=True)
@@ -21,6 +21,7 @@ class Representation(Iterable[str]):
     _SLOT_NAMES: ClassVar[tuple[str, ...]] = ()
     """Class-level attribute populated automatically per concrete subclass"""
 
+    @override
     def __str__(self) -> str:
         """Returns the NFC-normalized string composed by joining all field values.
 
@@ -29,6 +30,7 @@ class Representation(Iterable[str]):
         """
         return unicodedata.normalize("NFC", "".join(map(str, self)))
 
+    @override
     def __iter__(self) -> Iterator[str]:
         """Iterates through field values in definition order.
 

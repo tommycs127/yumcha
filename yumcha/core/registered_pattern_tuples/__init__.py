@@ -7,7 +7,7 @@ positional bitmasks for performant evaluation and lookup.
 from collections.abc import Sequence
 from operator import itemgetter
 from types import MappingProxyType
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, override
 
 from ..primitives.directives import SchemeDirective
 from ..primitives.pattern import Pattern
@@ -133,7 +133,7 @@ class RegisteredPatternTuples:
             if (pattern_tuple_len := len(sequence)) != expected_pattern_tuple_len:
                 raise ValueError(
                     f"expecting length of {expected_pattern_tuple_len}, "
-                    f"got {pattern_tuple_len} at index {idx} [{sequence!r}]"
+                    + f"got {pattern_tuple_len} at index {idx} [{sequence!r}]"
                 )
 
             pattern_tuple = PatternTuple(sequence)
@@ -243,6 +243,7 @@ class RegisteredPatternTupleWithInvalidMasks(RegisteredPatternTuples):
         """SequenceProxy[int]: Read-only view of bitmasks representing invalid pattern tuples keyed by registrant index."""
         return self._invalid_registrant_masks_view
 
+    @override
     def _reset(self) -> None:
         """Clears all compiled pattern and invalid-mask data."""
         super()._reset()
@@ -251,7 +252,7 @@ class RegisteredPatternTupleWithInvalidMasks(RegisteredPatternTuples):
 
     def build_invalid_masks(
         self,
-        invalid_pattern_tuples: Sequence[PatternTuple[Pattern]],
+        invalid_pattern_tuples: Sequence[PatternTuple],
     ) -> None:
         """Computes bitmasks indicating registered pattern tuples satisfied by provided invalid pattern tuples.
 

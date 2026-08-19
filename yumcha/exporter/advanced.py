@@ -8,21 +8,29 @@ from collections.abc import Callable
 from concurrent.futures import ProcessPoolExecutor
 from itertools import batched, product
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, cast
 
 if TYPE_CHECKING:
+    from ..core.facades.phonology import Phonology
     from ..core.iterator.wrappers import ProgressBarWrapper
     from ..core.language import Language
     from ..core.models.representation import PhonologyRepresentation
 
 
-_worker_language: Language | None = None
+_worker_language: Language[PhonologyRepresentation] | None = None
 _worker_scheme_ids: tuple[str, ...] = ()
+
+type LoaderFnType[PhonologyRepresentationT: PhonologyRepresentation] = Callable[
+    ..., Language[PhonologyRepresentationT]
+]
+type LoaderArgsTypes[PhonologyRepresentationT: PhonologyRepresentation] = (
+    tuple[()] | tuple[Phonology[PhonologyRepresentationT]]
+)
 
 
 def _init_worker(
-    loader_fn: Callable[..., Language],
-    loader_args: tuple[Any, ...],
+    loader_fn: LoaderFnType[PhonologyRepresentation],
+    loader_args: LoaderArgsTypes[PhonologyRepresentation],
     scheme_ids: tuple[str, ...],
 ) -> None:
     """Initializer for process pool worker tasks."""
@@ -39,11 +47,11 @@ def _export_worker(
 
     language = _worker_language
     scheme_ids = _worker_scheme_ids
-    results = []
+    results: list[tuple[list[str], list[bool]]] = []
 
     for pattern_tuple_str in chunk:
-        row = [pattern_tuple_str]
-        converted_flags = []
+        row: list[str] = [pattern_tuple_str]
+        converted_flags: list[bool] = []
 
         for scheme_id in scheme_ids:
             converted = language.convert_intermediate_to_scheme(
@@ -57,19 +65,21 @@ def _export_worker(
                 converted_flags.append(False)
 
         results.append((row, converted_flags))
+
     return results
 
 
-def _export_worker_single(
-    language: Language,
+def _export_worker_single[PhonologyRepresentationT: PhonologyRepresentation](
+    language: Language[PhonologyRepresentationT],
     scheme_ids: tuple[str, ...],
     chunk: list[str] | tuple[str, ...],
 ) -> list[tuple[list[str], list[bool]]]:
     """Single-threaded chunk converter used when process pooling is disabled."""
-    results = []
+    results: list[tuple[list[str], list[bool]]] = []
+
     for pattern_tuple_str in chunk:
-        row = [pattern_tuple_str]
-        converted_flags = []
+        row: list[str] = [pattern_tuple_str]
+        converted_flags: list[bool] = []
         for scheme_id in scheme_ids:
             converted = language.convert_intermediate_to_scheme(
                 pattern_tuple_str, scheme_id, True, False
@@ -81,6 +91,7 @@ def _export_worker_single(
                 row.append("")
                 converted_flags.append(False)
         results.append((row, converted_flags))
+
     return results
 
 
@@ -90,8 +101,8 @@ class Exporter[PhonologyRepresentationT: PhonologyRepresentation]:
     def __init__(
         self,
         language: Language[PhonologyRepresentationT],
-        loader_fn: Callable[..., Language[PhonologyRepresentationT]] | None = None,
-        loader_args: tuple[Any, ...] = (),
+        loader_fn: LoaderFnType[PhonologyRepresentationT] | None = None,
+        loader_args: LoaderArgsTypes[PhonologyRepresentationT] = (),
     ):
         """Initializes an Exporter instance with support for multi-process worker creation.
 
@@ -100,9 +111,9 @@ class Exporter[PhonologyRepresentationT: PhonologyRepresentation]:
             loader_fn: Optional factory function to instantiate `Language` in worker processes.
             loader_args: Arguments to pass to `loader_fn` upon worker initialization.
         """
-        self.language = language
-        self.loader_fn = loader_fn
-        self.loader_args = loader_args
+        self.language: Language[PhonologyRepresentationT] = language
+        self.loader_fn: LoaderFnType[PhonologyRepresentationT] | None = loader_fn
+        self.loader_args: LoaderArgsTypes[PhonologyRepresentationT] = loader_args
 
     def export(
         self,
@@ -164,10 +175,14 @@ class Exporter[PhonologyRepresentationT: PhonologyRepresentation]:
                             if flag:
                                 scheme_counts[idx] += 1
             else:
+                loader_fn = cast(
+                    "LoaderFnType[PhonologyRepresentation]", self.loader_fn
+                )
+
                 with ProcessPoolExecutor(
                     max_workers=workers,
                     initializer=_init_worker,
-                    initargs=(self.loader_fn, self.loader_args, scheme_ids),
+                    initargs=(loader_fn, self.loader_args, scheme_ids),
                 ) as executor:
                     results_generator = executor.map(
                         _export_worker, chunks, chunksize=1

@@ -36,8 +36,10 @@ class ConversionPipeline[PhonologyRepresentationT: PhonologyRepresentation]:
         Args:
             language: Language facade instance containing solvers, phonology, and schemes.
         """
-        self._language = language
-        self._validator = ConversionValidator(language)
+        self._language: Language[PhonologyRepresentationT] = language
+        self._validator: ConversionValidator[PhonologyRepresentationT] = (
+            ConversionValidator(language)
+        )
 
     def convert_to_intermediate(
         self,
@@ -65,8 +67,8 @@ class ConversionPipeline[PhonologyRepresentationT: PhonologyRepresentation]:
         """
         language = self._language
         if solver_id is None:
-            solver_id = language._solver_to_use[scheme_id]
-        solver = language._solvers[solver_id]
+            solver_id = language.solver_to_use[scheme_id]
+        solver = language.solvers[solver_id]
         return self._execute(
             source,
             scheme_id,
@@ -104,8 +106,8 @@ class ConversionPipeline[PhonologyRepresentationT: PhonologyRepresentation]:
         """
         language = self._language
         if solver_id is None:
-            solver_id = language._solver_to_use[scheme_id]
-        solver = language._solvers[solver_id]
+            solver_id = language.solver_to_use[scheme_id]
+        solver = language.solvers[solver_id]
         return self._execute(
             source,
             scheme_id,
@@ -125,7 +127,7 @@ class ConversionPipeline[PhonologyRepresentationT: PhonologyRepresentation]:
         solve_fn: SolveFn,
         target_cls_fn: SchemeRepresentationClsFn,
         inverse_solve_fn: SolveFn,
-        inverse_cls_fn: PhonologyRepresentationClsFn,
+        inverse_cls_fn: PhonologyRepresentationClsFn[PhonologyRepresentationT],
         validate: bool,
         strict: Literal[True] = ...,
     ) -> SchemeRepresentation: ...
@@ -138,7 +140,7 @@ class ConversionPipeline[PhonologyRepresentationT: PhonologyRepresentation]:
         solve_fn: SolveFn,
         target_cls_fn: SchemeRepresentationClsFn,
         inverse_solve_fn: SolveFn,
-        inverse_cls_fn: PhonologyRepresentationClsFn,
+        inverse_cls_fn: PhonologyRepresentationClsFn[PhonologyRepresentationT],
         validate: bool,
         strict: Literal[False] = ...,
     ) -> SchemeRepresentation | None: ...
@@ -149,7 +151,7 @@ class ConversionPipeline[PhonologyRepresentationT: PhonologyRepresentation]:
         source: str,
         scheme_id: str,
         solve_fn: SolveFn,
-        target_cls_fn: PhonologyRepresentationClsFn,
+        target_cls_fn: PhonologyRepresentationClsFn[PhonologyRepresentationT],
         inverse_solve_fn: SolveFn,
         inverse_cls_fn: SchemeRepresentationClsFn,
         validate: bool,
@@ -162,7 +164,7 @@ class ConversionPipeline[PhonologyRepresentationT: PhonologyRepresentation]:
         source: str,
         scheme_id: str,
         solve_fn: SolveFn,
-        target_cls_fn: PhonologyRepresentationClsFn,
+        target_cls_fn: PhonologyRepresentationClsFn[PhonologyRepresentationT],
         inverse_solve_fn: SolveFn,
         inverse_cls_fn: SchemeRepresentationClsFn,
         validate: bool,
@@ -174,9 +176,11 @@ class ConversionPipeline[PhonologyRepresentationT: PhonologyRepresentation]:
         source: str,
         scheme_id: str,
         solve_fn: SolveFn,
-        target_cls_fn: SchemeRepresentationClsFn | PhonologyRepresentationClsFn,
+        target_cls_fn: SchemeRepresentationClsFn
+        | PhonologyRepresentationClsFn[PhonologyRepresentationT],
         inverse_solve_fn: SolveFn,
-        inverse_cls_fn: PhonologyRepresentationClsFn | SchemeRepresentationClsFn,
+        inverse_cls_fn: PhonologyRepresentationClsFn[PhonologyRepresentationT]
+        | SchemeRepresentationClsFn,
         validate: bool,
         strict: bool = True,
     ) -> PhonologyRepresentationT | SchemeRepresentation | None:
@@ -204,7 +208,7 @@ class ConversionPipeline[PhonologyRepresentationT: PhonologyRepresentation]:
             PhonologicalError: If input violates phonotactic rules and `strict=True`.
             NotSupportedError: If roundtrip verification fails and `strict=True`.
         """
-        scheme = self._language._schemes[scheme_id]
+        scheme = self._language.schemes[scheme_id]
         solution = self._solve_or_raise(solve_fn, source, scheme, strict)
         if solution is None:
             return None

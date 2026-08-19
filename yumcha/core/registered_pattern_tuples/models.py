@@ -26,12 +26,12 @@ class RegisteredPatternTuple(NamedTuple):
 
     Attributes:
         origin_index (int): Original zero-based index of the pattern tuple before sorting.
-        pattern_tuple (PatternTuple[Pattern]): The underlying pattern tuple object.
+        pattern_tuple (PatternTuple): The underlying pattern tuple object.
         direction (SchemeDirective): Directive specifying the operational direction/scheme.
         pattern_tuple_weight (int): The calculated priority/weight used for sorting pattern tuples.
     """
 
     origin_index: int
-    pattern_tuple: PatternTuple[Pattern]
+    pattern_tuple: PatternTuple
     direction: SchemeDirective
     pattern_tuple_weight: int

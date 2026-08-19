@@ -112,7 +112,7 @@ def _parse_data(
         if len(row) != expected_columns_len:
             raise ValueError(
                 f"malformed data at line {line_no}: "
-                f"expecting columns length of {expected_columns_len}, got {len(row)}"
+                + f"expecting columns length of {expected_columns_len}, got {len(row)}"
             )
 
         row_directive = PhonologyRowDirective(row[0].strip())

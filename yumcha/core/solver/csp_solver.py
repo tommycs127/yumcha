@@ -9,7 +9,7 @@ from __future__ import annotations
 import re
 from collections.abc import Iterator
 from types import EllipsisType
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, override
 
 from ..models.solution import Solution
 from ..primitives.pattern_tuple import PatternTuple
@@ -34,9 +34,12 @@ EMPTY_STR = ""
 INF = float("inf")
 
 
-class CSPSolver[PhonologyRepresentationT: PhonologyRepresentation](BaseSolver):
+class CSPSolver[PhonologyRepresentationT: PhonologyRepresentation](
+    BaseSolver[PhonologyRepresentationT]
+):
     """CSP-based solver for resolving text patterns to representation solutions."""
 
+    @override
     def solve_intermediate(
         self,
         text: str,
@@ -53,6 +56,7 @@ class CSPSolver[PhonologyRepresentationT: PhonologyRepresentation](BaseSolver):
         """
         return self._solve_pipeline(text, scheme, SolveDirective.INTERMEDIATE_TO_SCHEME)
 
+    @override
     def solve_scheme(
         self,
         text: str,
@@ -137,7 +141,7 @@ class CSPSolver[PhonologyRepresentationT: PhonologyRepresentation](BaseSolver):
 
         source_pattern_tuples = context.source_pattern_tuples
         target_pattern_tuples = context.target_pattern_tuples
-        source_registrants = source_pattern_tuples._registrants
+        source_registrants = source_pattern_tuples.registrants
         source_fields_length = len(context.source_fields)
         target_fields_length = len(context.target_fields)
 
@@ -151,7 +155,7 @@ class CSPSolver[PhonologyRepresentationT: PhonologyRepresentation](BaseSolver):
             init_state = SearchState(0, full_registrant_mask, ())
             solution_iterator = self._find_solution(context, candidates, init_state)
 
-        invalid_origin_masks = context.scheme.pattern_tuples._invalid_origin_masks
+        invalid_origin_masks = context.scheme.pattern_tuples.invalid_origin_masks
 
         for state in solution_iterator:
             if state.selected_text != context.text_norm:

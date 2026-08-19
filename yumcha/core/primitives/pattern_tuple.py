@@ -4,10 +4,12 @@ This module provides data structures to optimize fixed-length pattern matching,
 alignment, merging, set-like intersections, and filtering via bitwise integer masks.
 """
 
+from __future__ import annotations
+
 import unicodedata
 from collections.abc import Iterable, Iterator, Sequence
 from types import EllipsisType
-from typing import Any, Literal, SupportsIndex, TypeVar, overload
+from typing import Literal, SupportsIndex, overload, override
 
 from ..utils.bit import iterate_bits
 from .pattern import Pattern
@@ -17,10 +19,10 @@ type NormForm = Literal["NFC", "NFD", "NFKC", "NFKD"] | None
 
 ELLIPSIS = ...
 _MAX_CACHED_LEN = 16
-_WILDCARDS_CACHE: tuple[Any, ...] = (...,) * _MAX_CACHED_LEN
+_WILDCARDS_CACHE: tuple[EllipsisType, ...] = (...,) * _MAX_CACHED_LEN
 
 
-def _get_wildcard_tuple(length: int) -> tuple[Any, ...]:
+def _get_wildcard_tuple(length: int) -> tuple[EllipsisType, ...]:
     """Retrieves or creates a tuple composed entirely of `Ellipsis` wildcards.
 
     Uses a pre-allocated cache for lengths up to `_MAX_CACHED_LEN` (16)
@@ -37,11 +39,7 @@ def _get_wildcard_tuple(length: int) -> tuple[Any, ...]:
     return (...,) * length
 
 
-PatternT_co = TypeVar("PatternT_co", bound=Pattern | str, covariant=True)
-PatternT = TypeVar("PatternT", bound=Pattern | str)
-
-
-class PatternTuple(Sequence[PatternT_co]):
+class PatternTuple(Sequence[Pattern]):
     """A bitmask-accelerated immutable sequence container for characters/patterns and wildcards.
 
     `PatternTuple` tracks populated string slots versus empty wildcard (`Ellipsis`)
@@ -56,14 +54,14 @@ class PatternTuple(Sequence[PatternT_co]):
             where all slots up to length `len(self)` are set to 1.
     """
 
-    __slots__ = ("_data", "full_mask", "mask", "weight")
+    __slots__: tuple[str, ...] = ("_data", "full_mask", "mask", "weight")
 
-    _data: tuple[PatternT_co, ...]
+    _data: tuple[Pattern, ...]
     mask: int
     weight: int
     full_mask: int
 
-    def __init__(self, iterable: Iterable[PatternT_co]) -> None:
+    def __init__(self, iterable: Iterable[Pattern]) -> None:
         """Initializes a PatternTuple from an iterable of strings or Ellipsis wildcards.
 
         Strings are automatically normalized using NFD (Canonical Decomposition).
@@ -82,7 +80,7 @@ class PatternTuple(Sequence[PatternT_co]):
             self.full_mask = iterable.full_mask
             return
 
-        items = []
+        items: list[Pattern] = []
         mask = 0
 
         _ellipsis = ELLIPSIS
@@ -103,17 +101,19 @@ class PatternTuple(Sequence[PatternT_co]):
         self.weight = mask.bit_count()
         self.full_mask = (1 << len(items_as_tuple)) - 1
 
+    @override
     def __len__(self) -> int:
         """Returns the total number of slots, including wildcards."""
         return len(self._data)
 
     @overload
-    def __getitem__(self, index: int) -> PatternT_co: ...
+    def __getitem__(self, index: int) -> Pattern: ...
 
     @overload
-    def __getitem__(self, index: slice) -> "PatternTuple[PatternT_co]": ...
+    def __getitem__(self, index: slice) -> PatternTuple: ...
 
-    def __getitem__(self, index: Any) -> Any:
+    @override
+    def __getitem__(self, index: int | slice) -> Pattern | PatternTuple:
         """Retrieves an item by integer index or a sub-sequence slice as a new PatternTuple.
 
         Args:
@@ -122,9 +122,9 @@ class PatternTuple(Sequence[PatternT_co]):
         Returns:
             The pattern/wildcard element at the index, or a sliced `PatternTuple` instance.
         """
-        result = self._data[index]
-
         if type(index) is slice:
+            result = self._data[index]
+
             mask = self.mask
             _data = self._data
 
@@ -157,35 +157,40 @@ class PatternTuple(Sequence[PatternT_co]):
             instance.full_mask = (1 << slice_len) - 1
             return instance
 
-        return result
+        return self._data[index]
 
-    def __iter__(self) -> Iterator[PatternT_co]:
+    @override
+    def __iter__(self) -> Iterator[Pattern]:
         """Returns an iterator over the pattern components."""
         return iter(self._data)
 
+    @override
     def __contains__(self, value: object) -> bool:
         """Checks whether a given pattern element or wildcard is present in the sequence."""
         return value in self._data
 
+    @override
     def __eq__(self, other: object) -> bool:
         """Checks equality against another PatternTuple or standard sequence."""
         if type(other) is PatternTuple:
             return self._data == other._data
         return self._data == other
 
+    @override
     def __hash__(self) -> int:
         """Computes a hash based on the tuple data and mask mask."""
         return hash((self._data, self.mask))
 
+    @override
     def __repr__(self) -> str:
         """Returns a string representation suitable for debugging."""
         return f"PatternTuple({self._data})"
 
-    def __sub__(self, other: Iterable[Pattern]) -> "PatternTuple[PatternT_co]":
+    def __sub__(self, other: Iterable[Pattern]) -> PatternTuple:
         """Operator overload for difference (`a - b`)."""
         return self.difference(other)
 
-    def __mul__(self, count: SupportsIndex) -> "PatternTuple[PatternT_co]":
+    def __mul__(self, count: SupportsIndex) -> PatternTuple:
         """Multiplies the PatternTuple sequence.
 
         Args:
@@ -221,7 +226,7 @@ class PatternTuple(Sequence[PatternT_co]):
         instance.full_mask = (1 << len(raw_tuple)) - 1
         return instance
 
-    def __and__(self, other: Iterable[Pattern]) -> "PatternTuple[PatternT_co]":
+    def __and__(self, other: Iterable[Pattern]) -> PatternTuple:
         """Operator overload for intersection (`a & b`)."""
         return self.intersection(other)
 
@@ -246,9 +251,7 @@ class PatternTuple(Sequence[PatternT_co]):
         raw_str = "".join(c for c in self._data if type(c) is str)
         return unicodedata.normalize(form, raw_str) if form else raw_str
 
-    def union(
-        self, other: Iterable[PatternT]
-    ) -> "PatternTuple[PatternT_co | PatternT]":
+    def union(self, other: Iterable[Pattern]) -> PatternTuple:
         """Combines two PatternTuple slot-by-slot, filling wildcards from either side.
 
         Args:
@@ -281,7 +284,7 @@ class PatternTuple(Sequence[PatternT_co]):
             if s_data[idx] != o_data[idx]:
                 raise ValueError(
                     f"conflicting slot at index {idx}: "
-                    f"'{s_data[idx]}' and '{o_data[idx]}'"
+                    + f"'{s_data[idx]}' and '{o_data[idx]}'"
                 )
 
         if self.is_complete():
@@ -312,7 +315,7 @@ class PatternTuple(Sequence[PatternT_co]):
         instance.full_mask = (1 << s_len) - 1
         return instance
 
-    def separate(self) -> "set[PatternTuple[PatternT_co]]":
+    def separate(self) -> set[PatternTuple]:
         """Decomposes this pattern tuple into individual single-slot PatternTuple.
 
         Returns:
@@ -320,13 +323,13 @@ class PatternTuple(Sequence[PatternT_co]):
             from `self` and wildcards in all other positions.
         """
         length = len(self._data)
-        separated = set()
+        separated: set[PatternTuple] = set()
         _ellipsis = ELLIPSIS
         s_data = self._data
         s_mask = self.mask
 
         for idx, lowest_bit in iterate_bits(s_mask, yield_lowest_bit=True):
-            items: list[PatternT_co | EllipsisType] = list(_get_wildcard_tuple(length))
+            items: list[Pattern | EllipsisType] = list(_get_wildcard_tuple(length))
             items[idx] = s_data[idx]
 
             instance = object.__new__(PatternTuple)
@@ -377,7 +380,7 @@ class PatternTuple(Sequence[PatternT_co]):
 
         return True
 
-    def intersection(self, other: Iterable[Pattern]) -> "PatternTuple[PatternT_co]":
+    def intersection(self, other: Iterable[Pattern]) -> PatternTuple:
         """Calculates the slot-wise intersection of two PatternTuple.
 
         Only slots that are populated with identical values in **both** patterns
@@ -434,7 +437,7 @@ class PatternTuple(Sequence[PatternT_co]):
         instance.full_mask = (1 << data_len) - 1
         return instance
 
-    def difference(self, other: Iterable[Pattern]) -> "PatternTuple[PatternT_co]":
+    def difference(self, other: Iterable[Pattern]) -> PatternTuple:
         """Calculates the slot-wise difference (relative complement) between two PatternTuple sequences.
 
         Removes matching populated slots found in `other` from `self`, replacing those positions
@@ -472,7 +475,7 @@ class PatternTuple(Sequence[PatternT_co]):
             if s_data[idx] != o_data[idx]:
                 raise ValueError(
                     f"conflicting slot at index {idx}: "
-                    f"'{s_data[idx]}' and '{o_data[idx]}'"
+                    + f"'{s_data[idx]}' and '{o_data[idx]}'"
                 )
 
         new_mask = s_mask & ~o_mask
@@ -491,7 +494,7 @@ class PatternTuple(Sequence[PatternT_co]):
         instance.full_mask = self.full_mask
         return instance
 
-    def filter(self, mask: int) -> "PatternTuple[PatternT_co]":
+    def filter(self, mask: int) -> PatternTuple:
         """Applies a bitmask filter, retaining elements only where bitmask bits are enabled.
 
         Unset bits in the filter mask cause the corresponding slots to be converted to wildcards.
@@ -541,7 +544,7 @@ class PatternTuple(Sequence[PatternT_co]):
         return f"({', '.join(str_components)})"
 
     @classmethod
-    def wildcards(cls, length: int) -> "PatternTuple[PatternT_co]":
+    def wildcards(cls, length: int) -> PatternTuple:
         """Creates a PatternTuple instance filled entirely with wildcard (`...`) elements.
 
         Args:

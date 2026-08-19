@@ -5,7 +5,7 @@ and sequence structures.
 """
 
 from collections.abc import Iterator, Sequence
-from typing import TypeVar, overload
+from typing import TypeVar, overload, override
 
 T = TypeVar("T")
 
@@ -31,6 +31,7 @@ class SequenceProxy(Sequence[T]):
     @overload
     def __getitem__(self, index: slice) -> Sequence[T]: ...
 
+    @override
     def __getitem__(self, index: int | slice) -> T | Sequence[T]:
         """Retrieves an item or slice from the underlying target sequence.
 
@@ -42,6 +43,7 @@ class SequenceProxy(Sequence[T]):
         """
         return self._target[index]
 
+    @override
     def __iter__(self) -> Iterator[T]:
         """Returns an iterator over the underlying target sequence.
 
@@ -50,6 +52,7 @@ class SequenceProxy(Sequence[T]):
         """
         return iter(self._target)
 
+    @override
     def __len__(self) -> int:
         """Returns the number of elements in the underlying target sequence.
 
@@ -58,6 +61,7 @@ class SequenceProxy(Sequence[T]):
         """
         return len(self._target)
 
+    @override
     def __repr__(self) -> str:
         """Returns a developer-readable string representation of the SequenceProxy instance.
 

@@ -65,8 +65,8 @@ class Scheme[RepresentationT_co: Representation]:
         for field, intermediate_indexes in fields.items():
             if not intermediate_indexes:
                 raise ValueError(
-                    f"unknown relation to intermediate representation "
-                    f"at field {field!r} (likely a misconfigured scheme)"
+                    "unknown relation to intermediate representation "
+                    + f"at field {field!r} (likely a misconfigured scheme)"
                 )
             min_idx = min(intermediate_indexes)
             max_idx = max(intermediate_indexes)
@@ -91,8 +91,9 @@ class Scheme[RepresentationT_co: Representation]:
         if not self.are_field_indexes_sequential:
             raise ValueError(f"field indexes of scheme {self.id!r} are non-sequential.")
 
-        groups = []
-        for patterns in self.pattern_tuples._pattern_masks_by_fields:
+        groups: list[str] = []
+        pattern_masks_by_fields = self.pattern_tuples.pattern_masks_by_fields
+        for patterns in pattern_masks_by_fields:
             valid_patterns = [re.escape(p) for p in patterns if isinstance(p, str)]
             if not valid_patterns:
                 groups.append("()")

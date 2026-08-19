@@ -19,7 +19,7 @@ class BaseSolver[PhonologyRepresentationT: PhonologyRepresentation](ABC):
         Args:
             language: Language facade instance containing phonology and scheme models.
         """
-        self.language = language
+        self.language: Language[PhonologyRepresentationT] = language
 
     @abstractmethod
     def solve_intermediate(

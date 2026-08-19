@@ -28,8 +28,8 @@ class Solution:
         directions: Directives specifying directional mapping pattern tuples for rules used.
     """
 
-    source_pattern_tuple: PatternTuple[Pattern]
-    target_pattern_tuple: PatternTuple[Pattern]
+    source_pattern_tuple: PatternTuple
+    target_pattern_tuple: PatternTuple
     origin_indexes: tuple[int, ...]
     registrant_indexes: tuple[int, ...]
     registrant_mask: int

@@ -98,8 +98,8 @@ class ClusterCanonicalizer:
                     elif learned_key != cluster:
                         raise ValueError(
                             "conflicting canonical cluster order for "
-                            f"{key}: {learned_key!r} (from {seen_sources[key]!r}) "
-                            f"vs {cluster!r} (from {token!r})"
+                            + f"{key}: {learned_key!r} (from {seen_sources[key]!r}) "
+                            + f"vs {cluster!r} (from {token!r})"
                         )
 
     def _learn_mark_rank(self) -> None:

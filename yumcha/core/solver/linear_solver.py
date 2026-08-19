@@ -8,8 +8,9 @@ registrants via bitwise mask intersection, and accumulates compatible pattern tu
 from __future__ import annotations
 
 import re
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, override
 
+from ..models.representation import PhonologyRepresentation
 from ..models.solution import Solution
 from ..primitives.directives import SchemeDirective
 from ..primitives.pattern_tuple import PatternTuple
@@ -23,7 +24,10 @@ if TYPE_CHECKING:
     from ..models.representation import SchemeRepresentation
 
 
-class LinearSolver(BaseSolver):
+class LinearSolver[PhonologyRepresentationT: PhonologyRepresentation](
+    BaseSolver[PhonologyRepresentationT]
+):
+    @override
     def solve_intermediate(
         self,
         text: str,
@@ -40,6 +44,7 @@ class LinearSolver(BaseSolver):
         """
         return self._solve_pipeline(text, scheme, SolveDirective.INTERMEDIATE_TO_SCHEME)
 
+    @override
     def solve_scheme(
         self,
         text: str,
@@ -122,7 +127,7 @@ class LinearSolver(BaseSolver):
 
         source_pattern_tuples = context.source_pattern_tuples
         target_pattern_tuples = context.target_pattern_tuples
-        source_registrants = source_pattern_tuples._registrants
+        source_registrants = source_pattern_tuples.registrants
 
         registrant_mask = (1 << len(source_registrants)) - 1
         pattern_masks_by_fields = context.source_pattern_tuples.pattern_masks_by_fields
