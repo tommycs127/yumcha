@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import csv
 import os
-from collections.abc import Callable
+from collections.abc import Callable, Iterable
 from concurrent.futures import ProcessPoolExecutor
 from itertools import batched, product
 from pathlib import Path
@@ -21,6 +21,17 @@ _worker_scheme_ids: tuple[str, ...] = ()
 
 type LoaderFnType = Callable[..., Language[PhonologyRepresentation]]
 type LoaderArgsTypes = tuple[object, ...]
+
+
+def _wrap_progress[T](
+    progress_bar: ProgressBarWrapper | None,
+    iterable: Iterable[T],
+    total: int,
+) -> Iterable[T]:
+    """Applies progress_bar if provided, preserving the exact item type T."""
+    if progress_bar is not None:
+        return progress_bar(iterable, total=total)
+    return iterable
 
 
 def _init_worker(
@@ -158,9 +169,7 @@ class Exporter[PhonologyRepresentationT: PhonologyRepresentation]:
             writer.writerow(["IR", *scheme_ids])
 
             if self.loader_fn is None:
-                chunks_iterable = chunks
-                if progress_bar is not None:
-                    chunks_iterable = progress_bar(chunks, total=total_chunks)
+                chunks_iterable = _wrap_progress(progress_bar, chunks, total_chunks)
 
                 for chunk in chunks_iterable:
                     chunk_result = _export_worker_single(language, scheme_ids, chunk)
@@ -177,14 +186,10 @@ class Exporter[PhonologyRepresentationT: PhonologyRepresentation]:
                     initializer=_init_worker,
                     initargs=(loader_fn, self.loader_args, scheme_ids),
                 ) as executor:
-                    results_generator = executor.map(
-                        _export_worker, chunks, chunksize=1
+                    raw_generator = executor.map(_export_worker, chunks, chunksize=1)
+                    results_generator = _wrap_progress(
+                        progress_bar, raw_generator, total_chunks
                     )
-
-                    if progress_bar is not None:
-                        results_generator = progress_bar(
-                            results_generator, total=total_chunks
-                        )
 
                     for chunk_result in results_generator:
                         for row, converted_flags in chunk_result:
