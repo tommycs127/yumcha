@@ -8,10 +8,9 @@ from collections.abc import Callable
 from concurrent.futures import ProcessPoolExecutor
 from itertools import batched, product
 from pathlib import Path
-from typing import TYPE_CHECKING, cast
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from ..core.facades.phonology import Phonology
     from ..core.iterator.wrappers import ProgressBarWrapper
     from ..core.language import Language
     from ..core.models.representation import PhonologyRepresentation
@@ -20,17 +19,13 @@ if TYPE_CHECKING:
 _worker_language: Language[PhonologyRepresentation] | None = None
 _worker_scheme_ids: tuple[str, ...] = ()
 
-type LoaderFnType[PhonologyRepresentationT: PhonologyRepresentation] = Callable[
-    ..., Language[PhonologyRepresentationT]
-]
-type LoaderArgsTypes[PhonologyRepresentationT: PhonologyRepresentation] = (
-    tuple[()] | tuple[Phonology[PhonologyRepresentationT]]
-)
+type LoaderFnType = Callable[..., Language[PhonologyRepresentation]]
+type LoaderArgsTypes = tuple[object, ...]
 
 
 def _init_worker(
-    loader_fn: LoaderFnType[PhonologyRepresentation],
-    loader_args: LoaderArgsTypes[PhonologyRepresentation],
+    loader_fn: LoaderFnType,
+    loader_args: LoaderArgsTypes,
     scheme_ids: tuple[str, ...],
 ) -> None:
     """Initializer for process pool worker tasks."""
@@ -101,8 +96,8 @@ class Exporter[PhonologyRepresentationT: PhonologyRepresentation]:
     def __init__(
         self,
         language: Language[PhonologyRepresentationT],
-        loader_fn: LoaderFnType[PhonologyRepresentationT] | None = None,
-        loader_args: LoaderArgsTypes[PhonologyRepresentationT] = (),
+        loader_fn: LoaderFnType | None = None,
+        loader_args: LoaderArgsTypes = (),
     ):
         """Initializes an Exporter instance with support for multi-process worker creation.
 
@@ -112,8 +107,8 @@ class Exporter[PhonologyRepresentationT: PhonologyRepresentation]:
             loader_args: Arguments to pass to `loader_fn` upon worker initialization.
         """
         self.language: Language[PhonologyRepresentationT] = language
-        self.loader_fn: LoaderFnType[PhonologyRepresentationT] | None = loader_fn
-        self.loader_args: LoaderArgsTypes[PhonologyRepresentationT] = loader_args
+        self.loader_fn: LoaderFnType | None = loader_fn
+        self.loader_args: LoaderArgsTypes = loader_args
 
     def export(
         self,
@@ -175,9 +170,7 @@ class Exporter[PhonologyRepresentationT: PhonologyRepresentation]:
                             if flag:
                                 scheme_counts[idx] += 1
             else:
-                loader_fn = cast(
-                    "LoaderFnType[PhonologyRepresentation]", self.loader_fn
-                )
+                loader_fn = self.loader_fn
 
                 with ProcessPoolExecutor(
                     max_workers=workers,
