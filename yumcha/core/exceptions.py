@@ -29,10 +29,6 @@ class ValidationError(CoreError):
     """Base exception for errors during post-conversion operations."""
 
 
-class PhonologicalError(ValidationError):
-    """Raised when a phonological rule violation or invalid feature sequence is encountered."""
-
-
 class RoundtripError(ValidationError):
     """Raised when result text fails to convert back to its original form inside the solver."""
 

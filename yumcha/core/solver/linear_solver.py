@@ -12,11 +12,8 @@ from typing import TYPE_CHECKING, override
 
 from ..models.representation import PhonologyRepresentation
 from ..models.solution import Solution
-from ..primitives.directives import SchemeDirective
-from ..primitives.pattern_tuple import PatternTuple
-from ..utils.bit import iterate_bits
 from .base import BaseSolver
-from .helpers import union_if_compatible
+from .helpers import build_solution
 from .models import SolveContext, SolveDirective
 
 if TYPE_CHECKING:
@@ -126,11 +123,8 @@ class LinearSolver[PhonologyRepresentationT: PhonologyRepresentation](
             return None
 
         source_pattern_tuples = context.source_pattern_tuples
-        target_pattern_tuples = context.target_pattern_tuples
-        source_registrants = source_pattern_tuples.registrants
-
-        registrant_mask = (1 << len(source_registrants)) - 1
-        pattern_masks_by_fields = context.source_pattern_tuples.pattern_masks_by_fields
+        registrant_mask = (1 << len(source_pattern_tuples.registrants)) - 1
+        pattern_masks_by_fields = source_pattern_tuples.pattern_masks_by_fields
 
         for field_idx, pattern in enumerate(match.groups()):
             pattern_mask = pattern_masks_by_fields[field_idx][pattern]
@@ -138,43 +132,4 @@ class LinearSolver[PhonologyRepresentationT: PhonologyRepresentation](
             if registrant_mask == 0:
                 return None
 
-        known_source = PatternTuple.wildcards(len(context.source_fields))
-        known_target = PatternTuple.wildcards(len(context.target_fields))
-        origin_indexes: list[int] = []
-        registrant_indexes: list[int] = []
-        directions: list[SchemeDirective] = []
-
-        for registrant_index in iterate_bits(registrant_mask):
-            (
-                origin_index,
-                source_pattern_tuple,
-                direction,
-                _,
-            ) = source_registrants[registrant_index]
-
-            merged = union_if_compatible(known_source, source_pattern_tuple)
-            if (merged is None) or (merged is known_source):
-                continue
-            known_source = merged
-
-            target_pattern_tuple = (
-                target_pattern_tuples.registrant_by_origin_index(origin_index)
-            )[1]
-
-            merged = union_if_compatible(known_target, target_pattern_tuple)
-            if (merged is None) or (merged is known_target):
-                continue
-            known_target = merged
-
-            origin_indexes.append(origin_index)
-            registrant_indexes.append(registrant_index)
-            directions.append(direction)
-
-        return Solution(
-            known_source,
-            known_target,
-            tuple(origin_indexes),
-            tuple(registrant_indexes),
-            registrant_mask,
-            tuple(directions),
-        )
+        return build_solution(context, registrant_mask)

@@ -9,7 +9,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from typing import TYPE_CHECKING
 
-from ..exceptions import CollisionError, PhonologicalError, RoundtripError
+from ..exceptions import CollisionError, RoundtripError
 
 if TYPE_CHECKING:
     from ..facades.scheme import Scheme
@@ -49,7 +49,7 @@ class ConversionValidator[PhonologyRepresentationT: PhonologyRepresentation]:
         ],
         strict: bool = True,
     ) -> bool:
-        """Runs phonotactic and roundtrip validations.
+        """Runs roundtrip validations.
 
         Args:
             source: Original source text.
@@ -64,17 +64,11 @@ class ConversionValidator[PhonologyRepresentationT: PhonologyRepresentation]:
             `True` if all validation checks pass; `False` if a check fails and `strict=False`.
 
         Raises:
-            PhonologicalError: If phonotactic checks fail and `strict=True`.
             RoundtripError: If `source` fails to convert back to its original form
                 inside the solver and `strict=True`.
             CollisionError: If a component collision occurs during round-trip validation
                 and `strict=True`.
         """
-        if self._has_phonotactic_violation(scheme, solution):
-            if not strict:
-                return False
-            raise PhonologicalError(f"text {source!r} violates phonotactic rules")
-
         roundtrip_source = str(representation)
         roundtrip_solution = inverse_solve_fn(roundtrip_source, scheme)
 
@@ -111,24 +105,3 @@ class ConversionValidator[PhonologyRepresentationT: PhonologyRepresentation]:
             )
 
         return True
-
-    def _has_phonotactic_violation(
-        self,
-        scheme: Scheme[SchemeRepresentation],
-        solution: Solution,
-    ) -> bool:
-        """Checks if a solution's origin mask violates forbidden phonotactic rules.
-
-        Args:
-            scheme: Target scheme definition holding invalid mask sets.
-            solution: Solution containing origin indexes.
-
-        Returns:
-            `True` if any bitwise mask overlap indicates an illegal feature pattern, `False` otherwise.
-        """
-        invalid_origin_masks = scheme.intermediate_pattern_tuples.invalid_origin_masks
-        origin_mask = sum(1 << origin_index for origin_index in solution.origin_indexes)
-        return any(
-            (origin_mask & invalid_mask) == origin_mask
-            for invalid_mask in invalid_origin_masks
-        )

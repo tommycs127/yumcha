@@ -12,10 +12,9 @@ from types import EllipsisType
 from typing import TYPE_CHECKING, override
 
 from ..models.solution import Solution
-from ..primitives.pattern_tuple import PatternTuple
 from ..utils.bit import iterate_bits
 from .base import BaseSolver
-from .helpers import union_if_compatible
+from .helpers import build_solution
 from .models import (
     Candidate,
     SearchState,
@@ -27,7 +26,6 @@ from .models import (
 if TYPE_CHECKING:
     from ..facades.scheme import Scheme
     from ..models.representation import PhonologyRepresentation, SchemeRepresentation
-    from ..primitives.directives import SchemeDirective
 
 ELLIPSIS = ...
 EMPTY_STR = ""
@@ -139,84 +137,25 @@ class CSPSolver[PhonologyRepresentationT: PhonologyRepresentation](
         if candidates is None:
             return None
 
-        source_pattern_tuples = context.source_pattern_tuples
-        target_pattern_tuples = context.target_pattern_tuples
-        source_registrants = source_pattern_tuples.registrants
-        source_fields_length = len(context.source_fields)
-        target_fields_length = len(context.target_fields)
+        source_registrants = context.source_pattern_tuples.registrants
 
         full_registrant_mask = (1 << len(source_registrants)) - 1
 
         if use_solver_with_mrv:
-            full_fields_mask = (1 << source_fields_length) - 1
+            full_fields_mask = (1 << len(context.source_fields)) - 1
             init_state = SearchStateMRV(full_fields_mask, full_registrant_mask, ())
             solution_iterator = self._find_solution_mrv(context, candidates, init_state)
         else:
             init_state = SearchState(0, full_registrant_mask, ())
             solution_iterator = self._find_solution(context, candidates, init_state)
 
-        invalid_origin_masks = context.scheme.pattern_tuples.invalid_origin_masks
-
         for state in solution_iterator:
             if state.selected_text != context.text_norm:
                 continue
 
-            registrant_mask = state.registrant_mask
-
-            origin_indexes: list[int] = []
-            registrant_indexes: list[int] = []
-            directions: list[SchemeDirective] = []
-            source_pattern_tuples_used: list[PatternTuple] = []
-
-            known_source = PatternTuple.wildcards(source_fields_length)
-            known_target = PatternTuple.wildcards(target_fields_length)
-            origin_mask = 0
-
-            for registrant_index in iterate_bits(registrant_mask):
-                (
-                    origin_index,
-                    source_pattern_tuple,
-                    direction,
-                    _,
-                ) = source_registrants[registrant_index]
-
-                merged = union_if_compatible(known_source, source_pattern_tuple)
-                if (merged is None) or (merged is known_source):
-                    continue
-                known_source = merged
-
-                target_pattern_tuple = target_pattern_tuples.registrant_by_origin_index(
-                    origin_index
-                )[1]
-
-                merged = union_if_compatible(known_target, target_pattern_tuple)
-                if (merged is None) or (merged is known_target):
-                    continue
-                known_target = merged
-
-                origin_mask |= 1 << origin_index
-                registrant_indexes.append(registrant_index)
-                origin_indexes.append(origin_index)
-                source_pattern_tuples_used.append(source_pattern_tuple)
-                directions.append(direction)
-
-            if not (known_source.is_complete() and known_target.is_complete()):
-                continue
-
-            if any(
-                (origin_mask & invalid_mask) == origin_mask
-                for invalid_mask in invalid_origin_masks
-            ):
-                continue
-
-            return Solution(
-                known_source,
-                known_target,
-                tuple(origin_indexes),
-                tuple(registrant_indexes),
-                registrant_mask,
-                tuple(directions),
-            )
+            solution = build_solution(context, state.registrant_mask)
+            if solution is not None:
+                return solution
 
         return None
 
@@ -309,6 +248,8 @@ class CSPSolver[PhonologyRepresentationT: PhonologyRepresentation](
         state: SearchStateMRV,
     ) -> Iterator[SearchStateMRV]:
         """Recursively yields candidate combinations using Minimum Remaining Values heuristic.
+
+        This strategy is for internal debugging only and is not intended for public exposure.
 
         Args:
             context: Solving context.

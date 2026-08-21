@@ -1,3 +1,9 @@
+"""Abstract base solver definition.
+
+Provides the foundational interface and shared language context for solvers
+resolving phonological representations and orthographic schemes.
+"""
+
 from __future__ import annotations
 
 from abc import ABC, abstractmethod

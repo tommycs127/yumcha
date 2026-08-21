@@ -1,7 +1,7 @@
 """Wrapper protocol definitions for external iteration utilities."""
 
 from collections.abc import Iterable
-from typing import Any, Protocol, TypeVar
+from typing import Protocol, TypeVar
 
 T = TypeVar("T")
 
@@ -14,5 +14,5 @@ class ProgressBarWrapper(Protocol):
         iterable: Iterable[T],
         *,
         total: int | None = None,
-        **kwargs: Any,
+        **kwargs: object,
     ) -> Iterable[T]: ...
