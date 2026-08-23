@@ -66,6 +66,6 @@ class SequenceProxy(Sequence[T]):
         """Returns a developer-readable string representation of the SequenceProxy instance.
 
         Returns:
-            A string formatted as `ListProxy(<wrapped_sequence>)`.
+            A string formatted as `SequenceProxy(<wrapped_sequence>)`.
         """
-        return f"ListProxy({self._target!r})"
+        return f"SequenceProxy({self._target!r})"
