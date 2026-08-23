@@ -2,7 +2,7 @@
 
 [![status](https://img.shields.io/badge/status-Alpha_development-red)](#)
 [![Python](https://img.shields.io/badge/python-3.12%2B-blue)](https://www.python.org/downloads/release/python-3120/)
-[![License](https://img.shields.io/badge/license-MIT-orange)](LICENSE)
+[![License](https://img.shields.io/badge/license-Apache_2.0-orange)](LICENSE)
 [![type](https://img.shields.io/badge/type-Transliteration_engine-cyan)](#)
 [![made-in](https://img.shields.io/badge/made_in-Hong_Kong-cc3399)](#)
 
