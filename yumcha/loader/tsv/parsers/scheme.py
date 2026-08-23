@@ -280,6 +280,11 @@ def _parse_data(
             raise TypeError(f"malformed data at line {line_no}: {te}") from te
 
         if row_directive is SchemeRowDirective.INVALID:
+            if row_scheme in seen_invalid_pattern_tuples:
+                raise ValueError(
+                    f"conflict at line {line_no}: "
+                    + f"duplicated invalid scheme tuple {row_scheme!r}"
+                )
             seen_invalid_pattern_tuples.add(row_scheme)
             parsed_invalid_pattern_tuples.append(PatternTuple(row_scheme))
             continue
