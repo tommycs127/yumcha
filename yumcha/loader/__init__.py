@@ -2,7 +2,8 @@
 
 from __future__ import annotations
 
-from dataclasses import astuple, make_dataclass
+from dataclasses import make_dataclass
+from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from ..core.cluster_canonicalizer import ClusterCanonicalizer
@@ -19,9 +20,9 @@ if TYPE_CHECKING:
     from ..core.models.specs import PhonologyData, SchemeData
 
 
-def load_phonology[PhonologyRepresentationT: PhonologyRepresentation](
+def load_phonology(
     phonology_data: PhonologyData,
-) -> Phonology[PhonologyRepresentationT]:
+) -> Phonology[PhonologyRepresentation]:
     """Loads and compiles a phonology specification from a TSV resource.
 
     Parses table data to build character sets, validation rules, regex tokenization,
@@ -44,7 +45,7 @@ def load_phonology[PhonologyRepresentationT: PhonologyRepresentation](
         charsets,
         char_directives,
         invalid_pattern_tuples,
-    ) = astuple(phonology_data)
+    ) = phonology_data.to_tuple()
 
     canonicalizer = ClusterCanonicalizer()
     canonicalizer.learn(charsets)
@@ -52,7 +53,7 @@ def load_phonology[PhonologyRepresentationT: PhonologyRepresentation](
     class_name = "".join(s.capitalize() for s in id.split("_"))
     class_fields = [(f, str) for f in fields]
 
-    class_ = make_dataclass(
+    class_: type[PhonologyRepresentation] = make_dataclass(
         cls_name=class_name,
         fields=class_fields,
         frozen=True,
@@ -70,9 +71,9 @@ def load_phonology[PhonologyRepresentationT: PhonologyRepresentation](
     )
 
 
-def load_scheme[SchemeRepresentationT: SchemeRepresentation](
+def load_scheme(
     scheme_data: SchemeData,
-) -> Scheme[SchemeRepresentationT]:
+) -> Scheme[SchemeRepresentation]:
     """Loads and compiles a orthographic/romanization scheme mapping from a TSV resource.
 
     Parses mapping definitions to construct forward and reverse indexers, regex pattern
@@ -96,7 +97,7 @@ def load_scheme[SchemeRepresentationT: SchemeRepresentation](
         fields,
         pattern_tuples,
         invalid_pattern_tuples,
-    ) = astuple(scheme_data)
+    ) = scheme_data.to_tuple()
 
     intermediate_registrants = RegisteredPatternTupleWithInvalidMasks()
     intermediate_registrants.load(
@@ -125,22 +126,20 @@ def load_scheme[SchemeRepresentationT: SchemeRepresentation](
     class_name = "".join(s.capitalize() for s in id.split("_"))
     cls_fields = [(f, str) for f in scheme_data.fields]
 
-    cls = make_dataclass(
+    cls: type[SchemeRepresentation] = make_dataclass(
         cls_name=class_name,
         fields=cls_fields,
         frozen=True,
         bases=(SchemeRepresentation,),
     )
 
-    scheme = Scheme(
+    return Scheme[SchemeRepresentation](
         id,
         cls,
-        intermediate_fields,
+        MappingProxyType(intermediate_fields),
         intermediate_registrants,
-        fields,
+        MappingProxyType(fields),
         registrants,
         directions,
         canonicalizer,
     )
-
-    return scheme

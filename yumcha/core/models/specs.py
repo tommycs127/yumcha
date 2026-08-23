@@ -32,6 +32,24 @@ class PhonologyData:
     char_directives: tuple[PhonologyDirectiveMap, ...]
     invalid_pattern_tuples: tuple[PatternTuple, ...]
 
+    def to_tuple(
+        self,
+    ) -> tuple[
+        str,
+        tuple[str, ...],
+        tuple[set[str], ...],
+        tuple[PhonologyDirectiveMap, ...],
+        tuple[PatternTuple, ...],
+    ]:
+        """Return attributes as a strictly-typed tuple."""
+        return (
+            self.id,
+            self.fields,
+            self.charsets,
+            self.char_directives,
+            self.invalid_pattern_tuples,
+        )
+
 
 @dataclass(frozen=True)
 class SchemeData:
@@ -54,3 +72,25 @@ class SchemeData:
     fields: dict[str, frozenset[int]]
     pattern_tuples: tuple[PatternTuple, ...]
     invalid_pattern_tuples: tuple[PatternTuple, ...]
+
+    def to_tuple(
+        self,
+    ) -> tuple[
+        str,
+        tuple[SchemeDirective, ...],
+        dict[str, frozenset[int]],
+        tuple[PatternTuple, ...],
+        dict[str, frozenset[int]],
+        tuple[PatternTuple, ...],
+        tuple[PatternTuple, ...],
+    ]:
+        """Return attributes as a strictly-typed tuple."""
+        return (
+            self.id,
+            self.directions,
+            self.intermediate_fields,
+            self.intermediate_pattern_tuples,
+            self.fields,
+            self.pattern_tuples,
+            self.invalid_pattern_tuples,
+        )
