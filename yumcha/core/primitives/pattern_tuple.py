@@ -174,12 +174,12 @@ class PatternTuple(Sequence[Pattern]):
         """Checks equality against another PatternTuple or standard sequence."""
         if type(other) is PatternTuple:
             return self._data == other._data
-        return self._data == other
+        return False
 
     @override
     def __hash__(self) -> int:
-        """Computes a hash based on the tuple data and mask mask."""
-        return hash((self._data, self.mask))
+        """Computes a hash based on the tuple data."""
+        return hash(self._data)
 
     @override
     def __repr__(self) -> str:
