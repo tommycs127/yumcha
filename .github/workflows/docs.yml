@@ -33,7 +33,7 @@ jobs:
           cat << 'EOF' > docs/source/conf.py
           import os
           import sys
-          sys.path.insert(0, os.path.abspath('../../yumcha'))
+          sys.path.insert(0, os.path.abspath('.'))
 
           project = 'yumcha'
           copyright = '2026, yumcha'
@@ -47,6 +47,7 @@ jobs:
           ]
 
           always_document_param_types = True
+          set_type_checking_flag = True
 
           templates_path = ['_templates']
           exclude_patterns = []
@@ -73,7 +74,7 @@ jobs:
           * :ref:`search`
           EOF
 
-          sphinx-apidoc -o docs/source/ yumcha/
+          sphinx-apidoc --implicit-namespaces -o docs/source/ yumcha/
           sphinx-build -b html docs/source/ docs/build/html
 
       - name: Deploy to GitHub Pages
