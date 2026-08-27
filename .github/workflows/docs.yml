@@ -25,6 +25,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install sphinx sphinx-rtd-theme sphinx-autodoc-typehints
+          pip install -e .
 
       - name: Generate API Documentation
         run: |
@@ -82,9 +83,8 @@ jobs:
 
           rm -f docs/source/modules.rst docs/source/yumcha*.rst
 
-          export PYTHONPATH=.
           sphinx-apidoc --implicit-namespaces -o docs/source/ yumcha/
-          sphinx-build -b html docs/source/ docs/build/html
+          sphinx-build -v -b html docs/source/ docs/build/html 2>&1 | tee sphinx-build.log
 
           touch docs/build/html/.nojekyll
 
