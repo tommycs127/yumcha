@@ -32,9 +32,6 @@ jobs:
           mkdir -p docs/source
 
           cat << 'EOF' > docs/source/conf.py
-          import os
-          import sys
-          sys.path.insert(0, os.path.abspath('.'))
 
           project = 'yumcha'
           copyright = '2026, yumcha'
@@ -46,6 +43,9 @@ jobs:
               'sphinx.ext.viewcode',
               'sphinx_autodoc_typehints'
           ]
+
+          autodoc_typehints = "signature"
+          autodoc_typehints_format = "short"
 
           always_document_param_types = True
           set_type_checking_flag = True
