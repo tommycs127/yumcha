@@ -37,13 +37,15 @@ jobs:
 
           project = 'yumcha'
           copyright = '2026, yumcha'
-          author = 'yumcha'
+          author = 'tommycs127'
 
           extensions = [
               'sphinx.ext.autodoc',
               'sphinx.ext.napoleon',
               'sphinx.ext.viewcode'
           ]
+
+          autodoc_typehints = 'description'
 
           templates_path = ['_templates']
           exclude_patterns = []
