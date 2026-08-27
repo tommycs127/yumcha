@@ -44,7 +44,7 @@ jobs:
               'sphinx_autodoc_typehints'
           ]
 
-          autodoc_mock_imports = [
+          mock_names = [
               "BaseSolver",
               "ClusterCanonicalizer",
               "ClusterKey",
@@ -72,6 +72,11 @@ jobs:
               "Solution",
               "SolveFn",
           ]
+
+          for name in mock_names:
+              setattr(builtins, name, MagicMock())
+
+          autodoc_mock_imports = mock_names
 
           always_document_param_types = True
           set_type_checking_flag = True
