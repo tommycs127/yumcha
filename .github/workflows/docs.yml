@@ -49,6 +49,12 @@ jobs:
           always_document_param_types = True
           set_type_checking_flag = True
 
+          autodoc_default_options = {
+              'members': True,
+              'undoc-members': True,
+              'show-inheritance': True,
+          }
+
           templates_path = ['_templates']
           exclude_patterns = []
 
@@ -74,8 +80,13 @@ jobs:
           * :ref:`search`
           EOF
 
+          rm -f docs/source/modules.rst docs/source/yumcha*.rst
+
+          export PYTHONPATH=.
           sphinx-apidoc --implicit-namespaces -o docs/source/ yumcha/
           sphinx-build -b html docs/source/ docs/build/html
+
+          touch docs/build/html/.nojekyll
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
