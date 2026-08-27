@@ -1,0 +1,31 @@
+yumcha.loader package
+=====================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   yumcha.loader.primitives
+   yumcha.loader.tsv
+   yumcha.loader.utils
+
+Submodules
+----------
+
+yumcha.loader.exceptions module
+-------------------------------
+
+.. automodule:: yumcha.loader.exceptions
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+Module contents
+---------------
+
+.. automodule:: yumcha.loader
+   :members:
+   :show-inheritance:
+   :undoc-members:

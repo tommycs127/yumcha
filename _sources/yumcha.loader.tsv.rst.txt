@@ -1,5 +1,5 @@
-loader package
-==============
+yumcha.loader.tsv package
+=========================
 
 Subpackages
 -----------
@@ -7,15 +7,15 @@ Subpackages
 .. toctree::
    :maxdepth: 4
 
-   loader.tsv
+   yumcha.loader.tsv.parsers
 
 Submodules
 ----------
 
-loader.exceptions module
-------------------------
+yumcha.loader.tsv.reader module
+-------------------------------
 
-.. automodule:: loader.exceptions
+.. automodule:: yumcha.loader.tsv.reader
    :members:
    :show-inheritance:
    :undoc-members:
@@ -23,7 +23,7 @@ loader.exceptions module
 Module contents
 ---------------
 
-.. automodule:: loader
+.. automodule:: yumcha.loader.tsv
    :members:
    :show-inheritance:
    :undoc-members:

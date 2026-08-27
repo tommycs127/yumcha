@@ -1,0 +1,31 @@
+yumcha.core.primitives namespace
+================================
+
+.. py:module:: yumcha.core.primitives
+
+Submodules
+----------
+
+yumcha.core.primitives.directives module
+----------------------------------------
+
+.. automodule:: yumcha.core.primitives.directives
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+yumcha.core.primitives.pattern module
+-------------------------------------
+
+.. automodule:: yumcha.core.primitives.pattern
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+yumcha.core.primitives.pattern\_tuple module
+--------------------------------------------
+
+.. automodule:: yumcha.core.primitives.pattern_tuple
+   :members:
+   :show-inheritance:
+   :undoc-members:

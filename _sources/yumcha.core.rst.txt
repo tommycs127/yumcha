@@ -1,0 +1,45 @@
+yumcha.core package
+===================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   yumcha.core.cluster_canonicalizer
+   yumcha.core.conversion_pipeline
+   yumcha.core.facades
+   yumcha.core.indexer
+   yumcha.core.iterator
+   yumcha.core.models
+   yumcha.core.primitives
+   yumcha.core.solver
+   yumcha.core.utils
+
+Submodules
+----------
+
+yumcha.core.exceptions module
+-----------------------------
+
+.. automodule:: yumcha.core.exceptions
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+yumcha.core.language module
+---------------------------
+
+.. automodule:: yumcha.core.language
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+Module contents
+---------------
+
+.. automodule:: yumcha.core
+   :members:
+   :show-inheritance:
+   :undoc-members:

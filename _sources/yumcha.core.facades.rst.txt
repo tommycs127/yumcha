@@ -1,0 +1,23 @@
+yumcha.core.facades namespace
+=============================
+
+.. py:module:: yumcha.core.facades
+
+Submodules
+----------
+
+yumcha.core.facades.phonology module
+------------------------------------
+
+.. automodule:: yumcha.core.facades.phonology
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+yumcha.core.facades.scheme module
+---------------------------------
+
+.. automodule:: yumcha.core.facades.scheme
+   :members:
+   :show-inheritance:
+   :undoc-members:
