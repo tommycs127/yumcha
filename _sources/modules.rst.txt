@@ -1,7 +1,0 @@
-yumcha
-======
-
-.. toctree::
-   :maxdepth: 4
-
-   yumcha
