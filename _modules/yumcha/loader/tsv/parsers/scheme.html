@@ -1,0 +1,438 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>yumcha.loader.tsv.parsers.scheme &mdash; yumcha  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            yumcha
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">yumcha</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">yumcha</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../../../loader.html">yumcha.loader</a></li>
+          <li class="breadcrumb-item"><a href="../../tsv.html">yumcha.loader.tsv</a></li>
+      <li class="breadcrumb-item active">yumcha.loader.tsv.parsers.scheme</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for yumcha.loader.tsv.parsers.scheme</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Parser for compiling orthographic/romanization scheme specifications from raw TSV rows."""</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">Counter</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">types</span><span class="w"> </span><span class="kn">import</span> <span class="n">EllipsisType</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">....core.models.specs</span><span class="w"> </span><span class="kn">import</span> <span class="n">SchemeData</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">....core.primitives.pattern_tuple</span><span class="w"> </span><span class="kn">import</span> <span class="n">PatternTuple</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">...primitives.directives</span><span class="w"> </span><span class="kn">import</span> <span class="n">SchemeRowDirective</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">...utils.text</span><span class="w"> </span><span class="kn">import</span> <span class="n">parse_data_cell</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">....core.primitives.directives</span><span class="w"> </span><span class="kn">import</span> <span class="n">SchemeDirective</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">....core.primitives.pattern</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pattern</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">...primitives.pre_pattern_tuple</span><span class="w"> </span><span class="kn">import</span> <span class="n">PrePatternTuple</span>
+
+
+<span class="n">ID_PATTERN</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">"[^\d\W]\w*"</span>
+<span class="sd">"""Regex pattern string matching valid Python-style identifier names."""</span>
+
+<span class="n">SCHEME_COLUMN_PATTERN</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="sa">rf</span><span class="s2">"^\s*</span><span class="si">{</span><span class="n">ID_PATTERN</span><span class="si">}</span><span class="s2">\s*=\s*</span><span class="si">{</span><span class="n">ID_PATTERN</span><span class="si">}</span><span class="s2">\s*(,\s*</span><span class="si">{</span><span class="n">ID_PATTERN</span><span class="si">}</span><span class="s2">\s*)*$"</span>
+<span class="p">)</span>
+<span class="sd">"""Regex pattern string for validating scheme header definitions (e.g., 'scheme=intermediate')."""</span>
+
+<span class="n">SCHEME_COLUMN_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">SCHEME_COLUMN_PATTERN</span><span class="p">)</span>
+<span class="sd">"""Compiled regular expression for matching scheme column header syntax."""</span>
+
+
+<div class="viewcode-block" id="parse">
+<a class="viewcode-back" href="../../../../../yumcha.loader.tsv.parsers.html#yumcha.loader.tsv.parsers.scheme.parse">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">parse</span><span class="p">(</span>
+    <span class="n">scheme_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">headers</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">data</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SchemeData</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Parses raw TSV headers and data rows into a structured `ParsedContext`.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        headers: Header row cell strings from the TSV file.</span>
+<span class="sd">        data: Collection of data row cell strings.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A fully constructed `ParsedContext` dataclass.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If TSV header layout is malformed or missing scheme definitions.</span>
+<span class="sd">    """</span>
+    <span class="n">headers_split_index</span> <span class="o">=</span> <span class="n">_get_headers_split_index</span><span class="p">(</span><span class="n">headers</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">headers_split_index</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">"invalid header layout: "</span>
+            <span class="o">+</span> <span class="s2">"must have at least two header cells before scheme definitions begin"</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">headers_split_index</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">headers</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">"invalid header layout: at least one scheme field must be present "</span>
+            <span class="o">+</span> <span class="s2">"(e.g. 'initial=initial' at the first column of scheme headers)"</span>
+        <span class="p">)</span>
+
+    <span class="p">(</span>
+        <span class="n">intermediate_fields</span><span class="p">,</span>
+        <span class="n">fields</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">=</span> <span class="n">_parse_headers</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">headers_split_index</span><span class="p">)</span>
+
+    <span class="p">(</span>
+        <span class="n">directions</span><span class="p">,</span>
+        <span class="n">intermediate_pattern_tuples</span><span class="p">,</span>
+        <span class="n">pattern_tuples</span><span class="p">,</span>
+        <span class="n">invalid_pattern_tuples</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">=</span> <span class="n">_parse_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">headers_split_index</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">headers</span><span class="p">),</span> <span class="n">fields</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">SchemeData</span><span class="p">(</span>
+        <span class="n">scheme_id</span><span class="p">,</span>
+        <span class="n">directions</span><span class="p">,</span>
+        <span class="n">intermediate_fields</span><span class="p">,</span>
+        <span class="n">intermediate_pattern_tuples</span><span class="p">,</span>
+        <span class="n">fields</span><span class="p">,</span>
+        <span class="n">pattern_tuples</span><span class="p">,</span>
+        <span class="n">invalid_pattern_tuples</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_parse_headers</span><span class="p">(</span>
+    <span class="n">headers</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">headers_split_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span>
+    <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">frozenset</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span>  <span class="c1"># intermediate_fields</span>
+    <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">frozenset</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span>  <span class="c1"># scheme_fields</span>
+<span class="p">]:</span>
+<span class="w">    </span><span class="sd">"""Parses TSV table headers into intermediate fields and scheme field mappings.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        headers: List of header cell strings from the input TSV file.</span>
+<span class="sd">        headers_split_index: The column index separating intermediate fields from scheme fields.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A tuple containing:</span>
+<span class="sd">            - `intermediate_fields`: Cleaned tuple of intermediate field names.</span>
+<span class="sd">            - `scheme_fields`: Map of target scheme names to frozensets of source field indices.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If intermediate fields are empty or duplicated, or if scheme syntax/references</span>
+<span class="sd">            are invalid or leave intermediate fields unmapped.</span>
+<span class="sd">    """</span>
+    <span class="n">intermediate_fields</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">headers</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="n">headers_split_index</span><span class="p">])</span>
+    <span class="n">intermediate_fields_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">s</span><span class="p">:</span> <span class="n">idx</span> <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">intermediate_fields</span><span class="p">)}</span>
+
+    <span class="k">if</span> <span class="s2">""</span> <span class="ow">in</span> <span class="n">intermediate_fields_dict</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"intermediate fields cannot be empty"</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">intermediate_fields</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">intermediate_fields_dict</span><span class="p">):</span>
+        <span class="n">counts</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">intermediate_fields</span><span class="p">)</span>
+        <span class="n">duplicates</span> <span class="o">=</span> <span class="p">[</span><span class="n">field</span> <span class="k">for</span> <span class="n">field</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">counts</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">count</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"duplicated intermediate fields </span><span class="si">{</span><span class="n">duplicates</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+    <span class="n">scheme_cells</span> <span class="o">=</span> <span class="n">headers</span><span class="p">[</span><span class="n">headers_split_index</span><span class="p">:]</span>
+    <span class="n">parsed_scheme_fields</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">frozenset</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">seen_scheme_fields</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">unused_intermediate_fields_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">intermediate_fields</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">scheme_cell</span> <span class="ow">in</span> <span class="n">scheme_cells</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">scheme_cell</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s2">"="</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"scheme headers must only have one equal sign ('=')"</span><span class="p">)</span>
+
+        <span class="n">field</span><span class="p">,</span> <span class="n">sources_str</span> <span class="o">=</span> <span class="n">scheme_cell</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"="</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">field</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">field</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"empty scheme field"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">seen_scheme_fields</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"duplicated scheme field </span><span class="si">{</span><span class="n">field</span><span class="si">!r}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">sources_str</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"scheme field </span><span class="si">{</span><span class="n">field</span><span class="si">!r}</span><span class="s2"> must specify at least one intermediate field"</span>
+            <span class="p">)</span>
+
+        <span class="n">seen_scheme_fields</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
+
+        <span class="n">parsed_sources_mapping</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">source</span> <span class="ow">in</span> <span class="n">sources_str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">","</span><span class="p">):</span>
+            <span class="n">source</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">source</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">intermediate_fields_dict</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">"invalid intermediate field </span><span class="si">{</span><span class="n">source</span><span class="si">!r}</span><span class="s2"> "</span>
+                    <span class="o">+</span> <span class="sa">f</span><span class="s2">"used for scheme field </span><span class="si">{</span><span class="n">field</span><span class="si">!r}</span><span class="s2">"</span>
+                <span class="p">)</span>
+
+            <span class="n">unused_intermediate_fields_set</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
+            <span class="n">parsed_sources_mapping</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">intermediate_fields_dict</span><span class="p">[</span><span class="n">source</span><span class="p">])</span>
+
+        <span class="n">parsed_scheme_fields</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">(</span><span class="n">parsed_sources_mapping</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">unused_intermediate_fields_set</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"unused intermediate fields </span><span class="si">{</span><span class="n">unused_intermediate_fields_set</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+    <span class="n">pre_intermediate_fields</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">field</span><span class="p">:</span> <span class="nb">set</span><span class="p">()</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">intermediate_fields</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span> <span class="n">scheme_idx</span><span class="p">,</span> <span class="n">indexes</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">parsed_scheme_fields</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
+        <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">indexes</span><span class="p">:</span>
+            <span class="n">intermediate_field</span> <span class="o">=</span> <span class="n">intermediate_fields</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+            <span class="n">pre_intermediate_fields</span><span class="p">[</span><span class="n">intermediate_field</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">scheme_idx</span><span class="p">)</span>
+
+    <span class="n">parsed_intermediate_fields</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">frozenset</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">key</span><span class="p">:</span> <span class="nb">frozenset</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">pre_intermediate_fields</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">parsed_intermediate_fields</span><span class="p">,</span>
+        <span class="n">parsed_scheme_fields</span><span class="p">,</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_validate_mapping</span><span class="p">(</span>
+    <span class="n">row_intermediate</span><span class="p">:</span> <span class="n">PrePatternTuple</span><span class="p">,</span>
+    <span class="n">row_scheme</span><span class="p">:</span> <span class="n">PrePatternTuple</span><span class="p">,</span>
+    <span class="n">scheme_fields</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">frozenset</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Validates structural type consistency between intermediate and scheme tuple values.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        row_intermediate: Intermediate pattern tuple for a single row.</span>
+<span class="sd">        row_scheme: Scheme pattern tuple for a single row.</span>
+<span class="sd">        scheme_fields: Map of scheme field names to intermediate field index mappings.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        TypeError: If an intermediate slot expected to be active contains an ellipsis,</span>
+<span class="sd">            or if an inactive slot contains a string value.</span>
+<span class="sd">    """</span>
+    <span class="n">active_indices</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">idx</span>
+        <span class="k">for</span> <span class="n">scheme_pattern</span><span class="p">,</span> <span class="n">mapping</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">row_scheme</span><span class="p">,</span> <span class="n">scheme_fields</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">scheme_pattern</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">mapping</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">intermediate_pattern</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">row_intermediate</span><span class="p">):</span>
+        <span class="n">expected_type</span> <span class="o">=</span> <span class="nb">str</span> <span class="k">if</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">active_indices</span> <span class="k">else</span> <span class="n">EllipsisType</span>
+
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">intermediate_pattern</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">expected_type</span><span class="p">:</span>
+            <span class="n">got_type</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">intermediate_pattern</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span>
+            <span class="n">exp_name</span> <span class="o">=</span> <span class="n">expected_type</span><span class="o">.</span><span class="vm">__name__</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"index </span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2"> of intermediate tuple </span><span class="si">{</span><span class="n">row_intermediate</span><span class="si">!r}</span><span class="s2">: "</span>
+                <span class="o">+</span> <span class="sa">f</span><span class="s2">"expecting </span><span class="si">{</span><span class="n">exp_name</span><span class="si">}</span><span class="s2">, got </span><span class="si">{</span><span class="n">got_type</span><span class="si">}</span><span class="s2">"</span>
+            <span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_parse_data</span><span class="p">(</span>
+    <span class="n">data</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+    <span class="n">headers_split_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">expected_columns_len</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">scheme_fields</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">frozenset</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span>
+    <span class="nb">tuple</span><span class="p">[</span><span class="n">SchemeDirective</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span>  <span class="c1"># parsed_directions</span>
+    <span class="nb">tuple</span><span class="p">[</span><span class="n">PatternTuple</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span>  <span class="c1"># parsed_intermediate_pattern_tuples</span>
+    <span class="nb">tuple</span><span class="p">[</span><span class="n">PatternTuple</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span>  <span class="c1"># parsed_pattern_tuples</span>
+    <span class="nb">tuple</span><span class="p">[</span><span class="n">PatternTuple</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span>  <span class="c1"># parsed_invalid_pattern_tuples</span>
+<span class="p">]:</span>
+<span class="w">    </span><span class="sd">"""Parses TSV data rows into directives and tuple sequences.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        data: List of raw TSV row cell lists (excluding headers).</span>
+<span class="sd">        headers_split_index: Column index where scheme definitions begin.</span>
+<span class="sd">        expected_columns_len: Total expected columns per row.</span>
+<span class="sd">        scheme_fields: Field mapping specification from intermediate to scheme slots.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A tuple containing:</span>
+<span class="sd">            - `parsed_directions`: Tuple of row directive direction flags.</span>
+<span class="sd">            - `parsed_intermediate_pattern_tuples`: Parsed intermediate pattern tuples.</span>
+<span class="sd">            - `parsed_pattern_tuples`: Parsed scheme pattern tuples.</span>
+<span class="sd">            - `parsed_invalid_pattern_tuples`: Parsed invalid scheme pattern tuples.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If row lengths differ from expectations or if duplicate entries conflict</span>
+<span class="sd">            with direction rules.</span>
+<span class="sd">        TypeError: If intermediate and scheme pattern types fail validation pattern tuples.</span>
+<span class="sd">    """</span>
+    <span class="n">parsed_directions</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">SchemeDirective</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">parsed_intermediate_pattern_tuples</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">PatternTuple</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">parsed_pattern_tuples</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">PatternTuple</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">parsed_invalid_pattern_tuples</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">PatternTuple</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">seen_intermediate_pattern_tuples</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">Pattern</span><span class="p">,</span> <span class="o">...</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">seen_pattern_tuples</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">Pattern</span><span class="p">,</span> <span class="o">...</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">seen_invalid_pattern_tuples</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">Pattern</span><span class="p">,</span> <span class="o">...</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+    <span class="n">CHECK_INTERMEDIATE</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">SchemeRowDirective</span><span class="o">.</span><span class="n">BIDIRECTIONAL</span><span class="p">,</span>
+        <span class="n">SchemeRowDirective</span><span class="o">.</span><span class="n">FORWARD</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">CHECK_SCHEME</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">SchemeRowDirective</span><span class="o">.</span><span class="n">BIDIRECTIONAL</span><span class="p">,</span>
+        <span class="n">SchemeRowDirective</span><span class="o">.</span><span class="n">REVERSE</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span> <span class="n">line_no</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">row</span><span class="p">)</span> <span class="o">!=</span> <span class="n">expected_columns_len</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"malformed data at line </span><span class="si">{</span><span class="n">line_no</span><span class="si">}</span><span class="s2">: "</span>
+                <span class="o">+</span> <span class="sa">f</span><span class="s2">"expecting columns length of </span><span class="si">{</span><span class="n">expected_columns_len</span><span class="si">}</span><span class="s2">, got </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">row</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
+            <span class="p">)</span>
+
+        <span class="n">row_directive</span> <span class="o">=</span> <span class="n">SchemeRowDirective</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+
+        <span class="k">if</span> <span class="n">row_directive</span> <span class="ow">is</span> <span class="n">SchemeRowDirective</span><span class="o">.</span><span class="n">COMMENT</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="n">row_intermediate</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">parse_data_cell</span><span class="p">,</span> <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="n">headers_split_index</span><span class="p">]))</span>
+        <span class="n">row_scheme</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">parse_data_cell</span><span class="p">,</span> <span class="n">row</span><span class="p">[</span><span class="n">headers_split_index</span><span class="p">:]))</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">_validate_mapping</span><span class="p">(</span><span class="n">row_intermediate</span><span class="p">,</span> <span class="n">row_scheme</span><span class="p">,</span> <span class="n">scheme_fields</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">te</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"malformed data at line </span><span class="si">{</span><span class="n">line_no</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">te</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">te</span>
+
+        <span class="k">if</span> <span class="n">row_directive</span> <span class="ow">is</span> <span class="n">SchemeRowDirective</span><span class="o">.</span><span class="n">INVALID</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">row_scheme</span> <span class="ow">in</span> <span class="n">seen_invalid_pattern_tuples</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">"conflict at line </span><span class="si">{</span><span class="n">line_no</span><span class="si">}</span><span class="s2">: "</span>
+                    <span class="o">+</span> <span class="sa">f</span><span class="s2">"duplicated invalid scheme tuple </span><span class="si">{</span><span class="n">row_scheme</span><span class="si">!r}</span><span class="s2">"</span>
+                <span class="p">)</span>
+            <span class="n">seen_invalid_pattern_tuples</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">row_scheme</span><span class="p">)</span>
+            <span class="n">parsed_invalid_pattern_tuples</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PatternTuple</span><span class="p">(</span><span class="n">row_scheme</span><span class="p">))</span>
+            <span class="k">continue</span>
+
+        <span class="k">if</span> <span class="n">row_directive</span> <span class="ow">in</span> <span class="n">CHECK_INTERMEDIATE</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">row_intermediate</span> <span class="ow">in</span> <span class="n">seen_intermediate_pattern_tuples</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">"conflict at line </span><span class="si">{</span><span class="n">line_no</span><span class="si">}</span><span class="s2">: "</span>
+                    <span class="o">+</span> <span class="sa">f</span><span class="s2">"duplicated intermediate tuple </span><span class="si">{</span><span class="n">row_intermediate</span><span class="si">!r}</span><span class="s2">"</span>
+                <span class="p">)</span>
+            <span class="n">seen_intermediate_pattern_tuples</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">row_intermediate</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">row_directive</span> <span class="ow">in</span> <span class="n">CHECK_SCHEME</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">row_scheme</span> <span class="ow">in</span> <span class="n">seen_pattern_tuples</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">"conflict at line </span><span class="si">{</span><span class="n">line_no</span><span class="si">}</span><span class="s2">: duplicated scheme tuple </span><span class="si">{</span><span class="n">row_scheme</span><span class="si">!r}</span><span class="s2">"</span>
+                <span class="p">)</span>
+            <span class="n">seen_pattern_tuples</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">row_scheme</span><span class="p">)</span>
+
+        <span class="n">parsed_directions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row_directive</span><span class="o">.</span><span class="n">to_core_directive</span><span class="p">())</span>
+        <span class="n">parsed_intermediate_pattern_tuples</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PatternTuple</span><span class="p">(</span><span class="n">row_intermediate</span><span class="p">))</span>
+        <span class="n">parsed_pattern_tuples</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PatternTuple</span><span class="p">(</span><span class="n">row_scheme</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="nb">tuple</span><span class="p">(</span><span class="n">parsed_directions</span><span class="p">),</span>
+        <span class="nb">tuple</span><span class="p">(</span><span class="n">parsed_intermediate_pattern_tuples</span><span class="p">),</span>
+        <span class="nb">tuple</span><span class="p">(</span><span class="n">parsed_pattern_tuples</span><span class="p">),</span>
+        <span class="nb">tuple</span><span class="p">(</span><span class="n">parsed_invalid_pattern_tuples</span><span class="p">),</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_headers_split_index</span><span class="p">(</span><span class="n">headers</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Finds the column index in header row where scheme field definitions begin.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        headers: List of header cell strings.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The 0-based column index of the first scheme definition header, or `len(headers)`</span>
+<span class="sd">        if no scheme definitions were found.</span>
+<span class="sd">    """</span>
+    <span class="k">return</span> <span class="nb">next</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">headers</span><span class="p">)</span> <span class="k">if</span> <span class="n">SCHEME_COLUMN_RE</span><span class="o">.</span><span class="n">fullmatch</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">strip</span><span class="p">())),</span>
+        <span class="nb">len</span><span class="p">(</span><span class="n">headers</span><span class="p">),</span>
+    <span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, yumcha.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,215 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>yumcha.exporter package &mdash; yumcha  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="yumcha.loader package" href="yumcha.loader.html" />
+    <link rel="prev" title="yumcha.core.utils namespace" href="yumcha.core.utils.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            yumcha
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">yumcha</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="yumcha.html">yumcha namespace</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="yumcha.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.html">yumcha.core package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">yumcha.exporter package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.loader.html">yumcha.loader package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">yumcha</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">yumcha</a></li>
+          <li class="breadcrumb-item"><a href="yumcha.html">yumcha namespace</a></li>
+      <li class="breadcrumb-item active">yumcha.exporter package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/yumcha.exporter.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="yumcha-exporter-package">
+<h1>yumcha.exporter package<a class="headerlink" href="#yumcha-exporter-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-yumcha.exporter.advanced">
+<span id="yumcha-exporter-advanced-module"></span><h2>yumcha.exporter.advanced module<a class="headerlink" href="#module-yumcha.exporter.advanced" title="Link to this heading"></a></h2>
+<p>Advanced multi-process exporter for batched parallel conversion exports.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="yumcha.exporter.advanced.Exporter">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">yumcha.exporter.advanced.</span></span><span class="sig-name descname"><span class="pre">Exporter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">language</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loader_fn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loader_args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yumcha/exporter/advanced.html#Exporter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.exporter.advanced.Exporter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Generic</span></code></p>
+<p>Exports language conversions concurrently using process pool workers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>language</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="yumcha.core.html#yumcha.core.language.Language" title="yumcha.core.language.Language"><code class="xref py py-class docutils literal notranslate"><span class="pre">Language</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">TypeVar</span></code>(<code class="docutils literal notranslate"><span class="pre">PhonologyRepresentationT</span></code>, bound= <a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.representation.PhonologyRepresentation" title="yumcha.core.models.representation.PhonologyRepresentation"><code class="xref py py-class docutils literal notranslate"><span class="pre">PhonologyRepresentation</span></code></a>)]</span>)</p></li>
+<li><p><strong>loader_fn</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Callable</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">...</span></code>, <a class="reference internal" href="yumcha.core.html#yumcha.core.language.Language" title="yumcha.core.language.Language"><code class="xref py py-class docutils literal notranslate"><span class="pre">Language</span></code></a>[<a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.representation.PhonologyRepresentation" title="yumcha.core.models.representation.PhonologyRepresentation"><code class="xref py py-class docutils literal notranslate"><span class="pre">PhonologyRepresentation</span></code></a>]] | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>)</p></li>
+<li><p><strong>loader_args</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">...</span></code>]</span>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="yumcha.exporter.advanced.Exporter.export">
+<span class="sig-name descname"><span class="pre">export</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">progress_bar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_workers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunk_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yumcha/exporter/advanced.html#Exporter.export"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.exporter.advanced.Exporter.export" title="Link to this definition"></a></dt>
+<dd><p>Exports generated phonological representations and conversions to a TSV file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></span>) – Target file path for TSV output.</p></li>
+<li><p><strong>progress_bar</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="yumcha.core.iterator.html#yumcha.core.iterator.wrappers.ProgressBarWrapper" title="yumcha.core.iterator.wrappers.ProgressBarWrapper"><code class="xref py py-type docutils literal notranslate"><span class="pre">ProgressBarWrapper</span></code></a> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – Optional progress bar wrapper.</p></li>
+<li><p><strong>max_workers</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – Maximum process workers to use. Defaults to <cite>os.cpu_count()</cite>.
+Note: On resource-constrained devices (e.g., Raspberry Pi) or shared
+servers, set this to <cite>CPU_COUNT - 1</cite> to prevent thermal throttling
+and keep the system responsive.</p></li>
+<li><p><strong>chunk_size</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – Number of representations per worker batch. If <cite>None</cite>,
+dynamically calculated based on total rows and worker count.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py type">
+<dt class="sig sig-object py" id="yumcha.exporter.advanced.LoaderArgsTypes">
+<span class="property"><span class="k"><span class="pre">type</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">yumcha.exporter.advanced.</span></span><span class="sig-name descname"><span class="pre">LoaderArgsTypes</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">object</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#yumcha.exporter.advanced.LoaderArgsTypes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py type">
+<dt class="sig sig-object py" id="yumcha.exporter.advanced.LoaderFnType">
+<span class="property"><span class="k"><span class="pre">type</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">yumcha.exporter.advanced.</span></span><span class="sig-name descname"><span class="pre">LoaderFnType</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="yumcha.core.html#yumcha.core.language.Language" title="yumcha.core.language.Language"><span class="pre">Language</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.representation.PhonologyRepresentation" title="yumcha.core.models.representation.PhonologyRepresentation"><span class="pre">PhonologyRepresentation</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#yumcha.exporter.advanced.LoaderFnType" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-yumcha.exporter.basic">
+<span id="yumcha-exporter-basic-module"></span><h2>yumcha.exporter.basic module<a class="headerlink" href="#module-yumcha.exporter.basic" title="Link to this heading"></a></h2>
+<p>Basic single-threaded sequential exporter for phonological representations.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="yumcha.exporter.basic.BasicExporter">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">yumcha.exporter.basic.</span></span><span class="sig-name descname"><span class="pre">BasicExporter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">language</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yumcha/exporter/basic.html#BasicExporter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.exporter.basic.BasicExporter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Generic</span></code></p>
+<p>Handles basic, single-threaded export of language representations to TSV.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>language</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="yumcha.core.html#yumcha.core.language.Language" title="yumcha.core.language.Language"><code class="xref py py-class docutils literal notranslate"><span class="pre">Language</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">TypeVar</span></code>(<code class="docutils literal notranslate"><span class="pre">PhonologyRepresentationT</span></code>, bound= <a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.representation.PhonologyRepresentation" title="yumcha.core.models.representation.PhonologyRepresentation"><code class="xref py py-class docutils literal notranslate"><span class="pre">PhonologyRepresentation</span></code></a>)]</span>)</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="yumcha.exporter.basic.BasicExporter.export">
+<span class="sig-name descname"><span class="pre">export</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">progress_bar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yumcha/exporter/basic.html#BasicExporter.export"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.exporter.basic.BasicExporter.export" title="Link to this definition"></a></dt>
+<dd><p>Exports all generated phonological representations and scheme conversions to a TSV file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></span>) – Target file path for the TSV output.</p></li>
+<li><p><strong>progress_bar</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="yumcha.core.iterator.html#yumcha.core.iterator.wrappers.ProgressBarWrapper" title="yumcha.core.iterator.wrappers.ProgressBarWrapper"><code class="xref py py-type docutils literal notranslate"><span class="pre">ProgressBarWrapper</span></code></a> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – Optional progress bar wrapper instance.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-yumcha.exporter">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-yumcha.exporter" title="Link to this heading"></a></h2>
+<p>Exporter module providing simple sequential and parallelized multi-process exporters.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="yumcha.core.utils.html" class="btn btn-neutral float-left" title="yumcha.core.utils namespace" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="yumcha.loader.html" class="btn btn-neutral float-right" title="yumcha.loader package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, yumcha.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

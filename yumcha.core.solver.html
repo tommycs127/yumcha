@@ -1,0 +1,665 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>yumcha.core.solver package &mdash; yumcha  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="yumcha.core.utils namespace" href="yumcha.core.utils.html" />
+    <link rel="prev" title="yumcha.core.primitives namespace" href="yumcha.core.primitives.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            yumcha
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">yumcha</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="yumcha.html">yumcha namespace</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="yumcha.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="yumcha.core.html">yumcha.core package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.exporter.html">yumcha.exporter package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.loader.html">yumcha.loader package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">yumcha</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">yumcha</a></li>
+          <li class="breadcrumb-item"><a href="yumcha.html">yumcha namespace</a></li>
+          <li class="breadcrumb-item"><a href="yumcha.core.html">yumcha.core package</a></li>
+      <li class="breadcrumb-item active">yumcha.core.solver package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/yumcha.core.solver.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="yumcha-core-solver-package">
+<h1>yumcha.core.solver package<a class="headerlink" href="#yumcha-core-solver-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-yumcha.core.solver.base">
+<span id="yumcha-core-solver-base-module"></span><h2>yumcha.core.solver.base module<a class="headerlink" href="#module-yumcha.core.solver.base" title="Link to this heading"></a></h2>
+<p>Abstract base solver definition.</p>
+<p>Provides the foundational interface and shared language context for solvers
+resolving phonological representations and orthographic schemes.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="yumcha.core.solver.base.BaseSolver">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">yumcha.core.solver.base.</span></span><span class="sig-name descname"><span class="pre">BaseSolver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">language</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yumcha/core/solver/base.html#BaseSolver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.core.solver.base.BaseSolver" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Generic</span></code></p>
+<p>Abstract base class defining the uniform interface for all text solvers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>language</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="yumcha.core.html#yumcha.core.language.Language" title="yumcha.core.language.Language"><code class="xref py py-class docutils literal notranslate"><span class="pre">Language</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">TypeVar</span></code>(<code class="docutils literal notranslate"><span class="pre">PhonologyRepresentationT</span></code>, bound= <a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.representation.PhonologyRepresentation" title="yumcha.core.models.representation.PhonologyRepresentation"><code class="xref py py-class docutils literal notranslate"><span class="pre">PhonologyRepresentation</span></code></a>)]</span>)</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="yumcha.core.solver.base.BaseSolver.solve_intermediate">
+<span class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">solve_intermediate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scheme</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yumcha/core/solver/base.html#BaseSolver.solve_intermediate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.core.solver.base.BaseSolver.solve_intermediate" title="Link to this definition"></a></dt>
+<dd><p>Solves an intermediate phonological representation into a scheme solution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>text</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – Phonological representation text to convert.</p></li>
+<li><p><strong>scheme</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="yumcha.core.facades.html#yumcha.core.facades.scheme.Scheme" title="yumcha.core.facades.scheme.Scheme"><code class="xref py py-class docutils literal notranslate"><span class="pre">Scheme</span></code></a>[<a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.representation.SchemeRepresentation" title="yumcha.core.models.representation.SchemeRepresentation"><code class="xref py py-class docutils literal notranslate"><span class="pre">SchemeRepresentation</span></code></a>]</span>) – Target orthographic scheme.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.solution.Solution" title="yumcha.core.models.solution.Solution"><code class="xref py py-class docutils literal notranslate"><span class="pre">Solution</span></code></a> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A resolved <cite>Solution</cite> instance, or <cite>None</cite> if no compatible solution exists.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="yumcha.core.solver.base.BaseSolver.solve_scheme">
+<span class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">solve_scheme</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scheme</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yumcha/core/solver/base.html#BaseSolver.solve_scheme"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.core.solver.base.BaseSolver.solve_scheme" title="Link to this definition"></a></dt>
+<dd><p>Solves a scheme orthographic string into an intermediate phonological solution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>text</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – Scheme orthographic text to convert.</p></li>
+<li><p><strong>scheme</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="yumcha.core.facades.html#yumcha.core.facades.scheme.Scheme" title="yumcha.core.facades.scheme.Scheme"><code class="xref py py-class docutils literal notranslate"><span class="pre">Scheme</span></code></a>[<a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.representation.SchemeRepresentation" title="yumcha.core.models.representation.SchemeRepresentation"><code class="xref py py-class docutils literal notranslate"><span class="pre">SchemeRepresentation</span></code></a>]</span>) – Source orthographic scheme.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.solution.Solution" title="yumcha.core.models.solution.Solution"><code class="xref py py-class docutils literal notranslate"><span class="pre">Solution</span></code></a> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A resolved <cite>Solution</cite> instance, or <cite>None</cite> if no compatible solution exists.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-yumcha.core.solver.csp_solver">
+<span id="yumcha-core-solver-csp-solver-module"></span><h2>yumcha.core.solver.csp_solver module<a class="headerlink" href="#module-yumcha.core.solver.csp_solver" title="Link to this heading"></a></h2>
+<p>Constraint Satisfaction Problem (CSP) solver implementation.</p>
+<p>Solves phonological and orthographic conversions by searching candidate pattern combinations,
+enforcing feature compatibility, and eliminating invalid registrant masks.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="yumcha.core.solver.csp_solver.CSPSolver">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">yumcha.core.solver.csp_solver.</span></span><span class="sig-name descname"><span class="pre">CSPSolver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">language</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yumcha/core/solver/csp_solver.html#CSPSolver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.core.solver.csp_solver.CSPSolver" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#yumcha.core.solver.base.BaseSolver" title="yumcha.core.solver.base.BaseSolver"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseSolver</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Generic</span></code></p>
+<p>CSP-based solver for resolving text patterns to representation solutions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>language</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="yumcha.core.html#yumcha.core.language.Language" title="yumcha.core.language.Language"><code class="xref py py-class docutils literal notranslate"><span class="pre">Language</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">TypeVar</span></code>(<code class="docutils literal notranslate"><span class="pre">PhonologyRepresentationT</span></code>, bound= <a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.representation.PhonologyRepresentation" title="yumcha.core.models.representation.PhonologyRepresentation"><code class="xref py py-class docutils literal notranslate"><span class="pre">PhonologyRepresentation</span></code></a>)]</span>)</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="yumcha.core.solver.csp_solver.CSPSolver.solve_intermediate">
+<span class="sig-name descname"><span class="pre">solve_intermediate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scheme</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yumcha/core/solver/csp_solver.html#CSPSolver.solve_intermediate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.core.solver.csp_solver.CSPSolver.solve_intermediate" title="Link to this definition"></a></dt>
+<dd><p>Solves an intermediate phonological representation into a scheme solution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>text</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – Phonological representation text to convert.</p></li>
+<li><p><strong>scheme</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="yumcha.core.facades.html#yumcha.core.facades.scheme.Scheme" title="yumcha.core.facades.scheme.Scheme"><code class="xref py py-class docutils literal notranslate"><span class="pre">Scheme</span></code></a>[<a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.representation.SchemeRepresentation" title="yumcha.core.models.representation.SchemeRepresentation"><code class="xref py py-class docutils literal notranslate"><span class="pre">SchemeRepresentation</span></code></a>]</span>) – Target orthographic scheme.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.solution.Solution" title="yumcha.core.models.solution.Solution"><code class="xref py py-class docutils literal notranslate"><span class="pre">Solution</span></code></a> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A resolved <cite>Solution</cite> instance, or <cite>None</cite> if no compatible solution exists.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="yumcha.core.solver.csp_solver.CSPSolver.solve_scheme">
+<span class="sig-name descname"><span class="pre">solve_scheme</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scheme</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yumcha/core/solver/csp_solver.html#CSPSolver.solve_scheme"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.core.solver.csp_solver.CSPSolver.solve_scheme" title="Link to this definition"></a></dt>
+<dd><p>Solves a scheme orthographic string into an intermediate phonological solution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>text</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – Scheme orthographic text to convert.</p></li>
+<li><p><strong>scheme</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="yumcha.core.facades.html#yumcha.core.facades.scheme.Scheme" title="yumcha.core.facades.scheme.Scheme"><code class="xref py py-class docutils literal notranslate"><span class="pre">Scheme</span></code></a>[<a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.representation.SchemeRepresentation" title="yumcha.core.models.representation.SchemeRepresentation"><code class="xref py py-class docutils literal notranslate"><span class="pre">SchemeRepresentation</span></code></a>]</span>) – Source orthographic scheme.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.solution.Solution" title="yumcha.core.models.solution.Solution"><code class="xref py py-class docutils literal notranslate"><span class="pre">Solution</span></code></a> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A resolved <cite>Solution</cite> instance, or <cite>None</cite> if no compatible solution exists.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-yumcha.core.solver.helpers">
+<span id="yumcha-core-solver-helpers-module"></span><h2>yumcha.core.solver.helpers module<a class="headerlink" href="#module-yumcha.core.solver.helpers" title="Link to this heading"></a></h2>
+<p>Helper functions for pattern tuple merging and validation in solving.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="yumcha.core.solver.helpers.build_solution">
+<span class="sig-prename descclassname"><span class="pre">yumcha.core.solver.helpers.</span></span><span class="sig-name descname"><span class="pre">build_solution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">candidate_mask</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yumcha/core/solver/helpers.html#build_solution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.core.solver.helpers.build_solution" title="Link to this definition"></a></dt>
+<dd><p>Validates unified pattern tuples and global origin constraints
+to construct a Solution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>context</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#yumcha.core.solver.models.SolveContext" title="yumcha.core.solver.models.SolveContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">SolveContext</span></code></a></span>) – Active solve context containing source/target pattern tuples.</p></li>
+<li><p><strong>registrant_mask</strong> – Bitmask representing candidate active registrants.</p></li>
+<li><p><strong>candidate_mask</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.solution.Solution" title="yumcha.core.models.solution.Solution"><code class="xref py py-class docutils literal notranslate"><span class="pre">Solution</span></code></a> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A fully validated <cite>Solution</cite> instance, or <cite>None</cite> if unification fails
+or matches invalid origin masks.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="yumcha.core.solver.helpers.union_if_compatible">
+<span class="sig-prename descclassname"><span class="pre">yumcha.core.solver.helpers.</span></span><span class="sig-name descname"><span class="pre">union_if_compatible</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">known_pattern_tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern_tuple</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yumcha/core/solver/helpers.html#union_if_compatible"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.core.solver.helpers.union_if_compatible" title="Link to this definition"></a></dt>
+<dd><p>Merges two pattern tuples if their feature values do not conflict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>known_pattern_tuple</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.pattern_tuple.PatternTuple" title="yumcha.core.primitives.pattern_tuple.PatternTuple"><code class="xref py py-class docutils literal notranslate"><span class="pre">PatternTuple</span></code></a></span>) – Accumulated pattern tuple representing current known state.</p></li>
+<li><p><strong>pattern_tuple</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.pattern_tuple.PatternTuple" title="yumcha.core.primitives.pattern_tuple.PatternTuple"><code class="xref py py-class docutils literal notranslate"><span class="pre">PatternTuple</span></code></a></span>) – New pattern tuple to merge in.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.pattern_tuple.PatternTuple" title="yumcha.core.primitives.pattern_tuple.PatternTuple"><code class="xref py py-class docutils literal notranslate"><span class="pre">PatternTuple</span></code></a> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The merged <cite>PatternTuple</cite> if compatible, or <cite>None</cite> if feature collisions conflict.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-yumcha.core.solver.linear_solver">
+<span id="yumcha-core-solver-linear-solver-module"></span><h2>yumcha.core.solver.linear_solver module<a class="headerlink" href="#module-yumcha.core.solver.linear_solver" title="Link to this heading"></a></h2>
+<p>Linear solver implementation for deterministic phonetic mapping.</p>
+<p>Provides high-performance conversion for schemes with linear field dependencies.
+Uses regex capture groups to decompose strings into fields, narrows down valid
+registrants via bitwise mask intersection, and accumulates compatible pattern tuples.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="yumcha.core.solver.linear_solver.LinearSolver">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">yumcha.core.solver.linear_solver.</span></span><span class="sig-name descname"><span class="pre">LinearSolver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">language</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yumcha/core/solver/linear_solver.html#LinearSolver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.core.solver.linear_solver.LinearSolver" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#yumcha.core.solver.base.BaseSolver" title="yumcha.core.solver.base.BaseSolver"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseSolver</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Generic</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>language</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="yumcha.core.html#yumcha.core.language.Language" title="yumcha.core.language.Language"><code class="xref py py-class docutils literal notranslate"><span class="pre">Language</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">TypeVar</span></code>(<code class="docutils literal notranslate"><span class="pre">PhonologyRepresentationT</span></code>, bound= <a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.representation.PhonologyRepresentation" title="yumcha.core.models.representation.PhonologyRepresentation"><code class="xref py py-class docutils literal notranslate"><span class="pre">PhonologyRepresentation</span></code></a>)]</span>)</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="yumcha.core.solver.linear_solver.LinearSolver.solve_intermediate">
+<span class="sig-name descname"><span class="pre">solve_intermediate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scheme</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yumcha/core/solver/linear_solver.html#LinearSolver.solve_intermediate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.core.solver.linear_solver.LinearSolver.solve_intermediate" title="Link to this definition"></a></dt>
+<dd><p>Solves an intermediate phonological representation into a scheme solution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>text</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – Phonological representation text to convert.</p></li>
+<li><p><strong>scheme</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="yumcha.core.facades.html#yumcha.core.facades.scheme.Scheme" title="yumcha.core.facades.scheme.Scheme"><code class="xref py py-class docutils literal notranslate"><span class="pre">Scheme</span></code></a>[<a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.representation.SchemeRepresentation" title="yumcha.core.models.representation.SchemeRepresentation"><code class="xref py py-class docutils literal notranslate"><span class="pre">SchemeRepresentation</span></code></a>]</span>) – Target orthographic scheme.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.solution.Solution" title="yumcha.core.models.solution.Solution"><code class="xref py py-class docutils literal notranslate"><span class="pre">Solution</span></code></a> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A resolved <cite>Solution</cite> instance, or <cite>None</cite> if no compatible solution exists.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="yumcha.core.solver.linear_solver.LinearSolver.solve_scheme">
+<span class="sig-name descname"><span class="pre">solve_scheme</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scheme</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yumcha/core/solver/linear_solver.html#LinearSolver.solve_scheme"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.core.solver.linear_solver.LinearSolver.solve_scheme" title="Link to this definition"></a></dt>
+<dd><p>Solves a scheme orthographic string into an intermediate phonological solution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>text</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – Scheme orthographic text to convert.</p></li>
+<li><p><strong>scheme</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="yumcha.core.facades.html#yumcha.core.facades.scheme.Scheme" title="yumcha.core.facades.scheme.Scheme"><code class="xref py py-class docutils literal notranslate"><span class="pre">Scheme</span></code></a>[<a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.representation.SchemeRepresentation" title="yumcha.core.models.representation.SchemeRepresentation"><code class="xref py py-class docutils literal notranslate"><span class="pre">SchemeRepresentation</span></code></a>]</span>) – Source orthographic scheme.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.solution.Solution" title="yumcha.core.models.solution.Solution"><code class="xref py py-class docutils literal notranslate"><span class="pre">Solution</span></code></a> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A resolved <cite>Solution</cite> instance, or <cite>None</cite> if no compatible solution exists.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-yumcha.core.solver.models">
+<span id="yumcha-core-solver-models-module"></span><h2>yumcha.core.solver.models module<a class="headerlink" href="#module-yumcha.core.solver.models" title="Link to this heading"></a></h2>
+<p>Data models and search state structures for CSP solving.</p>
+<p>Defines directives, search contexts, candidates, and state representations
+for standard and Minimum Remaining Values (MRV) search algorithms.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="yumcha.core.solver.models.Candidate">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">yumcha.core.solver.models.</span></span><span class="sig-name descname"><span class="pre">Candidate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pattern</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">registrant_mask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">span</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yumcha/core/solver/models.html#Candidate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.core.solver.models.Candidate" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents a candidate pattern match within a field slot.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="yumcha.core.solver.models.Candidate.pattern">
+<span class="sig-name descname"><span class="pre">pattern</span></span><a class="headerlink" href="#yumcha.core.solver.models.Candidate.pattern" title="Link to this definition"></a></dt>
+<dd><p>The matched string pattern.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="yumcha.core.solver.models.Candidate.registrant_mask">
+<span class="sig-name descname"><span class="pre">registrant_mask</span></span><a class="headerlink" href="#yumcha.core.solver.models.Candidate.registrant_mask" title="Link to this definition"></a></dt>
+<dd><p>Bitmask of valid registrants associated with this pattern.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="yumcha.core.solver.models.Candidate.span">
+<span class="sig-name descname"><span class="pre">span</span></span><a class="headerlink" href="#yumcha.core.solver.models.Candidate.span" title="Link to this definition"></a></dt>
+<dd><p>Character offset range <cite>(start, end)</cite> in the source text, or <cite>None</cite> if empty.</p>
+</dd></dl>
+
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pattern</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>)</p></li>
+<li><p><strong>registrant_mask</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>)</p></li>
+<li><p><strong>span</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>] | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">pattern</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">registrant_mask</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></span><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">span</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="yumcha.core.solver.models.Candidate.str_mask">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">str_mask</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></span><a class="headerlink" href="#yumcha.core.solver.models.Candidate.str_mask" title="Link to this definition"></a></dt>
+<dd><p>Computes a bitmask representing the character span coverage in source text.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>An integer bitmask with bits set for each matched character position.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="yumcha.core.solver.models.SearchState">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">yumcha.core.solver.models.</span></span><span class="sig-name descname"><span class="pre">SearchState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">registrant_mask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selected</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yumcha/core/solver/models.html#SearchState"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.core.solver.models.SearchState" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Tracks linear depth-first search state across field indices.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="yumcha.core.solver.models.SearchState.field_index">
+<span class="sig-name descname"><span class="pre">field_index</span></span><a class="headerlink" href="#yumcha.core.solver.models.SearchState.field_index" title="Link to this definition"></a></dt>
+<dd><p>Current field index being processed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="yumcha.core.solver.models.SearchState.registrant_mask">
+<span class="sig-name descname"><span class="pre">registrant_mask</span></span><a class="headerlink" href="#yumcha.core.solver.models.SearchState.registrant_mask" title="Link to this definition"></a></dt>
+<dd><p>Combined bitmask of surviving compatible registrants.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="yumcha.core.solver.models.SearchState.selected">
+<span class="sig-name descname"><span class="pre">selected</span></span><a class="headerlink" href="#yumcha.core.solver.models.SearchState.selected" title="Link to this definition"></a></dt>
+<dd><p>Sequence of chosen <cite>Candidate</cite> matches.</p>
+</dd></dl>
+
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>field_index</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>)</p></li>
+<li><p><strong>registrant_mask</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>)</p></li>
+<li><p><strong>selected</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<a class="reference internal" href="#yumcha.core.solver.models.Candidate" title="yumcha.core.solver.models.Candidate"><code class="xref py py-class docutils literal notranslate"><span class="pre">Candidate</span></code></a>, <code class="xref py py-data docutils literal notranslate"><span class="pre">...</span></code>]</span>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id3">
+<span class="sig-name descname"><span class="pre">field_index</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></span><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id4">
+<span class="sig-name descname"><span class="pre">registrant_mask</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></span><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id5">
+<span class="sig-name descname"><span class="pre">selected</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#yumcha.core.solver.models.Candidate" title="yumcha.core.solver.models.Candidate"><span class="pre">Candidate</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#id5" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="yumcha.core.solver.models.SearchState.selected_text">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">selected_text</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#yumcha.core.solver.models.SearchState.selected_text" title="Link to this definition"></a></dt>
+<dd><p>Concatenates candidate patterns into the assembled output text.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The combined source or target string for currently selected candidates.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="yumcha.core.solver.models.SearchStateMRV">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">yumcha.core.solver.models.</span></span><span class="sig-name descname"><span class="pre">SearchStateMRV</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">remaining_fields_mask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">registrant_mask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selected</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yumcha/core/solver/models.html#SearchStateMRV"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.core.solver.models.SearchStateMRV" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Tracks state for Minimum Remaining Values (MRV) heuristic depth-first search.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="yumcha.core.solver.models.SearchStateMRV.remaining_fields_mask">
+<span class="sig-name descname"><span class="pre">remaining_fields_mask</span></span><a class="headerlink" href="#yumcha.core.solver.models.SearchStateMRV.remaining_fields_mask" title="Link to this definition"></a></dt>
+<dd><p>Bitmask indicating remaining unassigned fields.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="yumcha.core.solver.models.SearchStateMRV.registrant_mask">
+<span class="sig-name descname"><span class="pre">registrant_mask</span></span><a class="headerlink" href="#yumcha.core.solver.models.SearchStateMRV.registrant_mask" title="Link to this definition"></a></dt>
+<dd><p>Combined bitmask of surviving compatible registrants.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="yumcha.core.solver.models.SearchStateMRV.selected">
+<span class="sig-name descname"><span class="pre">selected</span></span><a class="headerlink" href="#yumcha.core.solver.models.SearchStateMRV.selected" title="Link to this definition"></a></dt>
+<dd><p>Tuples of <cite>(field_index, Candidate)</cite> for made assignments.</p>
+</dd></dl>
+
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>remaining_fields_mask</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>)</p></li>
+<li><p><strong>registrant_mask</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>)</p></li>
+<li><p><strong>selected</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <a class="reference internal" href="#yumcha.core.solver.models.Candidate" title="yumcha.core.solver.models.Candidate"><code class="xref py py-class docutils literal notranslate"><span class="pre">Candidate</span></code></a>], <code class="xref py py-data docutils literal notranslate"><span class="pre">...</span></code>]</span>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id6">
+<span class="sig-name descname"><span class="pre">registrant_mask</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></span><a class="headerlink" href="#id6" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id7">
+<span class="sig-name descname"><span class="pre">remaining_fields_mask</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></span><a class="headerlink" href="#id7" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id8">
+<span class="sig-name descname"><span class="pre">selected</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#yumcha.core.solver.models.Candidate" title="yumcha.core.solver.models.Candidate"><span class="pre">Candidate</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#id8" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="yumcha.core.solver.models.SearchStateMRV.selected_text">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">selected_text</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#yumcha.core.solver.models.SearchStateMRV.selected_text" title="Link to this definition"></a></dt>
+<dd><p>Concatenates selected candidate patterns ordered by original field index.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The assembled string reconstituted in field-index sequence order.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="yumcha.core.solver.models.SolveContext">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">yumcha.core.solver.models.</span></span><span class="sig-name descname"><span class="pre">SolveContext</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text_norm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scheme</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directive</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_indexer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_indexer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_fields</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_fields</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scheme_to_intermediate_map</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yumcha/core/solver/models.html#SolveContext"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.core.solver.models.SolveContext" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Encapsulates static parameters and target scheme data for a solver execution.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="yumcha.core.solver.models.SolveContext.text_norm">
+<span class="sig-name descname"><span class="pre">text_norm</span></span><a class="headerlink" href="#yumcha.core.solver.models.SolveContext.text_norm" title="Link to this definition"></a></dt>
+<dd><p>Canonicalized source text to solve.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="yumcha.core.solver.models.SolveContext.scheme">
+<span class="sig-name descname"><span class="pre">scheme</span></span><a class="headerlink" href="#yumcha.core.solver.models.SolveContext.scheme" title="Link to this definition"></a></dt>
+<dd><p>The active target or source <cite>Scheme</cite> facade.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="yumcha.core.solver.models.SolveContext.directive">
+<span class="sig-name descname"><span class="pre">directive</span></span><a class="headerlink" href="#yumcha.core.solver.models.SolveContext.directive" title="Link to this definition"></a></dt>
+<dd><p>The direction of conversion (<cite>INTERMEDIATE_TO_SCHEME</cite> or vice-versa).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="yumcha.core.solver.models.SolveContext.source_indexer">
+<span class="sig-name descname"><span class="pre">source_indexer</span></span><a class="headerlink" href="#yumcha.core.solver.models.SolveContext.source_indexer" title="Link to this definition"></a></dt>
+<dd><p>Indexed pattern tuples for the source domain.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="yumcha.core.solver.models.SolveContext.target_indexer">
+<span class="sig-name descname"><span class="pre">target_indexer</span></span><a class="headerlink" href="#yumcha.core.solver.models.SolveContext.target_indexer" title="Link to this definition"></a></dt>
+<dd><p>Indexed pattern tuples for the target domain.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="yumcha.core.solver.models.SolveContext.source_fields">
+<span class="sig-name descname"><span class="pre">source_fields</span></span><a class="headerlink" href="#yumcha.core.solver.models.SolveContext.source_fields" title="Link to this definition"></a></dt>
+<dd><p>Field names for the source representation.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="yumcha.core.solver.models.SolveContext.target_fields">
+<span class="sig-name descname"><span class="pre">target_fields</span></span><a class="headerlink" href="#yumcha.core.solver.models.SolveContext.target_fields" title="Link to this definition"></a></dt>
+<dd><p>Field names for the target representation.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="yumcha.core.solver.models.SolveContext.scheme_to_intermediate_map">
+<span class="sig-name descname"><span class="pre">scheme_to_intermediate_map</span></span><a class="headerlink" href="#yumcha.core.solver.models.SolveContext.scheme_to_intermediate_map" title="Link to this definition"></a></dt>
+<dd><p>Mapping of scheme fields to intermediate indices.</p>
+</dd></dl>
+
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>text_norm</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>)</p></li>
+<li><p><strong>scheme</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="yumcha.core.facades.html#yumcha.core.facades.scheme.Scheme" title="yumcha.core.facades.scheme.Scheme"><code class="xref py py-class docutils literal notranslate"><span class="pre">Scheme</span></code></a>[<a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.representation.SchemeRepresentation" title="yumcha.core.models.representation.SchemeRepresentation"><code class="xref py py-class docutils literal notranslate"><span class="pre">SchemeRepresentation</span></code></a>]</span>)</p></li>
+<li><p><strong>directive</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#yumcha.core.solver.models.SolveDirective" title="yumcha.core.solver.models.SolveDirective"><code class="xref py py-class docutils literal notranslate"><span class="pre">SolveDirective</span></code></a></span>)</p></li>
+<li><p><strong>source_indexer</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="yumcha.core.indexer.html#yumcha.core.indexer.Indexer" title="yumcha.core.indexer.Indexer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Indexer</span></code></a></span>)</p></li>
+<li><p><strong>target_indexer</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="yumcha.core.indexer.html#yumcha.core.indexer.Indexer" title="yumcha.core.indexer.Indexer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Indexer</span></code></a></span>)</p></li>
+<li><p><strong>source_fields</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">...</span></code>]</span>)</p></li>
+<li><p><strong>target_fields</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">...</span></code>]</span>)</p></li>
+<li><p><strong>scheme_to_intermediate_map</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">mappingproxy</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">frozenset</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]]</span>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id9">
+<span class="sig-name descname"><span class="pre">directive</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#yumcha.core.solver.models.SolveDirective" title="yumcha.core.solver.models.SolveDirective"><span class="pre">SolveDirective</span></a></span><a class="headerlink" href="#id9" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id10">
+<span class="sig-name descname"><span class="pre">scheme</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="yumcha.core.facades.html#yumcha.core.facades.scheme.Scheme" title="yumcha.core.facades.scheme.Scheme"><span class="pre">Scheme</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.representation.SchemeRepresentation" title="yumcha.core.models.representation.SchemeRepresentation"><span class="pre">SchemeRepresentation</span></a><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#id10" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id11">
+<span class="sig-name descname"><span class="pre">scheme_to_intermediate_map</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">MappingProxyType</span></span><a class="headerlink" href="#id11" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id12">
+<span class="sig-name descname"><span class="pre">source_fields</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#id12" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id13">
+<span class="sig-name descname"><span class="pre">source_indexer</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="yumcha.core.indexer.html#yumcha.core.indexer.Indexer" title="yumcha.core.indexer.Indexer"><span class="pre">Indexer</span></a></span><a class="headerlink" href="#id13" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id14">
+<span class="sig-name descname"><span class="pre">target_fields</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#id14" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id15">
+<span class="sig-name descname"><span class="pre">target_indexer</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="yumcha.core.indexer.html#yumcha.core.indexer.Indexer" title="yumcha.core.indexer.Indexer"><span class="pre">Indexer</span></a></span><a class="headerlink" href="#id15" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id16">
+<span class="sig-name descname"><span class="pre">text_norm</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#id16" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="yumcha.core.solver.models.SolveDirective">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">yumcha.core.solver.models.</span></span><span class="sig-name descname"><span class="pre">SolveDirective</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yumcha/core/solver/models.html#SolveDirective"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.core.solver.models.SolveDirective" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>Specifies the direction of conversion during pattern tuple solving.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="yumcha.core.solver.models.SolveDirective.INTERMEDIATE_TO_SCHEME">
+<span class="sig-name descname"><span class="pre">INTERMEDIATE_TO_SCHEME</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></span><a class="headerlink" href="#yumcha.core.solver.models.SolveDirective.INTERMEDIATE_TO_SCHEME" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="yumcha.core.solver.models.SolveDirective.SCHEME_TO_INTERMEDIATE">
+<span class="sig-name descname"><span class="pre">SCHEME_TO_INTERMEDIATE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></span><a class="headerlink" href="#yumcha.core.solver.models.SolveDirective.SCHEME_TO_INTERMEDIATE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-yumcha.core.solver">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-yumcha.core.solver" title="Link to this heading"></a></h2>
+<p>PatternTuple satisfaction solvers for phonological and scheme parsing.</p>
+<p>Exports concrete solver implementations used to resolve source text patterns into
+valid representation constraints.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="yumcha.core.primitives.html" class="btn btn-neutral float-left" title="yumcha.core.primitives namespace" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="yumcha.core.utils.html" class="btn btn-neutral float-right" title="yumcha.core.utils namespace" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, yumcha.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

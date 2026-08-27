@@ -1,0 +1,456 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>yumcha.core.models namespace &mdash; yumcha  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="yumcha.core.primitives namespace" href="yumcha.core.primitives.html" />
+    <link rel="prev" title="yumcha.core.iterator package" href="yumcha.core.iterator.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            yumcha
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">yumcha</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="yumcha.html">yumcha namespace</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="yumcha.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="yumcha.core.html">yumcha.core package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.exporter.html">yumcha.exporter package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.loader.html">yumcha.loader package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">yumcha</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">yumcha</a></li>
+          <li class="breadcrumb-item"><a href="yumcha.html">yumcha namespace</a></li>
+          <li class="breadcrumb-item"><a href="yumcha.core.html">yumcha.core package</a></li>
+      <li class="breadcrumb-item active">yumcha.core.models namespace</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/yumcha.core.models.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-yumcha.core.models">
+<span id="yumcha-core-models-namespace"></span><h1>yumcha.core.models namespace<a class="headerlink" href="#module-yumcha.core.models" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-yumcha.core.models.representation">
+<span id="yumcha-core-models-representation-module"></span><h2>yumcha.core.models.representation module<a class="headerlink" href="#module-yumcha.core.models.representation" title="Link to this heading"></a></h2>
+<p>Data representations for phonological features and schemes.</p>
+<p>Provides abstract and base dataclass containers for feature structures,
+enabling normalized string generation and iteration over field slots.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="yumcha.core.models.representation.PhonologyRepresentation">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">yumcha.core.models.representation.</span></span><span class="sig-name descname"><span class="pre">PhonologyRepresentation</span></span><a class="reference internal" href="_modules/yumcha/core/models/representation.html#PhonologyRepresentation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.core.models.representation.PhonologyRepresentation" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#yumcha.core.models.representation.Representation" title="yumcha.core.models.representation.Representation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Representation</span></code></a></p>
+<p>Base class for intermediate phonological feature dataclasses.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="yumcha.core.models.representation.Representation">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">yumcha.core.models.representation.</span></span><span class="sig-name descname"><span class="pre">Representation</span></span><a class="reference internal" href="_modules/yumcha/core/models/representation.html#Representation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.core.models.representation.Representation" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+<p>An abstract immutable container representing feature structures.</p>
+<p>Subclasses define fields corresponding to individual features or phonological slots.
+Iterating over a <cite>Representation</cite> yields the value of each field in definition order.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="yumcha.core.models.representation.SchemeRepresentation">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">yumcha.core.models.representation.</span></span><span class="sig-name descname"><span class="pre">SchemeRepresentation</span></span><a class="reference internal" href="_modules/yumcha/core/models/representation.html#SchemeRepresentation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.core.models.representation.SchemeRepresentation" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#yumcha.core.models.representation.Representation" title="yumcha.core.models.representation.Representation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Representation</span></code></a></p>
+<p>Base class for scheme-specific feature dataclasses.</p>
+</dd></dl>
+
+</section>
+<section id="module-yumcha.core.models.solution">
+<span id="yumcha-core-models-solution-module"></span><h2>yumcha.core.models.solution module<a class="headerlink" href="#module-yumcha.core.models.solution" title="Link to this heading"></a></h2>
+<p>Data models for solved pattern tuple conversions.</p>
+<p>Provides dataclass structures for representing resolved conversion mappings between
+source and target phonological pattern tuples.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="yumcha.core.models.solution.Solution">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">yumcha.core.models.solution.</span></span><span class="sig-name descname"><span class="pre">Solution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source_indexer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_indexer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_pattern_tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_pattern_tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selected_indexes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selected_mask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directions</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yumcha/core/models/solution.html#Solution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.core.models.solution.Solution" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents a resolved conversion mapping between phonological pattern tuples.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="yumcha.core.models.solution.Solution.source_indexer">
+<span class="sig-name descname"><span class="pre">source_indexer</span></span><a class="headerlink" href="#yumcha.core.models.solution.Solution.source_indexer" title="Link to this definition"></a></dt>
+<dd><p>Indexer in the source domain used.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="yumcha.core.models.solution.Solution.target_indexer">
+<span class="sig-name descname"><span class="pre">target_indexer</span></span><a class="headerlink" href="#yumcha.core.models.solution.Solution.target_indexer" title="Link to this definition"></a></dt>
+<dd><p>Indexer in the target domain used.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="yumcha.core.models.solution.Solution.source_pattern_tuple">
+<span class="sig-name descname"><span class="pre">source_pattern_tuple</span></span><a class="headerlink" href="#yumcha.core.models.solution.Solution.source_pattern_tuple" title="Link to this definition"></a></dt>
+<dd><p>Resolved pattern tuple in the source domain.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="yumcha.core.models.solution.Solution.target_pattern_tuple">
+<span class="sig-name descname"><span class="pre">target_pattern_tuple</span></span><a class="headerlink" href="#yumcha.core.models.solution.Solution.target_pattern_tuple" title="Link to this definition"></a></dt>
+<dd><p>Resolved pattern tuple in the target domain.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="yumcha.core.models.solution.Solution.selected_indexes">
+<span class="sig-name descname"><span class="pre">selected_indexes</span></span><a class="headerlink" href="#yumcha.core.models.solution.Solution.selected_indexes" title="Link to this definition"></a></dt>
+<dd><p>Tuple of matching pattern rule indexes.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="yumcha.core.models.solution.Solution.selected_mask">
+<span class="sig-name descname"><span class="pre">selected_mask</span></span><a class="headerlink" href="#yumcha.core.models.solution.Solution.selected_mask" title="Link to this definition"></a></dt>
+<dd><p>Combined integer bitmask representing registered pattern tuple states.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="yumcha.core.models.solution.Solution.directions">
+<span class="sig-name descname"><span class="pre">directions</span></span><a class="headerlink" href="#yumcha.core.models.solution.Solution.directions" title="Link to this definition"></a></dt>
+<dd><p>Directives specifying directional mapping pattern tuples for rules used.</p>
+</dd></dl>
+
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source_indexer</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="yumcha.core.indexer.html#yumcha.core.indexer.Indexer" title="yumcha.core.indexer.Indexer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Indexer</span></code></a></span>)</p></li>
+<li><p><strong>target_indexer</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="yumcha.core.indexer.html#yumcha.core.indexer.Indexer" title="yumcha.core.indexer.Indexer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Indexer</span></code></a></span>)</p></li>
+<li><p><strong>source_pattern_tuple</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.pattern_tuple.PatternTuple" title="yumcha.core.primitives.pattern_tuple.PatternTuple"><code class="xref py py-class docutils literal notranslate"><span class="pre">PatternTuple</span></code></a></span>)</p></li>
+<li><p><strong>target_pattern_tuple</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.pattern_tuple.PatternTuple" title="yumcha.core.primitives.pattern_tuple.PatternTuple"><code class="xref py py-class docutils literal notranslate"><span class="pre">PatternTuple</span></code></a></span>)</p></li>
+<li><p><strong>selected_indexes</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">...</span></code>]</span>)</p></li>
+<li><p><strong>selected_mask</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>)</p></li>
+<li><p><strong>directions</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.directives.SchemeDirective" title="yumcha.core.primitives.directives.SchemeDirective"><code class="xref py py-class docutils literal notranslate"><span class="pre">SchemeDirective</span></code></a>, <code class="xref py py-data docutils literal notranslate"><span class="pre">...</span></code>]</span>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">directions</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.directives.SchemeDirective" title="yumcha.core.primitives.directives.SchemeDirective"><span class="pre">SchemeDirective</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">selected_indexes</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">selected_mask</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></span><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id3">
+<span class="sig-name descname"><span class="pre">source_indexer</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="yumcha.core.indexer.html#yumcha.core.indexer.Indexer" title="yumcha.core.indexer.Indexer"><span class="pre">Indexer</span></a></span><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id4">
+<span class="sig-name descname"><span class="pre">source_pattern_tuple</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.pattern_tuple.PatternTuple" title="yumcha.core.primitives.pattern_tuple.PatternTuple"><span class="pre">PatternTuple</span></a></span><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id5">
+<span class="sig-name descname"><span class="pre">target_indexer</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="yumcha.core.indexer.html#yumcha.core.indexer.Indexer" title="yumcha.core.indexer.Indexer"><span class="pre">Indexer</span></a></span><a class="headerlink" href="#id5" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id6">
+<span class="sig-name descname"><span class="pre">target_pattern_tuple</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.pattern_tuple.PatternTuple" title="yumcha.core.primitives.pattern_tuple.PatternTuple"><span class="pre">PatternTuple</span></a></span><a class="headerlink" href="#id6" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-yumcha.core.models.specs">
+<span id="yumcha-core-models-specs-module"></span><h2>yumcha.core.models.specs module<a class="headerlink" href="#module-yumcha.core.models.specs" title="Link to this heading"></a></h2>
+<p>Data specification containers for phonological and scheme definitions.</p>
+<p>Provides structured dataclasses holding parsed header fields, character sets,
+pattern_tuples, and operational directives.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="yumcha.core.models.specs.PhonologyData">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">yumcha.core.models.specs.</span></span><span class="sig-name descname"><span class="pre">PhonologyData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fields</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">charsets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">char_directives</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">invalid_pattern_tuples</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yumcha/core/models/specs.html#PhonologyData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.core.models.specs.PhonologyData" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Container holding parsed phonology data.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="yumcha.core.models.specs.PhonologyData.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#yumcha.core.models.specs.PhonologyData.id" title="Link to this definition"></a></dt>
+<dd><p>The identifier of the phonology system.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="yumcha.core.models.specs.PhonologyData.fields">
+<span class="sig-name descname"><span class="pre">fields</span></span><a class="headerlink" href="#yumcha.core.models.specs.PhonologyData.fields" title="Link to this definition"></a></dt>
+<dd><p>Tuple of header field names.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="yumcha.core.models.specs.PhonologyData.charsets">
+<span class="sig-name descname"><span class="pre">charsets</span></span><a class="headerlink" href="#yumcha.core.models.specs.PhonologyData.charsets" title="Link to this definition"></a></dt>
+<dd><p>Tuple of character sets (one set per field position).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="yumcha.core.models.specs.PhonologyData.char_directives">
+<span class="sig-name descname"><span class="pre">char_directives</span></span><a class="headerlink" href="#yumcha.core.models.specs.PhonologyData.char_directives" title="Link to this definition"></a></dt>
+<dd><p>Tuple of dictionaries mapping characters to their directives per field position.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="yumcha.core.models.specs.PhonologyData.invalid_pattern_tuples">
+<span class="sig-name descname"><span class="pre">invalid_pattern_tuples</span></span><a class="headerlink" href="#yumcha.core.models.specs.PhonologyData.invalid_pattern_tuples" title="Link to this definition"></a></dt>
+<dd><p>Tuple of pattern tuples representing invalid feature patterns or wildcards.</p>
+</dd></dl>
+
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>)</p></li>
+<li><p><strong>fields</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">...</span></code>]</span>)</p></li>
+<li><p><strong>charsets</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">set</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">...</span></code>]</span>)</p></li>
+<li><p><strong>char_directives</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.directives.PhonologyDirective" title="yumcha.core.primitives.directives.PhonologyDirective"><code class="xref py py-class docutils literal notranslate"><span class="pre">PhonologyDirective</span></code></a>], <code class="xref py py-data docutils literal notranslate"><span class="pre">...</span></code>]</span>)</p></li>
+<li><p><strong>invalid_pattern_tuples</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.pattern_tuple.PatternTuple" title="yumcha.core.primitives.pattern_tuple.PatternTuple"><code class="xref py py-class docutils literal notranslate"><span class="pre">PatternTuple</span></code></a>, <code class="xref py py-data docutils literal notranslate"><span class="pre">...</span></code>]</span>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id7">
+<span class="sig-name descname"><span class="pre">char_directives</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.directives.PhonologyDirectiveMap" title="yumcha.core.primitives.directives.PhonologyDirectiveMap"><span class="pre">PhonologyDirectiveMap</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#id7" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id8">
+<span class="sig-name descname"><span class="pre">charsets</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#id8" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id9">
+<span class="sig-name descname"><span class="pre">fields</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#id9" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id10">
+<span class="sig-name descname"><span class="pre">id</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#id10" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id11">
+<span class="sig-name descname"><span class="pre">invalid_pattern_tuples</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.pattern_tuple.PatternTuple" title="yumcha.core.primitives.pattern_tuple.PatternTuple"><span class="pre">PatternTuple</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#id11" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="yumcha.core.models.specs.PhonologyData.to_tuple">
+<span class="sig-name descname"><span class="pre">to_tuple</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/yumcha/core/models/specs.html#PhonologyData.to_tuple"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.core.models.specs.PhonologyData.to_tuple" title="Link to this definition"></a></dt>
+<dd><p>Return attributes as a strictly-typed tuple.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">...</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">set</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>], <code class="xref py py-data docutils literal notranslate"><span class="pre">...</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.directives.PhonologyDirective" title="yumcha.core.primitives.directives.PhonologyDirective"><code class="xref py py-class docutils literal notranslate"><span class="pre">PhonologyDirective</span></code></a>], <code class="xref py py-data docutils literal notranslate"><span class="pre">...</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.pattern_tuple.PatternTuple" title="yumcha.core.primitives.pattern_tuple.PatternTuple"><code class="xref py py-class docutils literal notranslate"><span class="pre">PatternTuple</span></code></a>, <code class="xref py py-data docutils literal notranslate"><span class="pre">...</span></code>]]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="yumcha.core.models.specs.SchemeData">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">yumcha.core.models.specs.</span></span><span class="sig-name descname"><span class="pre">SchemeData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intermediate_fields</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intermediate_pattern_tuples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fields</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern_tuples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">invalid_pattern_tuples</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yumcha/core/models/specs.html#SchemeData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.core.models.specs.SchemeData" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Container holding parsed schema data.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="yumcha.core.models.specs.SchemeData.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#yumcha.core.models.specs.SchemeData.id" title="Link to this definition"></a></dt>
+<dd><p>The identifier of the scheme.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="yumcha.core.models.specs.SchemeData.directions">
+<span class="sig-name descname"><span class="pre">directions</span></span><a class="headerlink" href="#yumcha.core.models.specs.SchemeData.directions" title="Link to this definition"></a></dt>
+<dd><p>Tuple of row directives across data rows.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="yumcha.core.models.specs.SchemeData.intermediate_fields">
+<span class="sig-name descname"><span class="pre">intermediate_fields</span></span><a class="headerlink" href="#yumcha.core.models.specs.SchemeData.intermediate_fields" title="Link to this definition"></a></dt>
+<dd><p>Map of intermediate field names to sets of field index positions.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="yumcha.core.models.specs.SchemeData.intermediate_pattern_tuples">
+<span class="sig-name descname"><span class="pre">intermediate_pattern_tuples</span></span><a class="headerlink" href="#yumcha.core.models.specs.SchemeData.intermediate_pattern_tuples" title="Link to this definition"></a></dt>
+<dd><p>Collection of parsed intermediate pattern pattern tuples per row.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="yumcha.core.models.specs.SchemeData.fields">
+<span class="sig-name descname"><span class="pre">fields</span></span><a class="headerlink" href="#yumcha.core.models.specs.SchemeData.fields" title="Link to this definition"></a></dt>
+<dd><p>Map of scheme field names to sets of field index positions.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="yumcha.core.models.specs.SchemeData.pattern_tuples">
+<span class="sig-name descname"><span class="pre">pattern_tuples</span></span><a class="headerlink" href="#yumcha.core.models.specs.SchemeData.pattern_tuples" title="Link to this definition"></a></dt>
+<dd><p>Collection of parsed scheme pattern pattern tuples per row.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="yumcha.core.models.specs.SchemeData.invalid_pattern_tuples">
+<span class="sig-name descname"><span class="pre">invalid_pattern_tuples</span></span><a class="headerlink" href="#yumcha.core.models.specs.SchemeData.invalid_pattern_tuples" title="Link to this definition"></a></dt>
+<dd><p>Collection of pattern tuples representing invalid feature patterns.</p>
+</dd></dl>
+
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>)</p></li>
+<li><p><strong>directions</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.directives.SchemeDirective" title="yumcha.core.primitives.directives.SchemeDirective"><code class="xref py py-class docutils literal notranslate"><span class="pre">SchemeDirective</span></code></a>, <code class="xref py py-data docutils literal notranslate"><span class="pre">...</span></code>]</span>)</p></li>
+<li><p><strong>intermediate_fields</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">frozenset</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]]</span>)</p></li>
+<li><p><strong>intermediate_pattern_tuples</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.pattern_tuple.PatternTuple" title="yumcha.core.primitives.pattern_tuple.PatternTuple"><code class="xref py py-class docutils literal notranslate"><span class="pre">PatternTuple</span></code></a>, <code class="xref py py-data docutils literal notranslate"><span class="pre">...</span></code>]</span>)</p></li>
+<li><p><strong>fields</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">frozenset</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]]</span>)</p></li>
+<li><p><strong>pattern_tuples</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.pattern_tuple.PatternTuple" title="yumcha.core.primitives.pattern_tuple.PatternTuple"><code class="xref py py-class docutils literal notranslate"><span class="pre">PatternTuple</span></code></a>, <code class="xref py py-data docutils literal notranslate"><span class="pre">...</span></code>]</span>)</p></li>
+<li><p><strong>invalid_pattern_tuples</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.pattern_tuple.PatternTuple" title="yumcha.core.primitives.pattern_tuple.PatternTuple"><code class="xref py py-class docutils literal notranslate"><span class="pre">PatternTuple</span></code></a>, <code class="xref py py-data docutils literal notranslate"><span class="pre">...</span></code>]</span>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id12">
+<span class="sig-name descname"><span class="pre">directions</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.directives.SchemeDirective" title="yumcha.core.primitives.directives.SchemeDirective"><span class="pre">SchemeDirective</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#id12" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id13">
+<span class="sig-name descname"><span class="pre">fields</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">frozenset</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#id13" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id14">
+<span class="sig-name descname"><span class="pre">id</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#id14" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id15">
+<span class="sig-name descname"><span class="pre">intermediate_fields</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">frozenset</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#id15" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id16">
+<span class="sig-name descname"><span class="pre">intermediate_pattern_tuples</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.pattern_tuple.PatternTuple" title="yumcha.core.primitives.pattern_tuple.PatternTuple"><span class="pre">PatternTuple</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#id16" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id17">
+<span class="sig-name descname"><span class="pre">invalid_pattern_tuples</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.pattern_tuple.PatternTuple" title="yumcha.core.primitives.pattern_tuple.PatternTuple"><span class="pre">PatternTuple</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#id17" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id18">
+<span class="sig-name descname"><span class="pre">pattern_tuples</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.pattern_tuple.PatternTuple" title="yumcha.core.primitives.pattern_tuple.PatternTuple"><span class="pre">PatternTuple</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#id18" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="yumcha.core.models.specs.SchemeData.to_tuple">
+<span class="sig-name descname"><span class="pre">to_tuple</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/yumcha/core/models/specs.html#SchemeData.to_tuple"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.core.models.specs.SchemeData.to_tuple" title="Link to this definition"></a></dt>
+<dd><p>Return attributes as a strictly-typed tuple.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.directives.SchemeDirective" title="yumcha.core.primitives.directives.SchemeDirective"><code class="xref py py-class docutils literal notranslate"><span class="pre">SchemeDirective</span></code></a>, <code class="xref py py-data docutils literal notranslate"><span class="pre">...</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">frozenset</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]], <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.pattern_tuple.PatternTuple" title="yumcha.core.primitives.pattern_tuple.PatternTuple"><code class="xref py py-class docutils literal notranslate"><span class="pre">PatternTuple</span></code></a>, <code class="xref py py-data docutils literal notranslate"><span class="pre">...</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">frozenset</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]], <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.pattern_tuple.PatternTuple" title="yumcha.core.primitives.pattern_tuple.PatternTuple"><code class="xref py py-class docutils literal notranslate"><span class="pre">PatternTuple</span></code></a>, <code class="xref py py-data docutils literal notranslate"><span class="pre">...</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.pattern_tuple.PatternTuple" title="yumcha.core.primitives.pattern_tuple.PatternTuple"><code class="xref py py-class docutils literal notranslate"><span class="pre">PatternTuple</span></code></a>, <code class="xref py py-data docutils literal notranslate"><span class="pre">...</span></code>]]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="yumcha.core.iterator.html" class="btn btn-neutral float-left" title="yumcha.core.iterator package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="yumcha.core.primitives.html" class="btn btn-neutral float-right" title="yumcha.core.primitives namespace" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, yumcha.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

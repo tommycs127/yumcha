@@ -1,0 +1,556 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>yumcha.core.indexer &mdash; yumcha  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            yumcha
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">yumcha</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">yumcha</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">yumcha.core.indexer</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for yumcha.core.indexer</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""PatternTuple indexing system.</span>
+
+<span class="sd">Provides containers to load, index and sort pattern tuples into</span>
+<span class="sd">positional bitmasks for performant evaluation and lookup.</span>
+<span class="sd">"""</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sequence</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">types</span><span class="w"> </span><span class="kn">import</span> <span class="n">MappingProxyType</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..primitives.pattern_tuple</span><span class="w"> </span><span class="kn">import</span> <span class="n">PatternTuple</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..utils.collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">SequenceProxy</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..primitives.directives</span><span class="w"> </span><span class="kn">import</span> <span class="n">SchemeDirective</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..primitives.pattern</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pattern</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.models</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+        <span class="n">PatternIndexes</span><span class="p">,</span>
+        <span class="n">PatternIndexesView</span><span class="p">,</span>
+        <span class="n">PatternMasks</span><span class="p">,</span>
+        <span class="n">PatternMasksView</span><span class="p">,</span>
+    <span class="p">)</span>
+
+<span class="n">ELLIPSIS</span> <span class="o">=</span> <span class="o">...</span>
+
+
+<div class="viewcode-block" id="Indexer">
+<a class="viewcode-back" href="../../../yumcha.core.indexer.html#yumcha.core.indexer.Indexer">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Indexer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Manages loading, sorting, bitmask compiling, and index tracking for pattern tuples.</span>
+
+<span class="sd">    Pattern tuples are sorted by weight upon registration and indexed using bitmasks</span>
+<span class="sd">    for each field position to accelerate pattern matching against valid operational directives.</span>
+<span class="sd">    """</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Initializes an empty Indexer container."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pattern_tuples</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">PatternTuple</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pattern_tuples_view</span><span class="p">:</span> <span class="n">SequenceProxy</span><span class="p">[</span><span class="n">PatternTuple</span><span class="p">]</span> <span class="o">=</span> <span class="n">SequenceProxy</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_pattern_tuples</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pattern_tuples_frozenset</span><span class="p">:</span> <span class="nb">frozenset</span><span class="p">[</span><span class="n">PatternTuple</span><span class="p">]</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_directions</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">SchemeDirective</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_directions_view</span><span class="p">:</span> <span class="n">SequenceProxy</span><span class="p">[</span><span class="n">SchemeDirective</span><span class="p">]</span> <span class="o">=</span> <span class="n">SequenceProxy</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_directions</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sorted_indexes</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sorted_indexes_view</span><span class="p">:</span> <span class="n">SequenceProxy</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">SequenceProxy</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_sorted_indexes</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_index_ranks</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_index_ranks_view</span><span class="p">:</span> <span class="n">SequenceProxy</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">SequenceProxy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_index_ranks</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pattern_masks_by_fields</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">PatternMasksView</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pattern_masks_by_fields_view</span><span class="p">:</span> <span class="n">SequenceProxy</span><span class="p">[</span><span class="n">PatternMasksView</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">SequenceProxy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_pattern_masks_by_fields</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_charsets</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">frozenset</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_charsets_view</span><span class="p">:</span> <span class="n">SequenceProxy</span><span class="p">[</span><span class="nb">frozenset</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="n">SequenceProxy</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_charsets</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_invalid_pattern_tuples</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">PatternTuple</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_invalid_pattern_tuples_view</span><span class="p">:</span> <span class="n">SequenceProxy</span><span class="p">[</span><span class="n">PatternTuple</span><span class="p">]</span> <span class="o">=</span> <span class="n">SequenceProxy</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_invalid_pattern_tuples</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_invalid_pattern_masks</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_invalid_pattern_masks_view</span><span class="p">:</span> <span class="n">SequenceProxy</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">SequenceProxy</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_invalid_pattern_masks</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_invalid_pattern_masks_indexes_by_fields</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">PatternIndexesView</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_invalid_pattern_masks_indexes_by_fields_view</span><span class="p">:</span> <span class="n">SequenceProxy</span><span class="p">[</span>
+            <span class="n">PatternIndexesView</span>
+        <span class="p">]</span> <span class="o">=</span> <span class="n">SequenceProxy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_invalid_pattern_masks_indexes_by_fields</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">pattern_tuples</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SequenceProxy</span><span class="p">[</span><span class="n">PatternTuple</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Gets a read-only view of registered pattern tuples.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            SequenceProxy of registered `PatternTuple` instances.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pattern_tuples_view</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">pattern_tuples_set</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">frozenset</span><span class="p">[</span><span class="n">PatternTuple</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Gets a frozenset lookup table of registered pattern tuples.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Frozenset containing all registered `PatternTuple` instances.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pattern_tuples_frozenset</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">directions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SequenceProxy</span><span class="p">[</span><span class="n">SchemeDirective</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Gets a read-only view of directives corresponding to registered pattern tuples.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            SequenceProxy of `SchemeDirective` items aligned with `pattern_tuples`.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_directions_view</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">sorted_indexes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SequenceProxy</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Gets pattern tuple indices sorted in descending order by weight.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            SequenceProxy of original integer indices ordered by descending weight.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sorted_indexes_view</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">index_ranks</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SequenceProxy</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Gets the sorted rank position for each original pattern tuple index.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            SequenceProxy of rank integers indexed by original tuple position.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_index_ranks_view</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">pattern_masks_by_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SequenceProxy</span><span class="p">[</span><span class="n">PatternMasksView</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Gets compiled pattern-to-bitmask mappings per field position.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            SequenceProxy of read-only pattern-to-bitmask mappings for each field.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pattern_masks_by_fields_view</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">charsets</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SequenceProxy</span><span class="p">[</span><span class="nb">frozenset</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">"""Gets explicit string character sets present at each field position.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            SequenceProxy of frozensets containing string patterns per field slot.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_charsets_view</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">invalid_pattern_tuples</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SequenceProxy</span><span class="p">[</span><span class="n">PatternTuple</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Gets a read-only view of registered invalid/prohibited pattern tuples.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            SequenceProxy of invalid `PatternTuple` instances used for validation.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_invalid_pattern_tuples_view</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">invalid_pattern_masks</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SequenceProxy</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Gets compiled conflict bitmasks corresponding to invalid pattern tuples.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            SequenceProxy of bitmask integers identifying valid tuples that conflict with invalid rules.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_invalid_pattern_masks_view</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">invalid_pattern_masks_indexes_by_fields</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SequenceProxy</span><span class="p">[</span><span class="n">PatternIndexesView</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Gets field-wise index lookups mapping patterns to invalid tuple array indices.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            SequenceProxy of mappings from pattern tokens to sets of invalid tuple indices.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_invalid_pattern_masks_indexes_by_fields_view</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">pattern_tuple_length</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Gets the fixed slot count (number of fields) across registered pattern tuples.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Integer length of field slots in registered pattern tuples.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If no pattern tuples are currently loaded.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="n">pattern_tuples</span> <span class="o">:=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pattern_tuples</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">pattern_tuples</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"unknown length (no pattern tuples are loaded)"</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Indexer.load">
+<a class="viewcode-back" href="../../../yumcha.core.indexer.html#yumcha.core.indexer.Indexer.load">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">pattern_sequences</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Pattern</span><span class="p">]],</span>
+        <span class="n">directions</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">SchemeDirective</span><span class="p">],</span>
+        <span class="n">allowed_directions</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="n">SchemeDirective</span><span class="p">],</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Loads, sorts, compiles bitmasks, and extracts charsets for pattern sequences.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            pattern_sequences: Sequences of pattern elements representing constraint rules.</span>
+<span class="sd">            directions: Conversion directives corresponding to each pattern sequence.</span>
+<span class="sd">            allowed_directions: Set of directives permitted during bitmask compilation.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If `pattern_sequences` is empty, lengths mismatch `directions`,</span>
+<span class="sd">                sequence slot lengths vary, or all sequences contain wildcards at any single position.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">pattern_sequences</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"at least one pattern tuple is required"</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reset</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_register</span><span class="p">(</span><span class="n">pattern_sequences</span><span class="p">,</span> <span class="n">directions</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sort_and_rank_indexes_by_weight</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_compile</span><span class="p">(</span><span class="n">allowed_directions</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_extract_explicit_charsets</span><span class="p">()</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_reset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Clears all compiled pattern data while preserving its read-only views."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pattern_tuples</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pattern_tuples_frozenset</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_directions</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sorted_indexes</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_index_ranks</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pattern_masks_by_fields</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_charsets</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reset_validation_data</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_reset_validation_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Clears all compiled validation and invalid pattern data structures."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_invalid_pattern_tuples</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_invalid_pattern_masks</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_invalid_pattern_masks_indexes_by_fields</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_register</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">pattern_sequences</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Pattern</span><span class="p">]],</span>
+        <span class="n">directions</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">SchemeDirective</span><span class="p">],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Registers pattern tuple sequences.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            sequences: Sequences of pattern sequences to register.</span>
+<span class="sd">            directions: Scheme directives corresponding to each sequence.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If the length of sequences and directions is not the same,</span>
+<span class="sd">                or if any pattern sequence length differs from the first sequence length.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">sequences_length</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pattern_sequences</span><span class="p">))</span> <span class="o">!=</span> <span class="p">(</span>
+            <span class="n">directions_length</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">directions</span><span class="p">)</span>
+        <span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"expecting directions length of </span><span class="si">{</span><span class="n">sequences_length</span><span class="si">}</span><span class="s2">, got </span><span class="si">{</span><span class="n">directions_length</span><span class="si">}</span><span class="s2">"</span>
+            <span class="p">)</span>
+
+        <span class="n">expected_pattern_tuple_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pattern_sequences</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="n">pattern_tuples</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">PatternTuple</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">append_pattern_tuple</span> <span class="o">=</span> <span class="n">pattern_tuples</span><span class="o">.</span><span class="n">append</span>
+
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">sequence</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">pattern_sequences</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sequence</span><span class="p">)</span> <span class="o">!=</span> <span class="n">expected_pattern_tuple_length</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">"expecting length of </span><span class="si">{</span><span class="n">expected_pattern_tuple_length</span><span class="si">}</span><span class="s2">, "</span>
+                    <span class="o">+</span> <span class="sa">f</span><span class="s2">"got </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">sequence</span><span class="p">)</span><span class="si">}</span><span class="s2"> at index </span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2"> [</span><span class="si">{</span><span class="n">sequence</span><span class="si">!r}</span><span class="s2">]"</span>
+                <span class="p">)</span>
+
+            <span class="n">append_pattern_tuple</span><span class="p">(</span><span class="n">PatternTuple</span><span class="p">(</span><span class="n">sequence</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pattern_tuples</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">pattern_tuples</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pattern_tuples_frozenset</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">(</span><span class="n">pattern_tuples</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_directions</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">directions</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_sort_and_rank_indexes_by_weight</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Sorts pattern tuple indices by weight in descending order and assigns rank positions."""</span>
+        <span class="n">pattern_tuples</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pattern_tuples</span>
+        <span class="n">pattern_tuples_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pattern_tuples</span><span class="p">)</span>
+
+        <span class="n">weighted_indexes</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
+            <span class="p">((</span><span class="n">pattern_tuples</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span> <span class="n">idx</span><span class="p">)</span> <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">pattern_tuples_length</span><span class="p">)),</span>
+            <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">item</span><span class="p">:</span> <span class="n">item</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">sorted_indexes</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">weighted_indexes</span><span class="p">]</span>
+        <span class="n">index_ranks</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">pattern_tuples_length</span>
+
+        <span class="k">for</span> <span class="n">rank</span><span class="p">,</span> <span class="n">origin_idx</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sorted_indexes</span><span class="p">):</span>
+            <span class="n">index_ranks</span><span class="p">[</span><span class="n">origin_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">rank</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sorted_indexes</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">sorted_indexes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_index_ranks</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">index_ranks</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_compile</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">allowed_directions</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="n">SchemeDirective</span><span class="p">],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Compiles field-by-field bitmasks for registered pattern tuples</span>
+<span class="sd">        matching allowed directions.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            allowed_directions: Directives that should be included in bitmask generation.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If every pattern tuple contains a wildcard at the same field index.</span>
+<span class="sd">        """</span>
+        <span class="n">pattern_tuples</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pattern_tuples</span>
+        <span class="n">directions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_directions</span>
+        <span class="n">pattern_tuple_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pattern_tuples</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">if</span> <span class="n">pattern_tuples</span> <span class="k">else</span> <span class="mi">0</span>
+
+        <span class="n">pattern_masks_by_fields</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">PatternMasks</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">{}</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">pattern_tuple_length</span><span class="p">)</span>
+        <span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">pattern_tuple</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">pattern_tuples</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">directions</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">allowed_directions</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="n">bit</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">idx</span>
+
+            <span class="k">for</span> <span class="n">pattern_idx</span><span class="p">,</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">pattern_tuple</span><span class="p">):</span>
+                <span class="n">pattern_masks</span> <span class="o">=</span> <span class="n">pattern_masks_by_fields</span><span class="p">[</span><span class="n">pattern_idx</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">pattern_masks</span><span class="p">:</span>
+                    <span class="n">pattern_masks</span><span class="p">[</span><span class="n">pattern</span><span class="p">]</span> <span class="o">|=</span> <span class="n">bit</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">pattern_masks</span><span class="p">[</span><span class="n">pattern</span><span class="p">]</span> <span class="o">=</span> <span class="n">bit</span>
+
+        <span class="n">full_mask</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">pattern_tuples</span><span class="p">))</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="n">_ellipsis</span> <span class="o">=</span> <span class="n">ELLIPSIS</span>
+
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">pattern_masks</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">pattern_masks_by_fields</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">_ellipsis</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">pattern_masks</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="n">wildcard_mask</span> <span class="o">=</span> <span class="n">pattern_masks</span><span class="p">[</span><span class="n">_ellipsis</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">wildcard_mask</span> <span class="o">==</span> <span class="n">full_mask</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">"all pattern tuples contain a wildcard at index </span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">"</span>
+                <span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">wildcard_mask</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">pattern_masks</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">pattern</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_ellipsis</span><span class="p">:</span>
+                        <span class="n">pattern_masks</span><span class="p">[</span><span class="n">pattern</span><span class="p">]</span> <span class="o">|=</span> <span class="n">wildcard_mask</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pattern_masks_by_fields</span><span class="p">[:]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">MappingProxyType</span><span class="p">(</span><span class="n">pattern_masks</span><span class="p">)</span> <span class="k">for</span> <span class="n">pattern_masks</span> <span class="ow">in</span> <span class="n">pattern_masks_by_fields</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_extract_explicit_charsets</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Extracts frozensets of explicit string patterns present at each field position."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_charsets</span><span class="p">[:]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="nb">frozenset</span><span class="p">(</span><span class="n">pattern</span> <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">pattern_masks</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="nb">str</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">pattern_masks</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pattern_masks_by_fields</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="Indexer.load_invalid_patterns">
+<a class="viewcode-back" href="../../../yumcha.core.indexer.html#yumcha.core.indexer.Indexer.load_invalid_patterns">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_invalid_patterns</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">invalid_pattern_sequences</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Pattern</span><span class="p">]],</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Loads, registers, and compiles bitmask filters for invalid pattern sequences.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            invalid_pattern_sequences: Sequences of prohibited pattern combinations.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If an invalid tuple contradicts all valid tuples or is already</span>
+<span class="sd">                registered as a valid pattern tuple.</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reset_validation_data</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_register_validation_data</span><span class="p">(</span><span class="n">invalid_pattern_sequences</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_compile_validation_data</span><span class="p">()</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_register_validation_data</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">invalid_pattern_sequences</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Pattern</span><span class="p">]],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Registers invalid pattern sequences into `PatternTuple` instances.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            invalid_pattern_sequences: Sequences of prohibited pattern combinations to register.</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_invalid_pattern_tuples</span><span class="p">[:]</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">PatternTuple</span><span class="p">(</span><span class="n">invalid_pattern_sequence</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">invalid_pattern_sequence</span> <span class="ow">in</span> <span class="n">invalid_pattern_sequences</span>
+        <span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_compile_validation_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Compiles conflict bitmasks and field index mappings for invalid pattern tuples.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If an invalid tuple invalidates all registered tuples (full mask conflict)</span>
+<span class="sd">                or was already registered as a valid pattern tuple.</span>
+<span class="sd">        """</span>
+        <span class="n">pattern_masks_by_fields</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pattern_masks_by_fields</span>
+        <span class="n">pattern_tuples_frozenset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pattern_tuples_frozenset</span>
+        <span class="n">invalid_pattern_tuples</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_invalid_pattern_tuples</span>
+
+        <span class="n">pattern_tuple_length</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pattern_tuple_length</span>
+
+        <span class="n">invalid_pattern_masks</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">invalid_pattern_masks_indexes_by_fields</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">PatternIndexes</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">{}</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">pattern_tuple_length</span><span class="p">)</span>
+        <span class="p">]</span>
+
+        <span class="n">full_mask</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_pattern_tuples</span><span class="p">))</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="n">_ellipsis</span> <span class="o">=</span> <span class="n">ELLIPSIS</span>
+
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">invalid_pattern_tuple</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">invalid_pattern_tuples</span><span class="p">):</span>
+            <span class="n">invalid_pattern_mask</span> <span class="o">=</span> <span class="n">full_mask</span>
+
+            <span class="k">for</span> <span class="n">pattern_idx</span><span class="p">,</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">invalid_pattern_tuple</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">pattern</span> <span class="ow">is</span> <span class="n">_ellipsis</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+                <span class="n">pattern_masks</span> <span class="o">=</span> <span class="n">pattern_masks_by_fields</span><span class="p">[</span><span class="n">pattern_idx</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">invalid_pattern_mask</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">pattern</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">pattern_masks</span><span class="p">:</span>
+                        <span class="n">invalid_pattern_mask</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">invalid_pattern_mask</span> <span class="o">&amp;=</span> <span class="n">pattern_masks</span><span class="p">[</span><span class="n">pattern</span><span class="p">]</span>
+
+                <span class="n">invalid_pattern_masks_indexes</span> <span class="o">=</span> <span class="n">invalid_pattern_masks_indexes_by_fields</span><span class="p">[</span>
+                    <span class="n">pattern_idx</span>
+                <span class="p">]</span>
+                <span class="k">if</span> <span class="n">pattern</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">invalid_pattern_masks_indexes</span><span class="p">:</span>
+                    <span class="n">invalid_pattern_masks_indexes</span><span class="p">[</span><span class="n">pattern</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">idx</span><span class="p">}</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">invalid_pattern_masks_indexes</span><span class="p">[</span><span class="n">pattern</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">invalid_pattern_mask</span> <span class="o">==</span> <span class="n">full_mask</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">"invalid pattern tuple </span><span class="si">{</span><span class="n">invalid_pattern_tuple</span><span class="si">!r}</span><span class="s2"> "</span>
+                    <span class="o">+</span> <span class="s2">"contradicts all existing pattern tuples"</span>
+                <span class="p">)</span>
+            <span class="k">elif</span> <span class="n">invalid_pattern_tuple</span> <span class="ow">in</span> <span class="n">pattern_tuples_frozenset</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">"invalid pattern tuple </span><span class="si">{</span><span class="n">invalid_pattern_tuple</span><span class="si">!r}</span><span class="s2"> "</span>
+                    <span class="o">+</span> <span class="s2">"is already registered as a valid pattern tuple"</span>
+                <span class="p">)</span>
+
+            <span class="n">invalid_pattern_masks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">invalid_pattern_mask</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_invalid_pattern_masks</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">invalid_pattern_masks</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_invalid_pattern_masks_indexes_by_fields</span><span class="p">[:]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">MappingProxyType</span><span class="p">({</span><span class="n">k</span><span class="p">:</span> <span class="nb">frozenset</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">field_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()})</span>
+            <span class="k">for</span> <span class="n">field_dict</span> <span class="ow">in</span> <span class="n">invalid_pattern_masks_indexes_by_fields</span>
+        <span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, yumcha.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

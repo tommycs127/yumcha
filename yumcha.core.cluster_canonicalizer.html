@@ -1,0 +1,334 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>yumcha.core.cluster_canonicalizer package &mdash; yumcha  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="yumcha.core.conversion_pipeline package" href="yumcha.core.conversion_pipeline.html" />
+    <link rel="prev" title="yumcha.core package" href="yumcha.core.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            yumcha
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">yumcha</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="yumcha.html">yumcha namespace</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="yumcha.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="yumcha.core.html">yumcha.core package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.exporter.html">yumcha.exporter package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.loader.html">yumcha.loader package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">yumcha</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">yumcha</a></li>
+          <li class="breadcrumb-item"><a href="yumcha.html">yumcha namespace</a></li>
+          <li class="breadcrumb-item"><a href="yumcha.core.html">yumcha.core package</a></li>
+      <li class="breadcrumb-item active">yumcha.core.cluster_canonicalizer package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/yumcha.core.cluster_canonicalizer.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="yumcha-core-cluster-canonicalizer-package">
+<h1>yumcha.core.cluster_canonicalizer package<a class="headerlink" href="#yumcha-core-cluster-canonicalizer-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-yumcha.core.cluster_canonicalizer.helpers">
+<span id="yumcha-core-cluster-canonicalizer-helpers-module"></span><h2>yumcha.core.cluster_canonicalizer.helpers module<a class="headerlink" href="#module-yumcha.core.cluster_canonicalizer.helpers" title="Link to this heading"></a></h2>
+<p>Helper utilities for Unicode grapheme cluster splitting and key conversion.</p>
+<p>Provides functions to decompose NFD-normalized strings into grapheme clusters
+and convert clusters into order-invariant <cite>ClusterKey</cite> instances.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="yumcha.core.cluster_canonicalizer.helpers.split_clusters">
+<span class="sig-prename descclassname"><span class="pre">yumcha.core.cluster_canonicalizer.helpers.</span></span><span class="sig-name descname"><span class="pre">split_clusters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text_nfd</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yumcha/core/cluster_canonicalizer/helpers.html#split_clusters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.core.cluster_canonicalizer.helpers.split_clusters" title="Link to this definition"></a></dt>
+<dd><p>Splits an NFD-normalized string into individual grapheme clusters.</p>
+<p>Iterates through the Unicode characters of an NFD string and groups base
+characters (<cite>unicodedata.combining(char) == 0</cite>) with their subsequent
+combining marks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>text_nfd</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – An NFD (Normalization Form Canonical Decomposition) normalized
+string.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">...</span></code>]</span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A tuple of string clusters, where each cluster contains a base character
+followed by its associated combining marks (or leading combining marks
+grouped together if present at the start of the string).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="yumcha.core.cluster_canonicalizer.helpers.to_cluster_key">
+<span class="sig-prename descclassname"><span class="pre">yumcha.core.cluster_canonicalizer.helpers.</span></span><span class="sig-name descname"><span class="pre">to_cluster_key</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">char</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yumcha/core/cluster_canonicalizer/helpers.html#to_cluster_key"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.core.cluster_canonicalizer.helpers.to_cluster_key" title="Link to this definition"></a></dt>
+<dd><p>Converts a grapheme cluster string into a canonical ClusterKey representation.</p>
+<p>Extracts the base character and sorts any attached combining marks lexicographically
+to produce a consistent, order-invariant key representation of the cluster.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>char</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – A string representing a single grapheme cluster (e.g., a base character
+followed by combining marks).</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#yumcha.core.cluster_canonicalizer.models.ClusterKey" title="yumcha.core.cluster_canonicalizer.models.ClusterKey"><code class="xref py py-class docutils literal notranslate"><span class="pre">ClusterKey</span></code></a> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A <cite>ClusterKey</cite> instance consisting of <cite>(base, marks)</cite> where <cite>base</cite> is the
+base character and <cite>marks</cite> is a tuple of lexicographically sorted combining
+characters, or <cite>None</cite> if the input is empty or starts with a combining mark.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-yumcha.core.cluster_canonicalizer.models">
+<span id="yumcha-core-cluster-canonicalizer-models-module"></span><h2>yumcha.core.cluster_canonicalizer.models module<a class="headerlink" href="#module-yumcha.core.cluster_canonicalizer.models" title="Link to this heading"></a></h2>
+<p>Data models for grapheme cluster representations.</p>
+<p>Provides tuple-based data structures used to create order-invariant keys
+for grapheme cluster canonicalization.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="yumcha.core.cluster_canonicalizer.models.ClusterKey">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">yumcha.core.cluster_canonicalizer.models.</span></span><span class="sig-name descname"><span class="pre">ClusterKey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">marks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yumcha/core/cluster_canonicalizer/models.html#ClusterKey"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.core.cluster_canonicalizer.models.ClusterKey" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">NamedTuple</span></code></p>
+<p>A canonical, order-invariant representation of a grapheme cluster.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="yumcha.core.cluster_canonicalizer.models.ClusterKey.base">
+<span class="sig-name descname"><span class="pre">base</span></span><a class="headerlink" href="#yumcha.core.cluster_canonicalizer.models.ClusterKey.base" title="Link to this definition"></a></dt>
+<dd><p>The base character.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="yumcha.core.cluster_canonicalizer.models.ClusterKey.marks">
+<span class="sig-name descname"><span class="pre">marks</span></span><a class="headerlink" href="#yumcha.core.cluster_canonicalizer.models.ClusterKey.marks" title="Link to this definition"></a></dt>
+<dd><p>Combining characters ordered canonically.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple[str, …]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>base</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>)</p></li>
+<li><p><strong>marks</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">...</span></code>]</span>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">base</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">marks</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-yumcha.core.cluster_canonicalizer">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-yumcha.core.cluster_canonicalizer" title="Link to this heading"></a></h2>
+<p>Unicode grapheme cluster canonicalizer.</p>
+<p>Learns preferred combining mark ordering from training datasets and
+reorders combining marks within grapheme clusters into canonical representations.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="yumcha.core.cluster_canonicalizer.ClusterCanonicalizer">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">yumcha.core.cluster_canonicalizer.</span></span><span class="sig-name descname"><span class="pre">ClusterCanonicalizer</span></span><a class="reference internal" href="_modules/yumcha/core/cluster_canonicalizer.html#ClusterCanonicalizer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.core.cluster_canonicalizer.ClusterCanonicalizer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Learns combining mark ordering rules and normalizes grapheme clusters.</p>
+<p><cite>ClusterCanonicalizer</cite> ingests character sets to learn valid combining mark
+orders per base character and individual mark position ranks. It then applies
+these rules to reorder multi-mark grapheme clusters consistently.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="yumcha.core.cluster_canonicalizer.ClusterCanonicalizer.canonicalize">
+<span class="sig-name descname"><span class="pre">canonicalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yumcha/core/cluster_canonicalizer.html#ClusterCanonicalizer.canonicalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.core.cluster_canonicalizer.ClusterCanonicalizer.canonicalize" title="Link to this definition"></a></dt>
+<dd><p>Reorders combining marks in a string to match learned canonical orders.</p>
+<p>Normalizes input string to NFD format before processing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>text</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – Input string to canonicalize.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The canonicalized string in NFD form with combining marks reordered.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="yumcha.core.cluster_canonicalizer.ClusterCanonicalizer.canonicalize_from_nfd">
+<span class="sig-name descname"><span class="pre">canonicalize_from_nfd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text_nfd</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yumcha/core/cluster_canonicalizer.html#ClusterCanonicalizer.canonicalize_from_nfd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.core.cluster_canonicalizer.ClusterCanonicalizer.canonicalize_from_nfd" title="Link to this definition"></a></dt>
+<dd><p>Reorders combining marks in an NFD-normalized string using learned cluster rules.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>text_nfd</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – An NFD-normalized input string.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The string with all constituent grapheme clusters reordered canonically.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="yumcha.core.cluster_canonicalizer.ClusterCanonicalizer.cluster_map">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">cluster_map</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">MappingProxyType</span></span><a class="headerlink" href="#yumcha.core.cluster_canonicalizer.ClusterCanonicalizer.cluster_map" title="Link to this definition"></a></dt>
+<dd><p>Immutable view of learned ClusterKey-to-canonical-string mappings.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>MappingProxyType[<a class="reference internal" href="#yumcha.core.cluster_canonicalizer.models.ClusterKey" title="yumcha.core.cluster_canonicalizer.models.ClusterKey">ClusterKey</a>, str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="yumcha.core.cluster_canonicalizer.ClusterCanonicalizer.learn">
+<span class="sig-name descname"><span class="pre">learn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">charsets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yumcha/core/cluster_canonicalizer.html#ClusterCanonicalizer.learn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.core.cluster_canonicalizer.ClusterCanonicalizer.learn" title="Link to this definition"></a></dt>
+<dd><p>Learns cluster structures and mark orderings from unnormalized character sets.</p>
+<p>Normalizes tokens to NFD before processing cluster orderings.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>charsets</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]</span>) – An iterable of character sets (collections of strings).</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="yumcha.core.cluster_canonicalizer.ClusterCanonicalizer.learn_from_nfd">
+<span class="sig-name descname"><span class="pre">learn_from_nfd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">charsets_nfd</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yumcha/core/cluster_canonicalizer.html#ClusterCanonicalizer.learn_from_nfd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.core.cluster_canonicalizer.ClusterCanonicalizer.learn_from_nfd" title="Link to this definition"></a></dt>
+<dd><p>Learns cluster structures and mark orderings directly from NFD-normalized character sets.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>charsets_nfd</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]</span>) – An iterable of NFD-normalized character sets.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="yumcha.core.cluster_canonicalizer.ClusterCanonicalizer.mark_rank">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">mark_rank</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">MappingProxyType</span></span><a class="headerlink" href="#yumcha.core.cluster_canonicalizer.ClusterCanonicalizer.mark_rank" title="Link to this definition"></a></dt>
+<dd><p>Immutable view of learned combining mark positional rankings.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>MappingProxyType[str, int]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="yumcha.core.html" class="btn btn-neutral float-left" title="yumcha.core package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="yumcha.core.conversion_pipeline.html" class="btn btn-neutral float-right" title="yumcha.core.conversion_pipeline package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, yumcha.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

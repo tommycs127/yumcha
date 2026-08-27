@@ -1,0 +1,14 @@
+yumcha namespace
+================
+
+.. py:module:: yumcha
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   yumcha.core
+   yumcha.exporter
+   yumcha.loader

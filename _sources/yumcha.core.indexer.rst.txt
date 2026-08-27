@@ -1,0 +1,21 @@
+yumcha.core.indexer package
+===========================
+
+Submodules
+----------
+
+yumcha.core.indexer.models module
+---------------------------------
+
+.. automodule:: yumcha.core.indexer.models
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+Module contents
+---------------
+
+.. automodule:: yumcha.core.indexer
+   :members:
+   :show-inheritance:
+   :undoc-members:

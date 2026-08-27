@@ -1,0 +1,15 @@
+yumcha.loader.utils namespace
+=============================
+
+.. py:module:: yumcha.loader.utils
+
+Submodules
+----------
+
+yumcha.loader.utils.text module
+-------------------------------
+
+.. automodule:: yumcha.loader.utils.text
+   :members:
+   :show-inheritance:
+   :undoc-members:

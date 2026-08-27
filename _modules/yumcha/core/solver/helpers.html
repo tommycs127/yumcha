@@ -1,0 +1,263 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>yumcha.core.solver.helpers &mdash; yumcha  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            yumcha
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">yumcha</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">yumcha</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">yumcha.core.solver.helpers</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for yumcha.core.solver.helpers</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Helper functions for pattern tuple merging and validation in solving."""</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">defaultdict</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..indexer</span><span class="w"> </span><span class="kn">import</span> <span class="n">Indexer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..models.solution</span><span class="w"> </span><span class="kn">import</span> <span class="n">Solution</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..primitives.directives</span><span class="w"> </span><span class="kn">import</span> <span class="n">SchemeDirective</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..primitives.pattern_tuple</span><span class="w"> </span><span class="kn">import</span> <span class="n">PatternTuple</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..utils.bit</span><span class="w"> </span><span class="kn">import</span> <span class="n">iterate_bits</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">SolveContext</span>
+
+
+<div class="viewcode-block" id="build_solution">
+<a class="viewcode-back" href="../../../../yumcha.core.solver.html#yumcha.core.solver.helpers.build_solution">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">build_solution</span><span class="p">(</span>
+    <span class="n">context</span><span class="p">:</span> <span class="n">SolveContext</span><span class="p">,</span>
+    <span class="n">candidate_mask</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Solution</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Validates unified pattern tuples and global origin constraints</span>
+<span class="sd">    to construct a Solution.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        context: Active solve context containing source/target pattern tuples.</span>
+<span class="sd">        registrant_mask: Bitmask representing candidate active registrants.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A fully validated `Solution` instance, or `None` if unification fails</span>
+<span class="sd">        or matches invalid origin masks.</span>
+<span class="sd">    """</span>
+
+    <span class="n">source_indexer</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">source_indexer</span>
+    <span class="n">source_pattern_tuples</span> <span class="o">=</span> <span class="n">source_indexer</span><span class="o">.</span><span class="n">pattern_tuples</span>
+    <span class="n">source_index_ranks</span> <span class="o">=</span> <span class="n">source_indexer</span><span class="o">.</span><span class="n">index_ranks</span>
+    <span class="n">source_directions</span> <span class="o">=</span> <span class="n">source_indexer</span><span class="o">.</span><span class="n">directions</span>
+
+    <span class="n">target_indexer</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">target_indexer</span>
+    <span class="n">target_pattern_tuples</span> <span class="o">=</span> <span class="n">target_indexer</span><span class="o">.</span><span class="n">pattern_tuples</span>
+
+    <span class="n">selected_indexes</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">directions</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">SchemeDirective</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">append_selected_index</span> <span class="o">=</span> <span class="n">selected_indexes</span><span class="o">.</span><span class="n">append</span>
+    <span class="n">append_direction</span> <span class="o">=</span> <span class="n">directions</span><span class="o">.</span><span class="n">append</span>
+
+    <span class="n">known_source</span> <span class="o">=</span> <span class="n">PatternTuple</span><span class="o">.</span><span class="n">wildcards</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">context</span><span class="o">.</span><span class="n">source_fields</span><span class="p">))</span>
+    <span class="n">known_target</span> <span class="o">=</span> <span class="n">PatternTuple</span><span class="o">.</span><span class="n">wildcards</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">context</span><span class="o">.</span><span class="n">target_fields</span><span class="p">))</span>
+    <span class="n">selected_mask</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">candidate_indexes</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">iterate_bits</span><span class="p">(</span><span class="n">candidate_mask</span><span class="p">))</span>
+    <span class="n">candidate_indexes</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">idx</span><span class="p">:</span> <span class="n">source_index_ranks</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
+
+    <span class="k">for</span> <span class="n">candidate_index</span> <span class="ow">in</span> <span class="n">candidate_indexes</span><span class="p">:</span>
+        <span class="n">source_pattern_tuple</span> <span class="o">=</span> <span class="n">source_pattern_tuples</span><span class="p">[</span><span class="n">candidate_index</span><span class="p">]</span>
+        <span class="n">merged</span> <span class="o">=</span> <span class="n">union_if_compatible</span><span class="p">(</span><span class="n">known_source</span><span class="p">,</span> <span class="n">source_pattern_tuple</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">merged</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">merged</span> <span class="ow">is</span> <span class="n">known_source</span><span class="p">):</span>
+            <span class="k">continue</span>
+        <span class="n">known_source</span> <span class="o">=</span> <span class="n">merged</span>
+
+        <span class="n">target_pattern_tuple</span> <span class="o">=</span> <span class="n">target_pattern_tuples</span><span class="p">[</span><span class="n">candidate_index</span><span class="p">]</span>
+        <span class="n">merged</span> <span class="o">=</span> <span class="n">union_if_compatible</span><span class="p">(</span><span class="n">known_target</span><span class="p">,</span> <span class="n">target_pattern_tuple</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">merged</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">merged</span> <span class="ow">is</span> <span class="n">known_target</span><span class="p">):</span>
+            <span class="k">continue</span>
+        <span class="n">known_target</span> <span class="o">=</span> <span class="n">merged</span>
+
+        <span class="n">selected_mask</span> <span class="o">|=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">candidate_index</span>
+        <span class="n">append_selected_index</span><span class="p">(</span><span class="n">candidate_index</span><span class="p">)</span>
+
+        <span class="n">source_direction</span> <span class="o">=</span> <span class="n">source_directions</span><span class="p">[</span><span class="n">candidate_index</span><span class="p">]</span>
+        <span class="n">append_direction</span><span class="p">(</span><span class="n">source_direction</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">known_source</span><span class="o">.</span><span class="n">is_complete</span><span class="p">()</span> <span class="ow">and</span> <span class="n">known_target</span><span class="o">.</span><span class="n">is_complete</span><span class="p">()):</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">_is_valid</span><span class="p">(</span><span class="n">known_source</span><span class="p">,</span> <span class="n">source_indexer</span><span class="p">,</span> <span class="n">selected_mask</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">_is_valid</span><span class="p">(</span><span class="n">known_target</span><span class="p">,</span> <span class="n">target_indexer</span><span class="p">,</span> <span class="n">selected_mask</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">return</span> <span class="n">Solution</span><span class="p">(</span>
+        <span class="n">source_indexer</span><span class="p">,</span>
+        <span class="n">target_indexer</span><span class="p">,</span>
+        <span class="n">known_source</span><span class="p">,</span>
+        <span class="n">known_target</span><span class="p">,</span>
+        <span class="nb">tuple</span><span class="p">(</span><span class="n">selected_indexes</span><span class="p">),</span>
+        <span class="n">selected_mask</span><span class="p">,</span>
+        <span class="nb">tuple</span><span class="p">(</span><span class="n">directions</span><span class="p">),</span>
+    <span class="p">)</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_is_valid</span><span class="p">(</span>
+    <span class="n">pattern_tuple</span><span class="p">:</span> <span class="n">PatternTuple</span><span class="p">,</span>
+    <span class="n">indexer</span><span class="p">:</span> <span class="n">Indexer</span><span class="p">,</span>
+    <span class="n">selected_mask</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Validates that a pattern tuple does not contradict existing indexer constraints.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        pattern_tuple: The pattern tuple to check.</span>
+<span class="sd">        indexer: The indexer used to compute the pattern tuple.</span>
+<span class="sd">            It contains the indexes of invalid pattern tuples.</span>
+<span class="sd">        selected_mask: The bit mask containing the selected indexes</span>
+<span class="sd">            to form the patterh tuple.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        `False` if `selected_mask` matches any index of an invalid pattern tuple;</span>
+<span class="sd">            otherwise `True`.</span>
+<span class="sd">    """</span>
+    <span class="n">invalid_mask_indexes</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">invalid_pattern_masks_indexes_by_fields</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">indexer</span><span class="o">.</span><span class="n">invalid_pattern_masks_indexes_by_fields</span>
+    <span class="p">)</span>
+    <span class="n">invalid_pattern_masks</span> <span class="o">=</span> <span class="n">indexer</span><span class="o">.</span><span class="n">invalid_pattern_masks</span>
+
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">pattern_tuple</span><span class="p">):</span>
+        <span class="n">invalid_mask_indexes</span> <span class="o">|=</span> <span class="n">invalid_pattern_masks_indexes_by_fields</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="n">pattern</span><span class="p">,</span> <span class="nb">frozenset</span><span class="p">()</span>
+        <span class="p">)</span>
+
+    <span class="n">invalid_masks</span><span class="p">:</span> <span class="n">defaultdict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">mask_index</span> <span class="ow">in</span> <span class="n">invalid_mask_indexes</span><span class="p">:</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">invalid_pattern_masks</span><span class="p">[</span><span class="n">mask_index</span><span class="p">]</span>
+        <span class="n">invalid_masks</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mask_index</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">mask</span> <span class="ow">in</span> <span class="n">invalid_masks</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">selected_mask</span> <span class="o">&amp;</span> <span class="n">mask</span><span class="p">)</span> <span class="o">==</span> <span class="n">selected_mask</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">return</span> <span class="kc">True</span>
+
+
+<div class="viewcode-block" id="union_if_compatible">
+<a class="viewcode-back" href="../../../../yumcha.core.solver.html#yumcha.core.solver.helpers.union_if_compatible">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">union_if_compatible</span><span class="p">(</span>
+    <span class="n">known_pattern_tuple</span><span class="p">:</span> <span class="n">PatternTuple</span><span class="p">,</span>
+    <span class="n">pattern_tuple</span><span class="p">:</span> <span class="n">PatternTuple</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PatternTuple</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Merges two pattern tuples if their feature values do not conflict.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        known_pattern_tuple: Accumulated pattern tuple representing current known state.</span>
+<span class="sd">        pattern_tuple: New pattern tuple to merge in.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The merged `PatternTuple` if compatible, or `None` if feature collisions conflict.</span>
+<span class="sd">    """</span>
+    <span class="n">pattern_tuple_mask</span> <span class="o">=</span> <span class="n">pattern_tuple</span><span class="o">.</span><span class="n">mask</span>
+    <span class="n">collision_mask</span> <span class="o">=</span> <span class="n">known_pattern_tuple</span><span class="o">.</span><span class="n">mask</span> <span class="o">&amp;</span> <span class="n">pattern_tuple_mask</span>
+
+    <span class="k">if</span> <span class="n">collision_mask</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">pattern_tuple_mask</span><span class="o">.</span><span class="n">bit_count</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">known_pattern_tuple</span>
+
+        <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">iterate_bits</span><span class="p">(</span><span class="n">collision_mask</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">pattern_tuple</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">!=</span> <span class="n">known_pattern_tuple</span><span class="p">[</span><span class="n">idx</span><span class="p">]:</span>
+                <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">return</span> <span class="n">known_pattern_tuple</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">pattern_tuple</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, yumcha.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

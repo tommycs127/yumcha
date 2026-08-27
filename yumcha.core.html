@@ -1,0 +1,867 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>yumcha.core package &mdash; yumcha  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="yumcha.core.cluster_canonicalizer package" href="yumcha.core.cluster_canonicalizer.html" />
+    <link rel="prev" title="yumcha namespace" href="yumcha.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            yumcha
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">yumcha</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="yumcha.html">yumcha namespace</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="yumcha.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">yumcha.core package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.exporter.html">yumcha.exporter package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.loader.html">yumcha.loader package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">yumcha</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">yumcha</a></li>
+          <li class="breadcrumb-item"><a href="yumcha.html">yumcha namespace</a></li>
+      <li class="breadcrumb-item active">yumcha.core package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/yumcha.core.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="yumcha-core-package">
+<h1>yumcha.core package<a class="headerlink" href="#yumcha-core-package" title="Link to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="yumcha.core.cluster_canonicalizer.html">yumcha.core.cluster_canonicalizer package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="yumcha.core.cluster_canonicalizer.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yumcha.core.cluster_canonicalizer.html#module-yumcha.core.cluster_canonicalizer.helpers">yumcha.core.cluster_canonicalizer.helpers module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="yumcha.core.cluster_canonicalizer.html#yumcha.core.cluster_canonicalizer.helpers.split_clusters"><code class="docutils literal notranslate"><span class="pre">split_clusters()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="yumcha.core.cluster_canonicalizer.html#yumcha.core.cluster_canonicalizer.helpers.to_cluster_key"><code class="docutils literal notranslate"><span class="pre">to_cluster_key()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="yumcha.core.cluster_canonicalizer.html#module-yumcha.core.cluster_canonicalizer.models">yumcha.core.cluster_canonicalizer.models module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="yumcha.core.cluster_canonicalizer.html#yumcha.core.cluster_canonicalizer.models.ClusterKey"><code class="docutils literal notranslate"><span class="pre">ClusterKey</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.cluster_canonicalizer.html#yumcha.core.cluster_canonicalizer.models.ClusterKey.base"><code class="docutils literal notranslate"><span class="pre">ClusterKey.base</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.cluster_canonicalizer.html#yumcha.core.cluster_canonicalizer.models.ClusterKey.marks"><code class="docutils literal notranslate"><span class="pre">ClusterKey.marks</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.cluster_canonicalizer.html#id0"><code class="docutils literal notranslate"><span class="pre">ClusterKey.base</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.cluster_canonicalizer.html#id1"><code class="docutils literal notranslate"><span class="pre">ClusterKey.marks</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="yumcha.core.cluster_canonicalizer.html#module-yumcha.core.cluster_canonicalizer">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="yumcha.core.cluster_canonicalizer.html#yumcha.core.cluster_canonicalizer.ClusterCanonicalizer"><code class="docutils literal notranslate"><span class="pre">ClusterCanonicalizer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.cluster_canonicalizer.html#yumcha.core.cluster_canonicalizer.ClusterCanonicalizer.canonicalize"><code class="docutils literal notranslate"><span class="pre">ClusterCanonicalizer.canonicalize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.cluster_canonicalizer.html#yumcha.core.cluster_canonicalizer.ClusterCanonicalizer.canonicalize_from_nfd"><code class="docutils literal notranslate"><span class="pre">ClusterCanonicalizer.canonicalize_from_nfd()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.cluster_canonicalizer.html#yumcha.core.cluster_canonicalizer.ClusterCanonicalizer.cluster_map"><code class="docutils literal notranslate"><span class="pre">ClusterCanonicalizer.cluster_map</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.cluster_canonicalizer.html#yumcha.core.cluster_canonicalizer.ClusterCanonicalizer.learn"><code class="docutils literal notranslate"><span class="pre">ClusterCanonicalizer.learn()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.cluster_canonicalizer.html#yumcha.core.cluster_canonicalizer.ClusterCanonicalizer.learn_from_nfd"><code class="docutils literal notranslate"><span class="pre">ClusterCanonicalizer.learn_from_nfd()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.cluster_canonicalizer.html#yumcha.core.cluster_canonicalizer.ClusterCanonicalizer.mark_rank"><code class="docutils literal notranslate"><span class="pre">ClusterCanonicalizer.mark_rank</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="yumcha.core.conversion_pipeline.html">yumcha.core.conversion_pipeline package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="yumcha.core.conversion_pipeline.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yumcha.core.conversion_pipeline.html#module-yumcha.core.conversion_pipeline.models">yumcha.core.conversion_pipeline.models module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="yumcha.core.conversion_pipeline.html#yumcha.core.conversion_pipeline.models.PhonologyRepresentationClsFn"><code class="docutils literal notranslate"><span class="pre">PhonologyRepresentationClsFn</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="yumcha.core.conversion_pipeline.html#yumcha.core.conversion_pipeline.models.SchemeRepresentationClsFn"><code class="docutils literal notranslate"><span class="pre">SchemeRepresentationClsFn</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="yumcha.core.conversion_pipeline.html#yumcha.core.conversion_pipeline.models.SolveFn"><code class="docutils literal notranslate"><span class="pre">SolveFn</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="yumcha.core.conversion_pipeline.html#module-yumcha.core.conversion_pipeline.validation">yumcha.core.conversion_pipeline.validation module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="yumcha.core.conversion_pipeline.html#yumcha.core.conversion_pipeline.validation.ConversionValidator"><code class="docutils literal notranslate"><span class="pre">ConversionValidator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.conversion_pipeline.html#yumcha.core.conversion_pipeline.validation.ConversionValidator.validate"><code class="docutils literal notranslate"><span class="pre">ConversionValidator.validate()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="yumcha.core.conversion_pipeline.html#module-yumcha.core.conversion_pipeline">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="yumcha.core.conversion_pipeline.html#yumcha.core.conversion_pipeline.ConversionPipeline"><code class="docutils literal notranslate"><span class="pre">ConversionPipeline</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.conversion_pipeline.html#yumcha.core.conversion_pipeline.ConversionPipeline.convert_to_intermediate"><code class="docutils literal notranslate"><span class="pre">ConversionPipeline.convert_to_intermediate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.conversion_pipeline.html#yumcha.core.conversion_pipeline.ConversionPipeline.convert_to_scheme"><code class="docutils literal notranslate"><span class="pre">ConversionPipeline.convert_to_scheme()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="yumcha.core.facades.html">yumcha.core.facades namespace</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="yumcha.core.facades.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yumcha.core.facades.html#module-yumcha.core.facades.phonology">yumcha.core.facades.phonology module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="yumcha.core.facades.html#yumcha.core.facades.phonology.Phonology"><code class="docutils literal notranslate"><span class="pre">Phonology</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.facades.html#yumcha.core.facades.phonology.Phonology.id"><code class="docutils literal notranslate"><span class="pre">Phonology.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.facades.html#yumcha.core.facades.phonology.Phonology.cls"><code class="docutils literal notranslate"><span class="pre">Phonology.cls</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.facades.html#yumcha.core.facades.phonology.Phonology.fields"><code class="docutils literal notranslate"><span class="pre">Phonology.fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.facades.html#yumcha.core.facades.phonology.Phonology.charsets"><code class="docutils literal notranslate"><span class="pre">Phonology.charsets</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.facades.html#yumcha.core.facades.phonology.Phonology.phonology_directive_maps"><code class="docutils literal notranslate"><span class="pre">Phonology.phonology_directive_maps</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.facades.html#yumcha.core.facades.phonology.Phonology.invalid_pattern_tuples"><code class="docutils literal notranslate"><span class="pre">Phonology.invalid_pattern_tuples</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.facades.html#yumcha.core.facades.phonology.Phonology.canonicalizer"><code class="docutils literal notranslate"><span class="pre">Phonology.canonicalizer</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.facades.html#id0"><code class="docutils literal notranslate"><span class="pre">Phonology.canonicalizer</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.facades.html#id1"><code class="docutils literal notranslate"><span class="pre">Phonology.charsets</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.facades.html#yumcha.core.facades.phonology.Phonology.charsets_classified"><code class="docutils literal notranslate"><span class="pre">Phonology.charsets_classified</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.facades.html#yumcha.core.facades.phonology.Phonology.charsets_sorted"><code class="docutils literal notranslate"><span class="pre">Phonology.charsets_sorted</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.facades.html#id2"><code class="docutils literal notranslate"><span class="pre">Phonology.cls</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.facades.html#yumcha.core.facades.phonology.Phonology.compiled_re_pattern"><code class="docutils literal notranslate"><span class="pre">Phonology.compiled_re_pattern</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.facades.html#id3"><code class="docutils literal notranslate"><span class="pre">Phonology.fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.facades.html#id4"><code class="docutils literal notranslate"><span class="pre">Phonology.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.facades.html#id5"><code class="docutils literal notranslate"><span class="pre">Phonology.invalid_pattern_tuples</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.facades.html#id6"><code class="docutils literal notranslate"><span class="pre">Phonology.phonology_directive_maps</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.facades.html#yumcha.core.facades.phonology.Phonology.re_pattern"><code class="docutils literal notranslate"><span class="pre">Phonology.re_pattern</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="yumcha.core.facades.html#module-yumcha.core.facades.scheme">yumcha.core.facades.scheme module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="yumcha.core.facades.html#yumcha.core.facades.scheme.Scheme"><code class="docutils literal notranslate"><span class="pre">Scheme</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.facades.html#yumcha.core.facades.scheme.Scheme.id"><code class="docutils literal notranslate"><span class="pre">Scheme.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.facades.html#yumcha.core.facades.scheme.Scheme.cls"><code class="docutils literal notranslate"><span class="pre">Scheme.cls</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.facades.html#yumcha.core.facades.scheme.Scheme.intermediate_fields"><code class="docutils literal notranslate"><span class="pre">Scheme.intermediate_fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.facades.html#yumcha.core.facades.scheme.Scheme.intermediate_indexer"><code class="docutils literal notranslate"><span class="pre">Scheme.intermediate_indexer</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.facades.html#yumcha.core.facades.scheme.Scheme.fields"><code class="docutils literal notranslate"><span class="pre">Scheme.fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.facades.html#yumcha.core.facades.scheme.Scheme.indexer"><code class="docutils literal notranslate"><span class="pre">Scheme.indexer</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.facades.html#yumcha.core.facades.scheme.Scheme.directions"><code class="docutils literal notranslate"><span class="pre">Scheme.directions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.facades.html#yumcha.core.facades.scheme.Scheme.canonicalizer"><code class="docutils literal notranslate"><span class="pre">Scheme.canonicalizer</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.facades.html#yumcha.core.facades.scheme.Scheme.are_field_indexes_sequential"><code class="docutils literal notranslate"><span class="pre">Scheme.are_field_indexes_sequential</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.facades.html#id7"><code class="docutils literal notranslate"><span class="pre">Scheme.canonicalizer</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.facades.html#id8"><code class="docutils literal notranslate"><span class="pre">Scheme.cls</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.facades.html#yumcha.core.facades.scheme.Scheme.compiled_re_pattern"><code class="docutils literal notranslate"><span class="pre">Scheme.compiled_re_pattern</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.facades.html#id9"><code class="docutils literal notranslate"><span class="pre">Scheme.directions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.facades.html#id10"><code class="docutils literal notranslate"><span class="pre">Scheme.fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.facades.html#id11"><code class="docutils literal notranslate"><span class="pre">Scheme.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.facades.html#id12"><code class="docutils literal notranslate"><span class="pre">Scheme.indexer</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.facades.html#id13"><code class="docutils literal notranslate"><span class="pre">Scheme.intermediate_fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.facades.html#id14"><code class="docutils literal notranslate"><span class="pre">Scheme.intermediate_indexer</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.facades.html#yumcha.core.facades.scheme.Scheme.re_pattern"><code class="docutils literal notranslate"><span class="pre">Scheme.re_pattern</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="yumcha.core.indexer.html">yumcha.core.indexer package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="yumcha.core.indexer.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yumcha.core.indexer.html#module-yumcha.core.indexer.models">yumcha.core.indexer.models module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="yumcha.core.indexer.html#yumcha.core.indexer.models.PatternIndexes"><code class="docutils literal notranslate"><span class="pre">PatternIndexes</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="yumcha.core.indexer.html#yumcha.core.indexer.models.PatternIndexesView"><code class="docutils literal notranslate"><span class="pre">PatternIndexesView</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="yumcha.core.indexer.html#yumcha.core.indexer.models.PatternMasks"><code class="docutils literal notranslate"><span class="pre">PatternMasks</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="yumcha.core.indexer.html#yumcha.core.indexer.models.PatternMasksView"><code class="docutils literal notranslate"><span class="pre">PatternMasksView</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="yumcha.core.indexer.html#module-yumcha.core.indexer">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="yumcha.core.indexer.html#yumcha.core.indexer.Indexer"><code class="docutils literal notranslate"><span class="pre">Indexer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.indexer.html#yumcha.core.indexer.Indexer.charsets"><code class="docutils literal notranslate"><span class="pre">Indexer.charsets</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.indexer.html#yumcha.core.indexer.Indexer.directions"><code class="docutils literal notranslate"><span class="pre">Indexer.directions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.indexer.html#yumcha.core.indexer.Indexer.index_ranks"><code class="docutils literal notranslate"><span class="pre">Indexer.index_ranks</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.indexer.html#yumcha.core.indexer.Indexer.invalid_pattern_masks"><code class="docutils literal notranslate"><span class="pre">Indexer.invalid_pattern_masks</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.indexer.html#yumcha.core.indexer.Indexer.invalid_pattern_masks_indexes_by_fields"><code class="docutils literal notranslate"><span class="pre">Indexer.invalid_pattern_masks_indexes_by_fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.indexer.html#yumcha.core.indexer.Indexer.invalid_pattern_tuples"><code class="docutils literal notranslate"><span class="pre">Indexer.invalid_pattern_tuples</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.indexer.html#yumcha.core.indexer.Indexer.load"><code class="docutils literal notranslate"><span class="pre">Indexer.load()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.indexer.html#yumcha.core.indexer.Indexer.load_invalid_patterns"><code class="docutils literal notranslate"><span class="pre">Indexer.load_invalid_patterns()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.indexer.html#yumcha.core.indexer.Indexer.pattern_masks_by_fields"><code class="docutils literal notranslate"><span class="pre">Indexer.pattern_masks_by_fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.indexer.html#yumcha.core.indexer.Indexer.pattern_tuple_length"><code class="docutils literal notranslate"><span class="pre">Indexer.pattern_tuple_length</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.indexer.html#yumcha.core.indexer.Indexer.pattern_tuples"><code class="docutils literal notranslate"><span class="pre">Indexer.pattern_tuples</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.indexer.html#yumcha.core.indexer.Indexer.pattern_tuples_set"><code class="docutils literal notranslate"><span class="pre">Indexer.pattern_tuples_set</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.indexer.html#yumcha.core.indexer.Indexer.sorted_indexes"><code class="docutils literal notranslate"><span class="pre">Indexer.sorted_indexes</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="yumcha.core.iterator.html">yumcha.core.iterator package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="yumcha.core.iterator.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yumcha.core.iterator.html#module-yumcha.core.iterator.wrappers">yumcha.core.iterator.wrappers module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="yumcha.core.iterator.html#yumcha.core.iterator.wrappers.ProgressBarWrapper"><code class="docutils literal notranslate"><span class="pre">ProgressBarWrapper</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="yumcha.core.iterator.html#module-yumcha.core.iterator">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="yumcha.core.iterator.html#yumcha.core.iterator.LanguageIterator"><code class="docutils literal notranslate"><span class="pre">LanguageIterator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.iterator.html#yumcha.core.iterator.LanguageIterator.language"><code class="docutils literal notranslate"><span class="pre">LanguageIterator.language</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.iterator.html#yumcha.core.iterator.LanguageIterator.progress_bar"><code class="docutils literal notranslate"><span class="pre">LanguageIterator.progress_bar</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.iterator.html#yumcha.core.iterator.LanguageIterator.current_counts"><code class="docutils literal notranslate"><span class="pre">LanguageIterator.current_counts</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.iterator.html#yumcha.core.iterator.LanguageIterator.headers"><code class="docutils literal notranslate"><span class="pre">LanguageIterator.headers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.iterator.html#yumcha.core.iterator.LanguageIterator.scheme_ids"><code class="docutils literal notranslate"><span class="pre">LanguageIterator.scheme_ids</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.iterator.html#yumcha.core.iterator.LanguageIterator.scheme_item_counts"><code class="docutils literal notranslate"><span class="pre">LanguageIterator.scheme_item_counts</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.iterator.html#yumcha.core.iterator.LanguageIterator.total_rows"><code class="docutils literal notranslate"><span class="pre">LanguageIterator.total_rows</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="yumcha.core.models.html">yumcha.core.models namespace</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="yumcha.core.models.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yumcha.core.models.html#module-yumcha.core.models.representation">yumcha.core.models.representation module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.representation.PhonologyRepresentation"><code class="docutils literal notranslate"><span class="pre">PhonologyRepresentation</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.representation.Representation"><code class="docutils literal notranslate"><span class="pre">Representation</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.representation.SchemeRepresentation"><code class="docutils literal notranslate"><span class="pre">SchemeRepresentation</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="yumcha.core.models.html#module-yumcha.core.models.solution">yumcha.core.models.solution module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.solution.Solution"><code class="docutils literal notranslate"><span class="pre">Solution</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.solution.Solution.source_indexer"><code class="docutils literal notranslate"><span class="pre">Solution.source_indexer</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.solution.Solution.target_indexer"><code class="docutils literal notranslate"><span class="pre">Solution.target_indexer</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.solution.Solution.source_pattern_tuple"><code class="docutils literal notranslate"><span class="pre">Solution.source_pattern_tuple</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.solution.Solution.target_pattern_tuple"><code class="docutils literal notranslate"><span class="pre">Solution.target_pattern_tuple</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.solution.Solution.selected_indexes"><code class="docutils literal notranslate"><span class="pre">Solution.selected_indexes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.solution.Solution.selected_mask"><code class="docutils literal notranslate"><span class="pre">Solution.selected_mask</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.solution.Solution.directions"><code class="docutils literal notranslate"><span class="pre">Solution.directions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.models.html#id0"><code class="docutils literal notranslate"><span class="pre">Solution.directions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.models.html#id1"><code class="docutils literal notranslate"><span class="pre">Solution.selected_indexes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.models.html#id2"><code class="docutils literal notranslate"><span class="pre">Solution.selected_mask</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.models.html#id3"><code class="docutils literal notranslate"><span class="pre">Solution.source_indexer</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.models.html#id4"><code class="docutils literal notranslate"><span class="pre">Solution.source_pattern_tuple</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.models.html#id5"><code class="docutils literal notranslate"><span class="pre">Solution.target_indexer</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.models.html#id6"><code class="docutils literal notranslate"><span class="pre">Solution.target_pattern_tuple</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="yumcha.core.models.html#module-yumcha.core.models.specs">yumcha.core.models.specs module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.specs.PhonologyData"><code class="docutils literal notranslate"><span class="pre">PhonologyData</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.specs.PhonologyData.id"><code class="docutils literal notranslate"><span class="pre">PhonologyData.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.specs.PhonologyData.fields"><code class="docutils literal notranslate"><span class="pre">PhonologyData.fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.specs.PhonologyData.charsets"><code class="docutils literal notranslate"><span class="pre">PhonologyData.charsets</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.specs.PhonologyData.char_directives"><code class="docutils literal notranslate"><span class="pre">PhonologyData.char_directives</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.specs.PhonologyData.invalid_pattern_tuples"><code class="docutils literal notranslate"><span class="pre">PhonologyData.invalid_pattern_tuples</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.models.html#id7"><code class="docutils literal notranslate"><span class="pre">PhonologyData.char_directives</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.models.html#id8"><code class="docutils literal notranslate"><span class="pre">PhonologyData.charsets</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.models.html#id9"><code class="docutils literal notranslate"><span class="pre">PhonologyData.fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.models.html#id10"><code class="docutils literal notranslate"><span class="pre">PhonologyData.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.models.html#id11"><code class="docutils literal notranslate"><span class="pre">PhonologyData.invalid_pattern_tuples</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.specs.PhonologyData.to_tuple"><code class="docutils literal notranslate"><span class="pre">PhonologyData.to_tuple()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.specs.SchemeData"><code class="docutils literal notranslate"><span class="pre">SchemeData</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.specs.SchemeData.id"><code class="docutils literal notranslate"><span class="pre">SchemeData.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.specs.SchemeData.directions"><code class="docutils literal notranslate"><span class="pre">SchemeData.directions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.specs.SchemeData.intermediate_fields"><code class="docutils literal notranslate"><span class="pre">SchemeData.intermediate_fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.specs.SchemeData.intermediate_pattern_tuples"><code class="docutils literal notranslate"><span class="pre">SchemeData.intermediate_pattern_tuples</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.specs.SchemeData.fields"><code class="docutils literal notranslate"><span class="pre">SchemeData.fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.specs.SchemeData.pattern_tuples"><code class="docutils literal notranslate"><span class="pre">SchemeData.pattern_tuples</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.specs.SchemeData.invalid_pattern_tuples"><code class="docutils literal notranslate"><span class="pre">SchemeData.invalid_pattern_tuples</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.models.html#id12"><code class="docutils literal notranslate"><span class="pre">SchemeData.directions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.models.html#id13"><code class="docutils literal notranslate"><span class="pre">SchemeData.fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.models.html#id14"><code class="docutils literal notranslate"><span class="pre">SchemeData.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.models.html#id15"><code class="docutils literal notranslate"><span class="pre">SchemeData.intermediate_fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.models.html#id16"><code class="docutils literal notranslate"><span class="pre">SchemeData.intermediate_pattern_tuples</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.models.html#id17"><code class="docutils literal notranslate"><span class="pre">SchemeData.invalid_pattern_tuples</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.models.html#id18"><code class="docutils literal notranslate"><span class="pre">SchemeData.pattern_tuples</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.specs.SchemeData.to_tuple"><code class="docutils literal notranslate"><span class="pre">SchemeData.to_tuple()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="yumcha.core.primitives.html">yumcha.core.primitives namespace</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="yumcha.core.primitives.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yumcha.core.primitives.html#module-yumcha.core.primitives.directives">yumcha.core.primitives.directives module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.directives.PhonologyDirective"><code class="docutils literal notranslate"><span class="pre">PhonologyDirective</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.directives.PhonologyDirective.REQUIRED"><code class="docutils literal notranslate"><span class="pre">PhonologyDirective.REQUIRED</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.directives.PhonologyDirective.OPTIONAL"><code class="docutils literal notranslate"><span class="pre">PhonologyDirective.OPTIONAL</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.directives.PhonologyDirective.INVALID"><code class="docutils literal notranslate"><span class="pre">PhonologyDirective.INVALID</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#id0"><code class="docutils literal notranslate"><span class="pre">PhonologyDirective.INVALID</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#id1"><code class="docutils literal notranslate"><span class="pre">PhonologyDirective.OPTIONAL</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#id2"><code class="docutils literal notranslate"><span class="pre">PhonologyDirective.REQUIRED</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.directives.PhonologyDirectiveMap"><code class="docutils literal notranslate"><span class="pre">PhonologyDirectiveMap</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.directives.SchemeDirective"><code class="docutils literal notranslate"><span class="pre">SchemeDirective</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.directives.SchemeDirective.BIDIRECTIONAL"><code class="docutils literal notranslate"><span class="pre">SchemeDirective.BIDIRECTIONAL</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.directives.SchemeDirective.FORWARD"><code class="docutils literal notranslate"><span class="pre">SchemeDirective.FORWARD</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.directives.SchemeDirective.REVERSE"><code class="docutils literal notranslate"><span class="pre">SchemeDirective.REVERSE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.directives.SchemeDirective.INVALID"><code class="docutils literal notranslate"><span class="pre">SchemeDirective.INVALID</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#id3"><code class="docutils literal notranslate"><span class="pre">SchemeDirective.BIDIRECTIONAL</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#id4"><code class="docutils literal notranslate"><span class="pre">SchemeDirective.FORWARD</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#id5"><code class="docutils literal notranslate"><span class="pre">SchemeDirective.INVALID</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#id6"><code class="docutils literal notranslate"><span class="pre">SchemeDirective.REVERSE</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="yumcha.core.primitives.html#module-yumcha.core.primitives.pattern">yumcha.core.primitives.pattern module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.pattern.Pattern"><code class="docutils literal notranslate"><span class="pre">Pattern</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="yumcha.core.primitives.html#module-yumcha.core.primitives.pattern_tuple">yumcha.core.primitives.pattern_tuple module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.pattern._tuple.Pattern"><code class="docutils literal notranslate"><span class="pre">_tuple.Pattern</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.pattern_tuple.NormForm"><code class="docutils literal notranslate"><span class="pre">NormForm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.pattern_tuple.PatternTuple"><code class="docutils literal notranslate"><span class="pre">PatternTuple</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.pattern_tuple.PatternTuple.mask"><code class="docutils literal notranslate"><span class="pre">PatternTuple.mask</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.pattern_tuple.PatternTuple.weight"><code class="docutils literal notranslate"><span class="pre">PatternTuple.weight</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.pattern_tuple.PatternTuple.full_mask"><code class="docutils literal notranslate"><span class="pre">PatternTuple.full_mask</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.pattern_tuple.PatternTuple.difference"><code class="docutils literal notranslate"><span class="pre">PatternTuple.difference()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.pattern_tuple.PatternTuple.filter"><code class="docutils literal notranslate"><span class="pre">PatternTuple.filter()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#id7"><code class="docutils literal notranslate"><span class="pre">PatternTuple.full_mask</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.pattern_tuple.PatternTuple.intersection"><code class="docutils literal notranslate"><span class="pre">PatternTuple.intersection()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.pattern_tuple.PatternTuple.is_complete"><code class="docutils literal notranslate"><span class="pre">PatternTuple.is_complete()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#id8"><code class="docutils literal notranslate"><span class="pre">PatternTuple.mask</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.pattern_tuple.PatternTuple.satisfies"><code class="docutils literal notranslate"><span class="pre">PatternTuple.satisfies()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.pattern_tuple.PatternTuple.separate"><code class="docutils literal notranslate"><span class="pre">PatternTuple.separate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.pattern_tuple.PatternTuple.to_debug_msg"><code class="docutils literal notranslate"><span class="pre">PatternTuple.to_debug_msg()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.pattern_tuple.PatternTuple.to_string"><code class="docutils literal notranslate"><span class="pre">PatternTuple.to_string()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.pattern_tuple.PatternTuple.union"><code class="docutils literal notranslate"><span class="pre">PatternTuple.union()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#id9"><code class="docutils literal notranslate"><span class="pre">PatternTuple.weight</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.pattern_tuple.PatternTuple.wildcards"><code class="docutils literal notranslate"><span class="pre">PatternTuple.wildcards()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="yumcha.core.solver.html">yumcha.core.solver package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="yumcha.core.solver.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yumcha.core.solver.html#module-yumcha.core.solver.base">yumcha.core.solver.base module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="yumcha.core.solver.html#yumcha.core.solver.base.BaseSolver"><code class="docutils literal notranslate"><span class="pre">BaseSolver</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.solver.html#yumcha.core.solver.base.BaseSolver.solve_intermediate"><code class="docutils literal notranslate"><span class="pre">BaseSolver.solve_intermediate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.solver.html#yumcha.core.solver.base.BaseSolver.solve_scheme"><code class="docutils literal notranslate"><span class="pre">BaseSolver.solve_scheme()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="yumcha.core.solver.html#module-yumcha.core.solver.csp_solver">yumcha.core.solver.csp_solver module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="yumcha.core.solver.html#yumcha.core.solver.csp_solver.CSPSolver"><code class="docutils literal notranslate"><span class="pre">CSPSolver</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.solver.html#yumcha.core.solver.csp_solver.CSPSolver.solve_intermediate"><code class="docutils literal notranslate"><span class="pre">CSPSolver.solve_intermediate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.solver.html#yumcha.core.solver.csp_solver.CSPSolver.solve_scheme"><code class="docutils literal notranslate"><span class="pre">CSPSolver.solve_scheme()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="yumcha.core.solver.html#module-yumcha.core.solver.helpers">yumcha.core.solver.helpers module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="yumcha.core.solver.html#yumcha.core.solver.helpers.build_solution"><code class="docutils literal notranslate"><span class="pre">build_solution()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="yumcha.core.solver.html#yumcha.core.solver.helpers.union_if_compatible"><code class="docutils literal notranslate"><span class="pre">union_if_compatible()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="yumcha.core.solver.html#module-yumcha.core.solver.linear_solver">yumcha.core.solver.linear_solver module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="yumcha.core.solver.html#yumcha.core.solver.linear_solver.LinearSolver"><code class="docutils literal notranslate"><span class="pre">LinearSolver</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.solver.html#yumcha.core.solver.linear_solver.LinearSolver.solve_intermediate"><code class="docutils literal notranslate"><span class="pre">LinearSolver.solve_intermediate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.solver.html#yumcha.core.solver.linear_solver.LinearSolver.solve_scheme"><code class="docutils literal notranslate"><span class="pre">LinearSolver.solve_scheme()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="yumcha.core.solver.html#module-yumcha.core.solver.models">yumcha.core.solver.models module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="yumcha.core.solver.html#yumcha.core.solver.models.Candidate"><code class="docutils literal notranslate"><span class="pre">Candidate</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.solver.html#yumcha.core.solver.models.Candidate.pattern"><code class="docutils literal notranslate"><span class="pre">Candidate.pattern</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.solver.html#yumcha.core.solver.models.Candidate.registrant_mask"><code class="docutils literal notranslate"><span class="pre">Candidate.registrant_mask</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.solver.html#yumcha.core.solver.models.Candidate.span"><code class="docutils literal notranslate"><span class="pre">Candidate.span</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.solver.html#id0"><code class="docutils literal notranslate"><span class="pre">Candidate.pattern</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.solver.html#id1"><code class="docutils literal notranslate"><span class="pre">Candidate.registrant_mask</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.solver.html#id2"><code class="docutils literal notranslate"><span class="pre">Candidate.span</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.solver.html#yumcha.core.solver.models.Candidate.str_mask"><code class="docutils literal notranslate"><span class="pre">Candidate.str_mask</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="yumcha.core.solver.html#yumcha.core.solver.models.SearchState"><code class="docutils literal notranslate"><span class="pre">SearchState</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.solver.html#yumcha.core.solver.models.SearchState.field_index"><code class="docutils literal notranslate"><span class="pre">SearchState.field_index</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.solver.html#yumcha.core.solver.models.SearchState.registrant_mask"><code class="docutils literal notranslate"><span class="pre">SearchState.registrant_mask</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.solver.html#yumcha.core.solver.models.SearchState.selected"><code class="docutils literal notranslate"><span class="pre">SearchState.selected</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.solver.html#id3"><code class="docutils literal notranslate"><span class="pre">SearchState.field_index</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.solver.html#id4"><code class="docutils literal notranslate"><span class="pre">SearchState.registrant_mask</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.solver.html#id5"><code class="docutils literal notranslate"><span class="pre">SearchState.selected</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.solver.html#yumcha.core.solver.models.SearchState.selected_text"><code class="docutils literal notranslate"><span class="pre">SearchState.selected_text</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="yumcha.core.solver.html#yumcha.core.solver.models.SearchStateMRV"><code class="docutils literal notranslate"><span class="pre">SearchStateMRV</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.solver.html#yumcha.core.solver.models.SearchStateMRV.remaining_fields_mask"><code class="docutils literal notranslate"><span class="pre">SearchStateMRV.remaining_fields_mask</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.solver.html#yumcha.core.solver.models.SearchStateMRV.registrant_mask"><code class="docutils literal notranslate"><span class="pre">SearchStateMRV.registrant_mask</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.solver.html#yumcha.core.solver.models.SearchStateMRV.selected"><code class="docutils literal notranslate"><span class="pre">SearchStateMRV.selected</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.solver.html#id6"><code class="docutils literal notranslate"><span class="pre">SearchStateMRV.registrant_mask</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.solver.html#id7"><code class="docutils literal notranslate"><span class="pre">SearchStateMRV.remaining_fields_mask</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.solver.html#id8"><code class="docutils literal notranslate"><span class="pre">SearchStateMRV.selected</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.solver.html#yumcha.core.solver.models.SearchStateMRV.selected_text"><code class="docutils literal notranslate"><span class="pre">SearchStateMRV.selected_text</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="yumcha.core.solver.html#yumcha.core.solver.models.SolveContext"><code class="docutils literal notranslate"><span class="pre">SolveContext</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.solver.html#yumcha.core.solver.models.SolveContext.text_norm"><code class="docutils literal notranslate"><span class="pre">SolveContext.text_norm</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.solver.html#yumcha.core.solver.models.SolveContext.scheme"><code class="docutils literal notranslate"><span class="pre">SolveContext.scheme</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.solver.html#yumcha.core.solver.models.SolveContext.directive"><code class="docutils literal notranslate"><span class="pre">SolveContext.directive</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.solver.html#yumcha.core.solver.models.SolveContext.source_indexer"><code class="docutils literal notranslate"><span class="pre">SolveContext.source_indexer</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.solver.html#yumcha.core.solver.models.SolveContext.target_indexer"><code class="docutils literal notranslate"><span class="pre">SolveContext.target_indexer</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.solver.html#yumcha.core.solver.models.SolveContext.source_fields"><code class="docutils literal notranslate"><span class="pre">SolveContext.source_fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.solver.html#yumcha.core.solver.models.SolveContext.target_fields"><code class="docutils literal notranslate"><span class="pre">SolveContext.target_fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.solver.html#yumcha.core.solver.models.SolveContext.scheme_to_intermediate_map"><code class="docutils literal notranslate"><span class="pre">SolveContext.scheme_to_intermediate_map</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.solver.html#id9"><code class="docutils literal notranslate"><span class="pre">SolveContext.directive</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.solver.html#id10"><code class="docutils literal notranslate"><span class="pre">SolveContext.scheme</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.solver.html#id11"><code class="docutils literal notranslate"><span class="pre">SolveContext.scheme_to_intermediate_map</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.solver.html#id12"><code class="docutils literal notranslate"><span class="pre">SolveContext.source_fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.solver.html#id13"><code class="docutils literal notranslate"><span class="pre">SolveContext.source_indexer</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.solver.html#id14"><code class="docutils literal notranslate"><span class="pre">SolveContext.target_fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.solver.html#id15"><code class="docutils literal notranslate"><span class="pre">SolveContext.target_indexer</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.solver.html#id16"><code class="docutils literal notranslate"><span class="pre">SolveContext.text_norm</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="yumcha.core.solver.html#yumcha.core.solver.models.SolveDirective"><code class="docutils literal notranslate"><span class="pre">SolveDirective</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.solver.html#yumcha.core.solver.models.SolveDirective.INTERMEDIATE_TO_SCHEME"><code class="docutils literal notranslate"><span class="pre">SolveDirective.INTERMEDIATE_TO_SCHEME</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.solver.html#yumcha.core.solver.models.SolveDirective.SCHEME_TO_INTERMEDIATE"><code class="docutils literal notranslate"><span class="pre">SolveDirective.SCHEME_TO_INTERMEDIATE</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="yumcha.core.solver.html#module-yumcha.core.solver">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="yumcha.core.utils.html">yumcha.core.utils namespace</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="yumcha.core.utils.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yumcha.core.utils.html#module-yumcha.core.utils.bit">yumcha.core.utils.bit module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="yumcha.core.utils.html#yumcha.core.utils.bit.iterate_bits"><code class="docutils literal notranslate"><span class="pre">iterate_bits()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="yumcha.core.utils.html#module-yumcha.core.utils.collections">yumcha.core.utils.collections module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="yumcha.core.utils.html#yumcha.core.utils.collections.SequenceProxy"><code class="docutils literal notranslate"><span class="pre">SequenceProxy</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-yumcha.core.exceptions">
+<span id="yumcha-core-exceptions-module"></span><h2>yumcha.core.exceptions module<a class="headerlink" href="#module-yumcha.core.exceptions" title="Link to this heading"></a></h2>
+<p>Exception hierarchy for phonological rule processing and scheme execution errors.</p>
+<p>Provides custom exception classes to handle domain-specific errors such as rule violations,
+unresolved pattern queries, and unsupported scheme operations.</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="yumcha.core.exceptions.CollisionError">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">yumcha.core.exceptions.</span></span><span class="sig-name descname"><span class="pre">CollisionError</span></span><a class="reference internal" href="_modules/yumcha/core/exceptions.html#CollisionError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.core.exceptions.CollisionError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#yumcha.core.exceptions.ValidationError" title="yumcha.core.exceptions.ValidationError"><code class="xref py py-class docutils literal notranslate"><span class="pre">ValidationError</span></code></a></p>
+<p>Raised when a component collision occurs during round-trip validation.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="yumcha.core.exceptions.ConversionError">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">yumcha.core.exceptions.</span></span><span class="sig-name descname"><span class="pre">ConversionError</span></span><a class="reference internal" href="_modules/yumcha/core/exceptions.html#ConversionError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.core.exceptions.ConversionError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#yumcha.core.exceptions.CoreError" title="yumcha.core.exceptions.CoreError"><code class="xref py py-class docutils literal notranslate"><span class="pre">CoreError</span></code></a></p>
+<p>Base exception for errors during conversion operations.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="yumcha.core.exceptions.CoreError">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">yumcha.core.exceptions.</span></span><span class="sig-name descname"><span class="pre">CoreError</span></span><a class="reference internal" href="_modules/yumcha/core/exceptions.html#CoreError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.core.exceptions.CoreError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Base exception for all phonological and scheme processing errors.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="yumcha.core.exceptions.NoMatchError">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">yumcha.core.exceptions.</span></span><span class="sig-name descname"><span class="pre">NoMatchError</span></span><a class="reference internal" href="_modules/yumcha/core/exceptions.html#NoMatchError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.core.exceptions.NoMatchError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#yumcha.core.exceptions.ConversionError" title="yumcha.core.exceptions.ConversionError"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConversionError</span></code></a></p>
+<p>Raised when no matching pattern rule can be resolved for a given sequence or query.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="yumcha.core.exceptions.ParseError">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">yumcha.core.exceptions.</span></span><span class="sig-name descname"><span class="pre">ParseError</span></span><a class="reference internal" href="_modules/yumcha/core/exceptions.html#ParseError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.core.exceptions.ParseError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#yumcha.core.exceptions.CoreError" title="yumcha.core.exceptions.CoreError"><code class="xref py py-class docutils literal notranslate"><span class="pre">CoreError</span></code></a></p>
+<p>Raised when text fails to match the expected phonology or scheme pattern.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="yumcha.core.exceptions.RoundtripError">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">yumcha.core.exceptions.</span></span><span class="sig-name descname"><span class="pre">RoundtripError</span></span><a class="reference internal" href="_modules/yumcha/core/exceptions.html#RoundtripError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.core.exceptions.RoundtripError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#yumcha.core.exceptions.ValidationError" title="yumcha.core.exceptions.ValidationError"><code class="xref py py-class docutils literal notranslate"><span class="pre">ValidationError</span></code></a></p>
+<p>Raised when result text fails to convert back to its original form inside the solver.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="yumcha.core.exceptions.SchemeError">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">yumcha.core.exceptions.</span></span><span class="sig-name descname"><span class="pre">SchemeError</span></span><a class="reference internal" href="_modules/yumcha/core/exceptions.html#SchemeError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.core.exceptions.SchemeError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#yumcha.core.exceptions.CoreError" title="yumcha.core.exceptions.CoreError"><code class="xref py py-class docutils literal notranslate"><span class="pre">CoreError</span></code></a></p>
+<p>Raised when a scheme fails the phonemic validation.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="yumcha.core.exceptions.ValidationError">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">yumcha.core.exceptions.</span></span><span class="sig-name descname"><span class="pre">ValidationError</span></span><a class="reference internal" href="_modules/yumcha/core/exceptions.html#ValidationError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.core.exceptions.ValidationError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#yumcha.core.exceptions.CoreError" title="yumcha.core.exceptions.CoreError"><code class="xref py py-class docutils literal notranslate"><span class="pre">CoreError</span></code></a></p>
+<p>Base exception for errors during post-conversion operations.</p>
+</dd></dl>
+
+</section>
+<section id="module-yumcha.core.language">
+<span id="yumcha-core-language-module"></span><h2>yumcha.core.language module<a class="headerlink" href="#module-yumcha.core.language" title="Link to this heading"></a></h2>
+<p>Language facade coordinating phonological representations and orthographic schemes.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="yumcha.core.language.Language">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">yumcha.core.language.</span></span><span class="sig-name descname"><span class="pre">Language</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phonology</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yumcha/core/language.html#Language"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.core.language.Language" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Generic</span></code></p>
+<p>Coordinates phonological representations and orthographic/romanization schemes.</p>
+<p>Provides high-level APIs for converting phoneme representations to/from registered
+schemes, cross-converting between schemes, running validations, and generating
+combinatorial syllable tables.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>phonology</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="yumcha.core.facades.html#yumcha.core.facades.phonology.Phonology" title="yumcha.core.facades.phonology.Phonology"><code class="xref py py-class docutils literal notranslate"><span class="pre">Phonology</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">TypeVar</span></code>(<code class="docutils literal notranslate"><span class="pre">PhonologyRepresentationT</span></code>, bound= <a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.representation.PhonologyRepresentation" title="yumcha.core.models.representation.PhonologyRepresentation"><code class="xref py py-class docutils literal notranslate"><span class="pre">PhonologyRepresentation</span></code></a>)]</span>)</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="yumcha.core.language.Language.add_scheme">
+<span class="sig-name descname"><span class="pre">add_scheme</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scheme</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yumcha/core/language.html#Language.add_scheme"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.core.language.Language.add_scheme" title="Link to this definition"></a></dt>
+<dd><p>Loads, validates, and registers a scheme mapping.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>scheme</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="yumcha.core.facades.html#yumcha.core.facades.scheme.Scheme" title="yumcha.core.facades.scheme.Scheme"><code class="xref py py-class docutils literal notranslate"><span class="pre">Scheme</span></code></a>[<a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.representation.SchemeRepresentation" title="yumcha.core.models.representation.SchemeRepresentation"><code class="xref py py-class docutils literal notranslate"><span class="pre">SchemeRepresentation</span></code></a>]</span>) – File path string, <cite>Traversable</cite> resource, or pre-built <cite>Scheme</cite> object.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If character sets in the scheme conflict with phonology requirements.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="yumcha.core.language.Language.convert_intermediate_to_scheme">
+<span class="sig-name descname"><span class="pre">convert_intermediate_to_scheme</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scheme_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solver_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yumcha/core/language.html#Language.convert_intermediate_to_scheme"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.core.language.Language.convert_intermediate_to_scheme" title="Link to this definition"></a></dt>
+<dd><p>Converts intermediate phonological input into a scheme representation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Overloads<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>self</strong>, <strong>source</strong> (<span class="sphinx_autodoc_typehints-type">str</span>), <strong>scheme_id</strong> (<span class="sphinx_autodoc_typehints-type">str</span>), <strong>validate</strong> (<span class="sphinx_autodoc_typehints-type">bool</span>), <strong>strict</strong> (<span class="sphinx_autodoc_typehints-type">Literal[True]</span>), <strong>solver_id</strong> (<span class="sphinx_autodoc_typehints-type">Literal[SupportedSolvers] | None</span>) → <span class="sphinx_autodoc_typehints-type">SchemeRepresentation</span></p></li>
+<li><p><strong>self</strong>, <strong>source</strong> (<span class="sphinx_autodoc_typehints-type">str</span>), <strong>scheme_id</strong> (<span class="sphinx_autodoc_typehints-type">str</span>), <strong>validate</strong> (<span class="sphinx_autodoc_typehints-type">bool</span>), <strong>strict</strong> (<span class="sphinx_autodoc_typehints-type">Literal[False]</span>), <strong>solver_id</strong> (<span class="sphinx_autodoc_typehints-type">Literal[SupportedSolvers] | None</span>) → <span class="sphinx_autodoc_typehints-type">SchemeRepresentation | None</span></p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>source</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – Source string in intermediate phonology format.</p></li>
+<li><p><strong>scheme_id</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – Identifier of the registered target scheme to convert into.</p></li>
+<li><p><strong>validate</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>) – Whether to run phonotactic rules and roundtrip validation.</p></li>
+<li><p><strong>strict</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>) – If True, raises exceptions on validation failure or missing solver
+solutions. If False, returns None instead.</p></li>
+<li><p><strong>solver_id</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Literal</span></code>[<code class="docutils literal notranslate"><span class="pre">SupportedSolvers</span></code>]]</span>) – Identifier of the solver to resolve source text into a solution.
+If <cite>None</cite>, picks the default solver from <cite>self._solver_to_use</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>An instantiated target <cite>SchemeRepresentation</cite> dataclass, or None
+if <cite>strict=False</cite> and conversion/validation fails.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If no valid solver solution exists and <cite>strict=True</cite>.</p></li>
+<li><p><strong>PhonologicalError</strong> – If the input violates phonotactic rules and <cite>strict=True</cite>.</p></li>
+<li><p><strong>NotSupportedError</strong> – If roundtrip validation fails and <cite>strict=True</cite>.</p></li>
+<li><p><strong>KeyError</strong> – If <cite>scheme_id</cite> is not registered, or if <cite>solver_id</cite> is not in
+    <cite>self._solvers</cite>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="yumcha.core.language.Language.convert_scheme_to_intermediate">
+<span class="sig-name descname"><span class="pre">convert_scheme_to_intermediate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scheme_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solver_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yumcha/core/language.html#Language.convert_scheme_to_intermediate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.core.language.Language.convert_scheme_to_intermediate" title="Link to this definition"></a></dt>
+<dd><p>Converts scheme input into an intermediate phonological representation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Overloads<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>self</strong>, <strong>source</strong> (<span class="sphinx_autodoc_typehints-type">str</span>), <strong>scheme_id</strong> (<span class="sphinx_autodoc_typehints-type">str</span>), <strong>validate</strong> (<span class="sphinx_autodoc_typehints-type">bool</span>), <strong>strict</strong> (<span class="sphinx_autodoc_typehints-type">Literal[True]</span>), <strong>solver_id</strong> (<span class="sphinx_autodoc_typehints-type">Literal[SupportedSolvers] | None</span>) → <span class="sphinx_autodoc_typehints-type">PhonologyRepresentationT</span></p></li>
+<li><p><strong>self</strong>, <strong>source</strong> (<span class="sphinx_autodoc_typehints-type">str</span>), <strong>scheme_id</strong> (<span class="sphinx_autodoc_typehints-type">str</span>), <strong>validate</strong> (<span class="sphinx_autodoc_typehints-type">bool</span>), <strong>strict</strong> (<span class="sphinx_autodoc_typehints-type">Literal[False]</span>), <strong>solver_id</strong> (<span class="sphinx_autodoc_typehints-type">Literal[SupportedSolvers] | None</span>) → <span class="sphinx_autodoc_typehints-type">PhonologyRepresentationT | None</span></p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>source</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – Source string in the target scheme format.</p></li>
+<li><p><strong>scheme_id</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – Identifier of the registered scheme to convert from.</p></li>
+<li><p><strong>validate</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>) – Whether to run phonotactic rules and roundtrip validation.</p></li>
+<li><p><strong>strict</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>) – If True, raises exceptions on validation failure or missing solver
+solutions. If False, returns None instead.</p></li>
+<li><p><strong>solver_id</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Literal</span></code>[<code class="docutils literal notranslate"><span class="pre">SupportedSolvers</span></code>]]</span>) – Identifier of the solver to resolve source text into a solution.
+If <cite>None</cite>, picks the default solver from <cite>self._solver_to_use</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>An instantiated intermediate <cite>PhonologyRepresentation</cite> dataclass, or None
+if <cite>strict=False</cite> and conversion/validation fails.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If no valid solver solution exists and <cite>strict=True</cite>.</p></li>
+<li><p><strong>PhonologicalError</strong> – If the input violates phonotactic rules and <cite>strict=True</cite>.</p></li>
+<li><p><strong>NotSupportedError</strong> – If roundtrip validation fails and <cite>strict=True</cite>.</p></li>
+<li><p><strong>KeyError</strong> – If <cite>scheme_id</cite> is not registered, or if <cite>solver_id</cite> is not in
+    <cite>self._solvers</cite>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="yumcha.core.language.Language.convert_scheme_to_scheme">
+<span class="sig-name descname"><span class="pre">convert_scheme_to_scheme</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">from_scheme_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_scheme_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yumcha/core/language.html#Language.convert_scheme_to_scheme"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.core.language.Language.convert_scheme_to_scheme" title="Link to this definition"></a></dt>
+<dd><p>Converts a source scheme string directly to another registered scheme representation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Overloads<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>self</strong>, <strong>source</strong> (<span class="sphinx_autodoc_typehints-type">str</span>), <strong>from_scheme_id</strong> (<span class="sphinx_autodoc_typehints-type">str</span>), <strong>to_scheme_id</strong> (<span class="sphinx_autodoc_typehints-type">str</span>), <strong>validate</strong> (<span class="sphinx_autodoc_typehints-type">bool</span>), <strong>strict</strong> (<span class="sphinx_autodoc_typehints-type">Literal[True]</span>) → <span class="sphinx_autodoc_typehints-type">SchemeRepresentation</span></p></li>
+<li><p><strong>self</strong>, <strong>source</strong> (<span class="sphinx_autodoc_typehints-type">str</span>), <strong>from_scheme_id</strong> (<span class="sphinx_autodoc_typehints-type">str</span>), <strong>to_scheme_id</strong> (<span class="sphinx_autodoc_typehints-type">str</span>), <strong>validate</strong> (<span class="sphinx_autodoc_typehints-type">bool</span>), <strong>strict</strong> (<span class="sphinx_autodoc_typehints-type">Literal[False]</span>) → <span class="sphinx_autodoc_typehints-type">SchemeRepresentation | None</span></p></li>
+</ul>
+</dd>
+</dl>
+<p>Translates the source string through the intermediate phonological representation
+before converting to the target scheme.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – Source text in the original scheme format.</p></li>
+<li><p><strong>from_scheme_id</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – Identifier of the source scheme to convert from.</p></li>
+<li><p><strong>to_scheme_id</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – Identifier of the target scheme to convert to.</p></li>
+<li><p><strong>validate</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>) – Whether to run phonotactic rules and roundtrip validation.</p></li>
+<li><p><strong>strict</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>) – If True, raises exceptions on validation failure or missing solver
+solutions. If False, returns None instead.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An instantiated target <cite>SchemeRepresentation</cite> dataclass, or None
+if <cite>strict=False</cite> and conversion/validation fails.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ValueError</strong> – If no valid solver solution exists and <cite>strict=True</cite>.</p></li>
+<li><p><strong>PhonologicalError</strong> – If the input violates phonotactic rules and <cite>strict=True</cite>.</p></li>
+<li><p><strong>NotSupportedError</strong> – If roundtrip validation fails and <cite>strict=True</cite>.</p></li>
+<li><p><strong>KeyError</strong> – If <cite>from_scheme_id</cite> or <cite>to_scheme_id</cite> is not registered.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="yumcha.core.language.Language.parse_to_intermediate">
+<span class="sig-name descname"><span class="pre">parse_to_intermediate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yumcha/core/language.html#Language.parse_to_intermediate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.core.language.Language.parse_to_intermediate" title="Link to this definition"></a></dt>
+<dd><p>Parses text into a phonological intermediate <cite>Representation</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>text</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – Raw input string to parse.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypeVar</span></code>(<code class="docutils literal notranslate"><span class="pre">PhonologyRepresentationT</span></code>, bound= <a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.representation.PhonologyRepresentation" title="yumcha.core.models.representation.PhonologyRepresentation"><code class="xref py py-class docutils literal notranslate"><span class="pre">PhonologyRepresentation</span></code></a>)</span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>An instantiated intermediate <cite>Representation</cite> dataclass.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#yumcha.core.exceptions.ParseError" title="yumcha.core.exceptions.ParseError"><strong>ParseError</strong></a> – If input text fails to match the expected phonology pattern.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="yumcha.core.language.Language.parse_to_scheme">
+<span class="sig-name descname"><span class="pre">parse_to_scheme</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scheme_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yumcha/core/language.html#Language.parse_to_scheme"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.core.language.Language.parse_to_scheme" title="Link to this definition"></a></dt>
+<dd><p>Parses text into the target scheme’s <cite>Representation</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>text</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – Raw input string to parse.</p></li>
+<li><p><strong>scheme_id</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – Identifier of the target registered scheme.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.representation.SchemeRepresentation" title="yumcha.core.models.representation.SchemeRepresentation"><code class="xref py py-class docutils literal notranslate"><span class="pre">SchemeRepresentation</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>An instantiated target scheme <cite>Representation</cite> dataclass.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>KeyError</strong> – If <cite>scheme_id</cite> is not registered.</p></li>
+<li><p><a class="reference internal" href="#yumcha.core.exceptions.ParseError" title="yumcha.core.exceptions.ParseError"><strong>ParseError</strong></a> – If input text fails to match the expected scheme pattern.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="yumcha.core.language.Language.phonology">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">phonology</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="yumcha.core.facades.html#yumcha.core.facades.phonology.Phonology" title="yumcha.core.facades.phonology.Phonology"><span class="pre">Phonology</span></a><span class="p"><span class="pre">[</span></span><span class="pre">PhonologyRepresentationT</span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#yumcha.core.language.Language.phonology" title="Link to this definition"></a></dt>
+<dd><p>Gets the underlying phonology specification.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Phonology instance containing character sets and phonotactic rules.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="yumcha.core.language.Language.remove_scheme">
+<span class="sig-name descname"><span class="pre">remove_scheme</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scheme_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yumcha/core/language.html#Language.remove_scheme"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.core.language.Language.remove_scheme" title="Link to this definition"></a></dt>
+<dd><p>Removes and returns a registered scheme by ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>scheme_id</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – Identifier of the scheme to unregister.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="yumcha.core.facades.html#yumcha.core.facades.scheme.Scheme" title="yumcha.core.facades.scheme.Scheme"><code class="xref py py-class docutils literal notranslate"><span class="pre">Scheme</span></code></a>[<a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.representation.SchemeRepresentation" title="yumcha.core.models.representation.SchemeRepresentation"><code class="xref py py-class docutils literal notranslate"><span class="pre">SchemeRepresentation</span></code></a>]</span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The removed <cite>Scheme</cite> instance.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>KeyError</strong> – If <cite>scheme_id</cite> is not registered.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="yumcha.core.language.Language.schemes">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">schemes</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">MappingProxyType</span></span><a class="headerlink" href="#yumcha.core.language.Language.schemes" title="Link to this definition"></a></dt>
+<dd><p>Gets a read-only view of registered scheme facades.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>MappingProxyType mapping scheme ID strings to Scheme instances.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="yumcha.core.language.Language.solver_to_use">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">solver_to_use</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">MappingProxyType</span></span><a class="headerlink" href="#yumcha.core.language.Language.solver_to_use" title="Link to this definition"></a></dt>
+<dd><p>Gets a read-only view mapping registered scheme IDs to their default solver strategies.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>MappingProxyType mapping scheme ID strings to solver strategy identifiers
+(“linear” or “csp”).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="yumcha.core.language.Language.solvers">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">solvers</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">MappingProxyType</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="yumcha.core.solver.html#yumcha.core.solver.base.BaseSolver" title="yumcha.core.solver.base.BaseSolver"><span class="pre">BaseSolver</span></a><span class="p"><span class="pre">[</span></span><span class="pre">PhonologyRepresentationT</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#yumcha.core.language.Language.solvers" title="Link to this definition"></a></dt>
+<dd><p>Gets a read-only view of registered solvers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>MappingProxyType mapping solver ID strings to <cite>BaseSolver</cite> instances.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="yumcha.core.language.Language.validate_scheme">
+<span class="sig-name descname"><span class="pre">validate_scheme</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scheme</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yumcha/core/language.html#Language.validate_scheme"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.core.language.Language.validate_scheme" title="Link to this definition"></a></dt>
+<dd><p>Validates that a scheme covers all required phonology character sets.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>scheme</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="yumcha.core.facades.html#yumcha.core.facades.scheme.Scheme" title="yumcha.core.facades.scheme.Scheme"><code class="xref py py-class docutils literal notranslate"><span class="pre">Scheme</span></code></a>[<a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.representation.SchemeRepresentation" title="yumcha.core.models.representation.SchemeRepresentation"><code class="xref py py-class docutils literal notranslate"><span class="pre">SchemeRepresentation</span></code></a>]</span>) – <cite>Scheme</cite> instance to validate against the active phonology.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If phonemes required by phonology are missing in the scheme,
+    or if redundant phonemes are present in the scheme.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py type">
+<dt class="sig sig-object py" id="yumcha.core.language.SupportedSolvers">
+<span class="property"><span class="k"><span class="pre">type</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">yumcha.core.language.</span></span><span class="sig-name descname"><span class="pre">SupportedSolvers</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'csp'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'linear'</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#yumcha.core.language.SupportedSolvers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-yumcha.core">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-yumcha.core" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="yumcha.html" class="btn btn-neutral float-left" title="yumcha namespace" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="yumcha.core.cluster_canonicalizer.html" class="btn btn-neutral float-right" title="yumcha.core.cluster_canonicalizer package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, yumcha.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

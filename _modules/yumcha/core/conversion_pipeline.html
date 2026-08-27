@@ -1,0 +1,439 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>yumcha.core.conversion_pipeline &mdash; yumcha  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            yumcha
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">yumcha</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">yumcha</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">yumcha.core.conversion_pipeline</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for yumcha.core.conversion_pipeline</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Conversion pipeline orchestrator.</span>
+
+<span class="sd">Provides high-level methods to convert between orthographic schemes and underlying</span>
+<span class="sd">phonological representations with automatic validation and strict error boundaries.</span>
+<span class="sd">"""</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">overload</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">NoMatchError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.validation</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConversionValidator</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..facades.scheme</span><span class="w"> </span><span class="kn">import</span> <span class="n">Scheme</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..language</span><span class="w"> </span><span class="kn">import</span> <span class="n">Language</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..models.representation</span><span class="w"> </span><span class="kn">import</span> <span class="n">PhonologyRepresentation</span><span class="p">,</span> <span class="n">SchemeRepresentation</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..models.solution</span><span class="w"> </span><span class="kn">import</span> <span class="n">Solution</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">PhonologyRepresentationClsFn</span><span class="p">,</span> <span class="n">SchemeRepresentationClsFn</span><span class="p">,</span> <span class="n">SolveFn</span>
+
+
+<div class="viewcode-block" id="ConversionPipeline">
+<a class="viewcode-back" href="../../../yumcha.core.conversion_pipeline.html#yumcha.core.conversion_pipeline.ConversionPipeline">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ConversionPipeline</span><span class="p">[</span><span class="n">PhonologyRepresentationT</span><span class="p">:</span> <span class="n">PhonologyRepresentation</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">"""Orchestrates conversion, phonotactic validation, and roundtrip checking."""</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">language</span><span class="p">:</span> <span class="n">Language</span><span class="p">[</span><span class="n">PhonologyRepresentationT</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Initializes the conversion pipeline for a given language model.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            language: Language facade instance containing solvers, phonology, and schemes.</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_language</span><span class="p">:</span> <span class="n">Language</span><span class="p">[</span><span class="n">PhonologyRepresentationT</span><span class="p">]</span> <span class="o">=</span> <span class="n">language</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_validator</span><span class="p">:</span> <span class="n">ConversionValidator</span><span class="p">[</span><span class="n">PhonologyRepresentationT</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">ConversionValidator</span><span class="p">(</span><span class="n">language</span><span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="nd">@overload</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">convert_to_intermediate</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">source</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">scheme_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">validate</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+        <span class="n">strict</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="kc">True</span><span class="p">]</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+        <span class="n">solver_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PhonologyRepresentationT</span><span class="p">:</span> <span class="o">...</span>
+
+    <span class="nd">@overload</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">convert_to_intermediate</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">source</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">scheme_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">validate</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+        <span class="n">strict</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="kc">False</span><span class="p">]</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+        <span class="n">solver_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PhonologyRepresentationT</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
+
+    <span class="nd">@overload</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">convert_to_intermediate</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">source</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">scheme_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">validate</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+        <span class="n">strict</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+        <span class="n">solver_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PhonologyRepresentationT</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
+
+<div class="viewcode-block" id="ConversionPipeline.convert_to_intermediate">
+<a class="viewcode-back" href="../../../yumcha.core.conversion_pipeline.html#yumcha.core.conversion_pipeline.ConversionPipeline.convert_to_intermediate">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">convert_to_intermediate</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">source</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">scheme_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">validate</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">strict</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">solver_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PhonologyRepresentationT</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Converts an orthographic scheme string into its intermediate phonological representation.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            source: Source scheme string to convert.</span>
+<span class="sd">            scheme_id: Identifier of the source scheme.</span>
+<span class="sd">            validate: Whether to run phonotactic and roundtrip integrity checks.</span>
+<span class="sd">            strict: If `True`, raises errors on failure; if `False`, returns `None`.</span>
+<span class="sd">            solver_id: Identifier of the solver to resolve source text into a solution.</span>
+<span class="sd">                If `None`, picks the default solver from `self._language._solver_to_use`.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            An instance of `PhonologyRepresentationT`, or `None` if conversion fails and `strict=False`.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            KeyError: If `solver_id` is not in `self._language._solvers`.</span>
+<span class="sd">        """</span>
+        <span class="n">language</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_language</span>
+        <span class="k">if</span> <span class="n">solver_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">solver_id</span> <span class="o">=</span> <span class="n">language</span><span class="o">.</span><span class="n">solver_to_use</span><span class="p">[</span><span class="n">scheme_id</span><span class="p">]</span>
+        <span class="n">solver</span> <span class="o">=</span> <span class="n">language</span><span class="o">.</span><span class="n">solvers</span><span class="p">[</span><span class="n">solver_id</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span>
+            <span class="n">source</span><span class="p">,</span>
+            <span class="n">scheme_id</span><span class="p">,</span>
+            <span class="n">solver</span><span class="o">.</span><span class="n">solve_scheme</span><span class="p">,</span>
+            <span class="k">lambda</span> <span class="n">_</span><span class="p">:</span> <span class="n">language</span><span class="o">.</span><span class="n">phonology</span><span class="o">.</span><span class="n">cls</span><span class="p">,</span>
+            <span class="n">solver</span><span class="o">.</span><span class="n">solve_intermediate</span><span class="p">,</span>
+            <span class="k">lambda</span> <span class="n">scheme</span><span class="p">:</span> <span class="n">scheme</span><span class="o">.</span><span class="n">cls</span><span class="p">,</span>
+            <span class="n">validate</span><span class="p">,</span>
+            <span class="n">strict</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+    <span class="nd">@overload</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">convert_to_scheme</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">source</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">scheme_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">validate</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+        <span class="n">strict</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="kc">True</span><span class="p">]</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+        <span class="n">solver_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SchemeRepresentation</span><span class="p">:</span> <span class="o">...</span>
+
+    <span class="nd">@overload</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">convert_to_scheme</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">source</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">scheme_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">validate</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+        <span class="n">strict</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="kc">False</span><span class="p">]</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+        <span class="n">solver_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SchemeRepresentation</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
+
+    <span class="nd">@overload</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">convert_to_scheme</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">source</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">scheme_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">validate</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+        <span class="n">strict</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+        <span class="n">solver_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SchemeRepresentation</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
+
+<div class="viewcode-block" id="ConversionPipeline.convert_to_scheme">
+<a class="viewcode-back" href="../../../yumcha.core.conversion_pipeline.html#yumcha.core.conversion_pipeline.ConversionPipeline.convert_to_scheme">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">convert_to_scheme</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">source</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">scheme_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">validate</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">strict</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">solver_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SchemeRepresentation</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Converts an intermediate phonological representation string into a target scheme representation.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            source: Source phonological string to convert.</span>
+<span class="sd">            scheme_id: Identifier of the target scheme.</span>
+<span class="sd">            validate: Whether to run phonotactic and roundtrip integrity checks.</span>
+<span class="sd">            strict: If `True`, raises errors on failure; if `False`, returns `None`.</span>
+<span class="sd">            solver_id: Identifier of the solver to resolve source text into a solution.</span>
+<span class="sd">                If `None`, picks the default solver in `self._language`.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            An instance of `SchemeRepresentation`, or `None` if conversion fails and `strict=False`.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            KeyError: If `solver_id` is not in `self._language._solvers`.</span>
+<span class="sd">        """</span>
+        <span class="n">language</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_language</span>
+        <span class="k">if</span> <span class="n">solver_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">solver_id</span> <span class="o">=</span> <span class="n">language</span><span class="o">.</span><span class="n">solver_to_use</span><span class="p">[</span><span class="n">scheme_id</span><span class="p">]</span>
+        <span class="n">solver</span> <span class="o">=</span> <span class="n">language</span><span class="o">.</span><span class="n">solvers</span><span class="p">[</span><span class="n">solver_id</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span>
+            <span class="n">source</span><span class="p">,</span>
+            <span class="n">scheme_id</span><span class="p">,</span>
+            <span class="n">solver</span><span class="o">.</span><span class="n">solve_intermediate</span><span class="p">,</span>
+            <span class="k">lambda</span> <span class="n">scheme</span><span class="p">:</span> <span class="n">scheme</span><span class="o">.</span><span class="n">cls</span><span class="p">,</span>
+            <span class="n">solver</span><span class="o">.</span><span class="n">solve_scheme</span><span class="p">,</span>
+            <span class="k">lambda</span> <span class="n">_</span><span class="p">:</span> <span class="n">language</span><span class="o">.</span><span class="n">phonology</span><span class="o">.</span><span class="n">cls</span><span class="p">,</span>
+            <span class="n">validate</span><span class="p">,</span>
+            <span class="n">strict</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+    <span class="nd">@overload</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_execute</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">source</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">scheme_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">solve_fn</span><span class="p">:</span> <span class="n">SolveFn</span><span class="p">,</span>
+        <span class="n">target_cls_fn</span><span class="p">:</span> <span class="n">SchemeRepresentationClsFn</span><span class="p">,</span>
+        <span class="n">inverse_solve_fn</span><span class="p">:</span> <span class="n">SolveFn</span><span class="p">,</span>
+        <span class="n">inverse_cls_fn</span><span class="p">:</span> <span class="n">PhonologyRepresentationClsFn</span><span class="p">[</span><span class="n">PhonologyRepresentationT</span><span class="p">],</span>
+        <span class="n">validate</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+        <span class="n">strict</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="kc">True</span><span class="p">]</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SchemeRepresentation</span><span class="p">:</span> <span class="o">...</span>
+
+    <span class="nd">@overload</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_execute</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">source</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">scheme_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">solve_fn</span><span class="p">:</span> <span class="n">SolveFn</span><span class="p">,</span>
+        <span class="n">target_cls_fn</span><span class="p">:</span> <span class="n">SchemeRepresentationClsFn</span><span class="p">,</span>
+        <span class="n">inverse_solve_fn</span><span class="p">:</span> <span class="n">SolveFn</span><span class="p">,</span>
+        <span class="n">inverse_cls_fn</span><span class="p">:</span> <span class="n">PhonologyRepresentationClsFn</span><span class="p">[</span><span class="n">PhonologyRepresentationT</span><span class="p">],</span>
+        <span class="n">validate</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+        <span class="n">strict</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="kc">False</span><span class="p">]</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SchemeRepresentation</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
+
+    <span class="nd">@overload</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_execute</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">source</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">scheme_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">solve_fn</span><span class="p">:</span> <span class="n">SolveFn</span><span class="p">,</span>
+        <span class="n">target_cls_fn</span><span class="p">:</span> <span class="n">PhonologyRepresentationClsFn</span><span class="p">[</span><span class="n">PhonologyRepresentationT</span><span class="p">],</span>
+        <span class="n">inverse_solve_fn</span><span class="p">:</span> <span class="n">SolveFn</span><span class="p">,</span>
+        <span class="n">inverse_cls_fn</span><span class="p">:</span> <span class="n">SchemeRepresentationClsFn</span><span class="p">,</span>
+        <span class="n">validate</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+        <span class="n">strict</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="kc">True</span><span class="p">]</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PhonologyRepresentationT</span><span class="p">:</span> <span class="o">...</span>
+
+    <span class="nd">@overload</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_execute</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">source</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">scheme_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">solve_fn</span><span class="p">:</span> <span class="n">SolveFn</span><span class="p">,</span>
+        <span class="n">target_cls_fn</span><span class="p">:</span> <span class="n">PhonologyRepresentationClsFn</span><span class="p">[</span><span class="n">PhonologyRepresentationT</span><span class="p">],</span>
+        <span class="n">inverse_solve_fn</span><span class="p">:</span> <span class="n">SolveFn</span><span class="p">,</span>
+        <span class="n">inverse_cls_fn</span><span class="p">:</span> <span class="n">SchemeRepresentationClsFn</span><span class="p">,</span>
+        <span class="n">validate</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+        <span class="n">strict</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="kc">False</span><span class="p">]</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PhonologyRepresentationT</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_execute</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">source</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">scheme_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">solve_fn</span><span class="p">:</span> <span class="n">SolveFn</span><span class="p">,</span>
+        <span class="n">target_cls_fn</span><span class="p">:</span> <span class="n">SchemeRepresentationClsFn</span>
+        <span class="o">|</span> <span class="n">PhonologyRepresentationClsFn</span><span class="p">[</span><span class="n">PhonologyRepresentationT</span><span class="p">],</span>
+        <span class="n">inverse_solve_fn</span><span class="p">:</span> <span class="n">SolveFn</span><span class="p">,</span>
+        <span class="n">inverse_cls_fn</span><span class="p">:</span> <span class="n">PhonologyRepresentationClsFn</span><span class="p">[</span><span class="n">PhonologyRepresentationT</span><span class="p">]</span>
+        <span class="o">|</span> <span class="n">SchemeRepresentationClsFn</span><span class="p">,</span>
+        <span class="n">validate</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+        <span class="n">strict</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PhonologyRepresentationT</span> <span class="o">|</span> <span class="n">SchemeRepresentation</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Executes conversion pipeline between phonology and scheme representations.</span>
+
+<span class="sd">        Handles solving input pattern tuples, instantiating target representation dataclasses,</span>
+<span class="sd">        and running phonotactic and roundtrip consistency checks.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            source: Raw string input to transform.</span>
+<span class="sd">            scheme_id: Identifier of the registered target scheme.</span>
+<span class="sd">            solve_fn: Function to resolve source text into a `Solution`.</span>
+<span class="sd">            target_cls_fn: Resolver function returning the target representation class.</span>
+<span class="sd">            inverse_solve_fn: Function used during roundtrip verification to solve back.</span>
+<span class="sd">            inverse_cls_fn: Resolver function returning the source representation class.</span>
+<span class="sd">            validate: Whether to validate phonotactics and roundtrip integrity.</span>
+<span class="sd">            strict: If True, raises exceptions on errors; if False, returns None.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            An instance of target representation dataclass, or None if conversion fails</span>
+<span class="sd">            and `strict=False`.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            NoMatchError: If `solve_fn` returns no solution and `strict=True`.</span>
+<span class="sd">            PhonologicalError: If input violates phonotactic rules and `strict=True`.</span>
+<span class="sd">            NotSupportedError: If roundtrip verification fails and `strict=True`.</span>
+<span class="sd">        """</span>
+        <span class="n">scheme</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_language</span><span class="o">.</span><span class="n">schemes</span><span class="p">[</span><span class="n">scheme_id</span><span class="p">]</span>
+        <span class="n">solution</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_solve_or_raise</span><span class="p">(</span><span class="n">solve_fn</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">scheme</span><span class="p">,</span> <span class="n">strict</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">solution</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">representation</span> <span class="o">=</span> <span class="n">target_cls_fn</span><span class="p">(</span><span class="n">scheme</span><span class="p">)(</span><span class="o">*</span><span class="n">solution</span><span class="o">.</span><span class="n">target_pattern_tuple</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">validate</span><span class="p">:</span>
+            <span class="n">is_valid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validator</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span>
+                <span class="n">source</span><span class="p">,</span>
+                <span class="n">scheme</span><span class="p">,</span>
+                <span class="n">solution</span><span class="p">,</span>
+                <span class="n">representation</span><span class="p">,</span>
+                <span class="n">inverse_solve_fn</span><span class="p">,</span>
+                <span class="n">inverse_cls_fn</span><span class="p">,</span>
+                <span class="n">strict</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">is_valid</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">return</span> <span class="n">representation</span>
+
+    <span class="nd">@overload</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_solve_or_raise</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">solve_fn</span><span class="p">:</span> <span class="n">SolveFn</span><span class="p">,</span>
+        <span class="n">source</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">scheme</span><span class="p">:</span> <span class="n">Scheme</span><span class="p">[</span><span class="n">SchemeRepresentation</span><span class="p">],</span>
+        <span class="n">strict</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="kc">True</span><span class="p">]</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Solution</span><span class="p">:</span> <span class="o">...</span>
+
+    <span class="nd">@overload</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_solve_or_raise</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">solve_fn</span><span class="p">:</span> <span class="n">SolveFn</span><span class="p">,</span>
+        <span class="n">source</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">scheme</span><span class="p">:</span> <span class="n">Scheme</span><span class="p">[</span><span class="n">SchemeRepresentation</span><span class="p">],</span>
+        <span class="n">strict</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="kc">False</span><span class="p">]</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Solution</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_solve_or_raise</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">solve_fn</span><span class="p">:</span> <span class="n">SolveFn</span><span class="p">,</span>
+        <span class="n">source</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">scheme</span><span class="p">:</span> <span class="n">Scheme</span><span class="p">[</span><span class="n">SchemeRepresentation</span><span class="p">],</span>
+        <span class="n">strict</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Solution</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Executes a solver function and enforces strict error boundary rules.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            solve_fn: Solver function mapping text and scheme to a `Solution`.</span>
+<span class="sd">            source: Source text string to solve.</span>
+<span class="sd">            scheme: Target `Scheme` instance.</span>
+<span class="sd">            strict: If True, raises `NoMatchError` on solver failure; if False, returns None.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A resolved `Solution` instance, or None if `strict=False` and solving fails.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            NoMatchError: If `solve_fn` returns None and `strict=True`.</span>
+<span class="sd">        """</span>
+        <span class="n">solution</span> <span class="o">=</span> <span class="n">solve_fn</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">scheme</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">solution</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">strict</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">None</span>
+            <span class="k">raise</span> <span class="n">NoMatchError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"invalid text </span><span class="si">{</span><span class="n">source</span><span class="si">!r}</span><span class="s2"> for scheme </span><span class="si">{</span><span class="n">scheme</span><span class="o">.</span><span class="n">id</span><span class="si">!r}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">solution</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, yumcha.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
