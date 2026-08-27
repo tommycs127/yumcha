@@ -44,8 +44,34 @@ jobs:
               'sphinx_autodoc_typehints'
           ]
 
-          autodoc_typehints = "signature"
-          autodoc_typehints_format = "short"
+          autodoc_mock_imports = [
+              "BaseSolver",
+              "ClusterCanonicalizer",
+              "ClusterKey",
+              "Indexer",
+              "Language",
+              "Pattern",
+              "PatternIndexes",
+              "PatternIndexesView",
+              "PatternMasks",
+              "PatternMasksView",
+              "PatternTuple",
+              "Phonology",
+              "PhonologyData",
+              "PhonologyDirective",
+              "PhonologyDirectiveMap",
+              "PhonologyRepresentation",
+              "PhonologyRepresentationClsFn",
+              "ProgressBarWrapper",
+              "Representation",
+              "Scheme",
+              "SchemeData",
+              "SchemeDirective",
+              "SchemeRepresentation",
+              "SchemeRepresentationClsFn",
+              "Solution",
+              "SolveFn",
+          ]
 
           always_document_param_types = True
           set_type_checking_flag = True
