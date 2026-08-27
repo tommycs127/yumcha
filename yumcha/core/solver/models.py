@@ -15,8 +15,8 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from ..facades.scheme import Scheme
+    from ..indexer import Indexer
     from ..models.representation import SchemeRepresentation
-    from ..registered_pattern_tuples import RegisteredPatternTuples
 
 
 class SolveDirective(Enum):
@@ -34,8 +34,8 @@ class SolveContext:
         text_norm: Canonicalized source text to solve.
         scheme: The active target or source `Scheme` facade.
         directive: The direction of conversion (`INTERMEDIATE_TO_SCHEME` or vice-versa).
-        source_pattern_tuples: Registered pattern tuples for the source domain.
-        target_pattern_tuples: Registered pattern tuples for the target domain.
+        source_indexer: Indexed pattern tuples for the source domain.
+        target_indexer: Indexed pattern tuples for the target domain.
         source_fields: Field names for the source representation.
         target_fields: Field names for the target representation.
         scheme_to_intermediate_map: Mapping of scheme fields to intermediate indices.
@@ -44,8 +44,8 @@ class SolveContext:
     text_norm: str
     scheme: Scheme[SchemeRepresentation]
     directive: SolveDirective
-    source_pattern_tuples: RegisteredPatternTuples
-    target_pattern_tuples: RegisteredPatternTuples
+    source_indexer: Indexer
+    target_indexer: Indexer
     source_fields: tuple[str, ...]
     target_fields: tuple[str, ...]
     scheme_to_intermediate_map: MappingProxyType[str, frozenset[int]]
@@ -94,6 +94,11 @@ class SearchState:
 
     @property
     def selected_text(self) -> str:
+        """Concatenates candidate patterns into the assembled output text.
+
+        Returns:
+            The combined source or target string for currently selected candidates.
+        """
         return "".join(candidate.pattern for candidate in self.selected)
 
 
@@ -113,6 +118,11 @@ class SearchStateMRV:
 
     @property
     def selected_text(self) -> str:
+        """Concatenates selected candidate patterns ordered by original field index.
+
+        Returns:
+            The assembled string reconstituted in field-index sequence order.
+        """
         return "".join(
             candidate.pattern
             for _, candidate in sorted(self.selected, key=itemgetter(0))

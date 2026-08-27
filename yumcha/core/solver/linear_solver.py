@@ -78,14 +78,14 @@ class LinearSolver[PhonologyRepresentationT: PhonologyRepresentation](
 
         if directive is SolveDirective.INTERMEDIATE_TO_SCHEME:
             canonicalizer = phonology.canonicalizer
-            source_pattern_tuples = scheme.intermediate_pattern_tuples
-            target_pattern_tuples = scheme.pattern_tuples
+            source_indexer = scheme.intermediate_indexer
+            target_indexer = scheme.indexer
             source_fields = phonology.fields
             target_fields = tuple(scheme.fields)
         else:
             canonicalizer = scheme.canonicalizer
-            source_pattern_tuples = scheme.pattern_tuples
-            target_pattern_tuples = scheme.intermediate_pattern_tuples
+            source_indexer = scheme.indexer
+            target_indexer = scheme.intermediate_indexer
             source_fields = tuple(scheme.fields)
             target_fields = phonology.fields
 
@@ -95,8 +95,8 @@ class LinearSolver[PhonologyRepresentationT: PhonologyRepresentation](
             text_norm,
             scheme,
             directive,
-            source_pattern_tuples,
-            target_pattern_tuples,
+            source_indexer,
+            target_indexer,
             source_fields,
             target_fields,
             scheme.fields,
@@ -118,18 +118,19 @@ class LinearSolver[PhonologyRepresentationT: PhonologyRepresentation](
             if context.directive is SolveDirective.INTERMEDIATE_TO_SCHEME
             else context.scheme.re_pattern
         )
-        match = re.fullmatch(re_pattern, context.text_norm)
-        if match is None:
+
+        if (match := re.fullmatch(re_pattern, context.text_norm)) is None:
             return None
 
-        source_pattern_tuples = context.source_pattern_tuples
-        registrant_mask = (1 << len(source_pattern_tuples.registrants)) - 1
-        pattern_masks_by_fields = source_pattern_tuples.pattern_masks_by_fields
+        source_indexer = context.source_indexer
+        source_pattern_masks_by_fields = source_indexer.pattern_masks_by_fields
+
+        full_mask = (1 << len(source_indexer.pattern_tuples)) - 1
+        candidate_mask = full_mask
 
         for field_idx, pattern in enumerate(match.groups()):
-            pattern_mask = pattern_masks_by_fields[field_idx][pattern]
-            registrant_mask &= pattern_mask
-            if registrant_mask == 0:
+            candidate_mask &= source_pattern_masks_by_fields[field_idx].get(pattern, 0)
+            if candidate_mask == 0:
                 return None
 
-        return build_solution(context, registrant_mask)
+        return build_solution(context, candidate_mask)

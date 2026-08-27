@@ -93,14 +93,14 @@ class CSPSolver[PhonologyRepresentationT: PhonologyRepresentation](
 
         if directive is SolveDirective.INTERMEDIATE_TO_SCHEME:
             canonicalizer = phonology.canonicalizer
-            source_pattern_tuples = scheme.intermediate_pattern_tuples
-            target_pattern_tuples = scheme.pattern_tuples
+            source_indexer = scheme.intermediate_indexer
+            target_indexer = scheme.indexer
             source_fields = phonology.fields
             target_fields = tuple(scheme.fields)
         else:
             canonicalizer = scheme.canonicalizer
-            source_pattern_tuples = scheme.pattern_tuples
-            target_pattern_tuples = scheme.intermediate_pattern_tuples
+            source_indexer = scheme.indexer
+            target_indexer = scheme.intermediate_indexer
             source_fields = tuple(scheme.fields)
             target_fields = phonology.fields
 
@@ -110,8 +110,8 @@ class CSPSolver[PhonologyRepresentationT: PhonologyRepresentation](
             text_norm,
             scheme,
             directive,
-            source_pattern_tuples,
-            target_pattern_tuples,
+            source_indexer,
+            target_indexer,
             source_fields,
             target_fields,
             scheme.fields,
@@ -137,9 +137,9 @@ class CSPSolver[PhonologyRepresentationT: PhonologyRepresentation](
         if candidates is None:
             return None
 
-        source_registrants = context.source_pattern_tuples.registrants
+        source_pattern_tuples = context.source_indexer.pattern_tuples
 
-        full_registrant_mask = (1 << len(source_registrants)) - 1
+        full_registrant_mask = (1 << len(source_pattern_tuples)) - 1
 
         if use_solver_with_mrv:
             full_fields_mask = (1 << len(context.source_fields)) - 1
@@ -173,7 +173,7 @@ class CSPSolver[PhonologyRepresentationT: PhonologyRepresentation](
         source_fields_length = len(source_fields)
 
         candidates: list[list[Candidate]] = [[] for _ in range(source_fields_length)]
-        pattern_masks_by_fields = context.source_pattern_tuples.pattern_masks_by_fields
+        pattern_masks_by_fields = context.source_indexer.pattern_masks_by_fields
 
         last_slot_idx = source_fields_length - 1
 
@@ -230,13 +230,13 @@ class CSPSolver[PhonologyRepresentationT: PhonologyRepresentation](
             return
 
         for candidate in candidates[field_index]:
-            new_registrant_mask = state.registrant_mask & candidate.registrant_mask
-            if new_registrant_mask == 0:
+            new_candidate_mask = state.registrant_mask & candidate.registrant_mask
+            if new_candidate_mask == 0:
                 continue
 
             new_state = SearchState(
                 state.field_index + 1,
-                new_registrant_mask,
+                new_candidate_mask,
                 (*state.selected, candidate),
             )
             yield from self._find_solution(context, candidates, new_state)

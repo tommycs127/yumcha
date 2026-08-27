@@ -49,7 +49,7 @@ class ConversionValidator[PhonologyRepresentationT: PhonologyRepresentation]:
         ],
         strict: bool = True,
     ) -> bool:
-        """Runs roundtrip validations.
+        """Runs validation pipeline.
 
         Args:
             source: Original source text.
@@ -62,6 +62,47 @@ class ConversionValidator[PhonologyRepresentationT: PhonologyRepresentation]:
 
         Returns:
             `True` if all validation checks pass; `False` if a check fails and `strict=False`.
+        """
+        return self._validate_roundtrip(
+            source,
+            scheme,
+            solution,
+            representation,
+            inverse_solve_fn,
+            inverse_cls_fn,
+            strict,
+        )
+
+    def _validate_roundtrip(
+        self,
+        source: str,
+        scheme: Scheme[SchemeRepresentation],
+        solution: Solution,
+        representation: Representation,
+        inverse_solve_fn: Callable[
+            [str, Scheme[SchemeRepresentation]],
+            (Solution | None),
+        ],
+        inverse_cls_fn: Callable[
+            [Scheme[SchemeRepresentation]],
+            type[PhonologyRepresentationT | SchemeRepresentation],
+        ],
+        strict: bool = True,
+    ) -> bool:
+        """Runs roundtrip validations.
+
+        Args:
+            source: Original source text.
+            scheme: Scheme instance being processed.
+            solution: Primary conversion solution.
+            representation: Converted target representation.
+            inverse_solve_fn: Function to convert target string back to source domain.
+            inverse_cls_fn: Function resolving source domain representation type.
+            strict: If `True`, raises validation exceptions; if `False`, returns `False`.
+
+        Returns:
+            `True` if roundtrip validation checks pass;
+            `False` if a check fails and `strict=False`.
 
         Raises:
             RoundtripError: If `source` fails to convert back to its original form

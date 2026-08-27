@@ -6,7 +6,6 @@ phonological representations with automatic validation and strict error boundari
 
 from __future__ import annotations
 
-from collections.abc import Callable
 from typing import TYPE_CHECKING, Literal, overload
 
 from ..exceptions import NoMatchError
@@ -17,18 +16,11 @@ if TYPE_CHECKING:
     from ..language import Language
     from ..models.representation import PhonologyRepresentation, SchemeRepresentation
     from ..models.solution import Solution
+    from .models import PhonologyRepresentationClsFn, SchemeRepresentationClsFn, SolveFn
 
 
 class ConversionPipeline[PhonologyRepresentationT: PhonologyRepresentation]:
     """Orchestrates conversion, phonotactic validation, and roundtrip checking."""
-
-    type SchemeRepresentationClsFn = Callable[
-        [Scheme[SchemeRepresentation]], type[SchemeRepresentation]
-    ]
-    type PhonologyRepresentationClsFn[P: PhonologyRepresentation] = Callable[
-        [Scheme[SchemeRepresentation]], type[PhonologyRepresentationT]
-    ]
-    type SolveFn = Callable[[str, Scheme[SchemeRepresentation]], (Solution | None)]
 
     def __init__(self, language: Language[PhonologyRepresentationT]) -> None:
         """Initializes the conversion pipeline for a given language model.
@@ -40,6 +32,36 @@ class ConversionPipeline[PhonologyRepresentationT: PhonologyRepresentation]:
         self._validator: ConversionValidator[PhonologyRepresentationT] = (
             ConversionValidator(language)
         )
+
+    @overload
+    def convert_to_intermediate(
+        self,
+        source: str,
+        scheme_id: str,
+        validate: bool = ...,
+        strict: Literal[True] = ...,
+        solver_id: str | None = ...,
+    ) -> PhonologyRepresentationT: ...
+
+    @overload
+    def convert_to_intermediate(
+        self,
+        source: str,
+        scheme_id: str,
+        validate: bool = ...,
+        strict: Literal[False] = ...,
+        solver_id: str | None = ...,
+    ) -> PhonologyRepresentationT | None: ...
+
+    @overload
+    def convert_to_intermediate(
+        self,
+        source: str,
+        scheme_id: str,
+        validate: bool = ...,
+        strict: bool = ...,
+        solver_id: str | None = ...,
+    ) -> PhonologyRepresentationT | None: ...
 
     def convert_to_intermediate(
         self,
@@ -79,6 +101,36 @@ class ConversionPipeline[PhonologyRepresentationT: PhonologyRepresentation]:
             validate,
             strict,
         )
+
+    @overload
+    def convert_to_scheme(
+        self,
+        source: str,
+        scheme_id: str,
+        validate: bool = ...,
+        strict: Literal[True] = ...,
+        solver_id: str | None = ...,
+    ) -> SchemeRepresentation: ...
+
+    @overload
+    def convert_to_scheme(
+        self,
+        source: str,
+        scheme_id: str,
+        validate: bool = ...,
+        strict: Literal[False] = ...,
+        solver_id: str | None = ...,
+    ) -> SchemeRepresentation | None: ...
+
+    @overload
+    def convert_to_scheme(
+        self,
+        source: str,
+        scheme_id: str,
+        validate: bool = ...,
+        strict: bool = ...,
+        solver_id: str | None = ...,
+    ) -> SchemeRepresentation | None: ...
 
     def convert_to_scheme(
         self,

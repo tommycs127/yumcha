@@ -60,7 +60,11 @@ class Language[PhonologyRepresentationT: PhonologyRepresentation]:
 
     @property
     def phonology(self) -> Phonology[PhonologyRepresentationT]:
-        """Gets the underlying phonology specification."""
+        """Gets the underlying phonology specification.
+
+        Returns:
+            Phonology instance containing character sets and phonotactic rules.
+        """
         return self._phonology
 
     @property
@@ -74,10 +78,21 @@ class Language[PhonologyRepresentationT: PhonologyRepresentation]:
 
     @property
     def solvers(self) -> MappingProxyType[str, BaseSolver[PhonologyRepresentationT]]:
+        """Gets a read-only view of registered solvers.
+
+        Returns:
+            MappingProxyType mapping solver ID strings to `BaseSolver` instances.
+        """
         return self._solvers_view
 
     @property
     def solver_to_use(self) -> MappingProxyType[str, SupportedSolvers]:
+        """Gets a read-only view mapping registered scheme IDs to their default solver strategies.
+
+        Returns:
+            MappingProxyType mapping scheme ID strings to solver strategy identifiers
+            ("linear" or "csp").
+        """
         return self._solver_to_use_view
 
     def add_scheme(self, scheme: Scheme[SchemeRepresentation]) -> None:
@@ -90,9 +105,10 @@ class Language[PhonologyRepresentationT: PhonologyRepresentation]:
             ValueError: If character sets in the scheme conflict with phonology requirements.
         """
         self.validate_scheme(scheme)
-        scheme.intermediate_pattern_tuples.build_invalid_masks(
+        scheme.intermediate_indexer.load_invalid_patterns(
             self._phonology.invalid_pattern_tuples
         )
+
         self._schemes[scheme.id] = scheme
         if scheme.are_field_indexes_sequential:
             self._solver_to_use[scheme.id] = "linear"
@@ -111,11 +127,11 @@ class Language[PhonologyRepresentationT: PhonologyRepresentation]:
         """
         phonology_directive_maps = self.phonology.phonology_directive_maps
         charsets_classified = self.phonology.charsets_classified
-        scheme_ic_charsets = scheme.intermediate_pattern_tuples.charsets
+        scheme_intermediate_charsets = scheme.intermediate_indexer.charsets
 
         for idx, phonology_charset in enumerate(phonology_directive_maps):
             phonology_required = charsets_classified[idx][PhonologyDirective.REQUIRED]
-            scheme_charset = scheme_ic_charsets[idx]
+            scheme_charset = scheme_intermediate_charsets[idx]
 
             if missing_charset := (phonology_required.difference(scheme_charset)):
                 raise SchemeError(
@@ -156,8 +172,7 @@ class Language[PhonologyRepresentationT: PhonologyRepresentation]:
         Raises:
             ParseError: If input text fails to match the expected phonology pattern.
         """
-        match = self._phonology.compiled_re_pattern.fullmatch(text)
-        if match is None:
+        if (match := self._phonology.compiled_re_pattern.fullmatch(text)) is None:
             raise ParseError(f"failed to parse text {text!r}")
         return self._phonology.cls(*match.groups())
 
@@ -178,8 +193,7 @@ class Language[PhonologyRepresentationT: PhonologyRepresentation]:
         scheme = self._schemes[scheme_id]
         solver_id = self._solver_to_use[scheme_id]
         solver = self._solvers[solver_id]
-        solution = solver.solve_scheme(text, scheme)
-        if solution is None:
+        if (solution := solver.solve_scheme(text, scheme)) is None:
             raise ParseError(f"failed to parse text {text!r} as scheme {scheme_id!r}")
         return scheme.cls(*solution.source_pattern_tuple)
 
@@ -350,13 +364,15 @@ class Language[PhonologyRepresentationT: PhonologyRepresentation]:
             NotSupportedError: If roundtrip validation fails and `strict=True`.
             KeyError: If `from_scheme_id` or `to_scheme_id` is not registered.
         """
-        intermediate = self.convert_scheme_to_intermediate(
-            source,
-            from_scheme_id,
-            validate,
-            strict,
-        )
-        if intermediate is None:
+
+        if (
+            intermediate := self.convert_scheme_to_intermediate(
+                source,
+                from_scheme_id,
+                validate,
+                strict,
+            )
+        ) is None:
             return None
 
         return self.convert_intermediate_to_scheme(

@@ -14,9 +14,9 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from ..cluster_canonicalizer import ClusterCanonicalizer
+    from ..indexer import Indexer
     from ..models.representation import Representation
     from ..primitives.directives import SchemeDirective
-    from ..registered_pattern_tuples import RegisteredPatternTupleWithInvalidMasks
 
 
 @dataclass(frozen=True)
@@ -27,9 +27,9 @@ class Scheme[RepresentationT_co: Representation]:
         id: Unique identifier for this scheme.
         cls: The concrete `Representation` subclass type used.
         intermediate_fields: Mapping of intermediate field names to their corresponding slot indices.
-        intermediate_pattern_tuples: Registered pattern_tuples and invalid mask lookup tables for intermediate fields.
+        intermediate_indexer: Indexed pattern_tuples and invalid mask lookup tables for intermediate fields.
         fields: Mapping of scheme field names to their corresponding slot indices.
-        pattern_tuples: Registered pattern_tuples and invalid mask lookup tables for scheme fields.
+        indexer: Indexed pattern_tuples and invalid mask lookup tables for scheme fields.
         directions: Conversion directional directives (bidirectional, forward, reverse) per row.
         canonicalizer: The cluster canonicalizer instance used to normalize combining mark sequences.
     """
@@ -37,9 +37,9 @@ class Scheme[RepresentationT_co: Representation]:
     id: str
     cls: type[RepresentationT_co]
     intermediate_fields: MappingProxyType[str, frozenset[int]]
-    intermediate_pattern_tuples: RegisteredPatternTupleWithInvalidMasks
+    intermediate_indexer: Indexer
     fields: MappingProxyType[str, frozenset[int]]
-    pattern_tuples: RegisteredPatternTupleWithInvalidMasks
+    indexer: Indexer
     directions: tuple[SchemeDirective, ...]
     canonicalizer: ClusterCanonicalizer
 
@@ -92,7 +92,7 @@ class Scheme[RepresentationT_co: Representation]:
             raise ValueError(f"field indexes of scheme {self.id!r} are non-sequential.")
 
         groups: list[str] = []
-        pattern_masks_by_fields = self.pattern_tuples.pattern_masks_by_fields
+        pattern_masks_by_fields = self.indexer.pattern_masks_by_fields
         for patterns in pattern_masks_by_fields:
             valid_patterns = [re.escape(p) for p in patterns if isinstance(p, str)]
             if not valid_patterns:

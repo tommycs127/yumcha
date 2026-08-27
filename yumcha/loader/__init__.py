@@ -9,12 +9,12 @@ from typing import TYPE_CHECKING
 from ..core.cluster_canonicalizer import ClusterCanonicalizer
 from ..core.facades.phonology import Phonology
 from ..core.facades.scheme import Scheme
+from ..core.indexer import Indexer
 from ..core.models.representation import (
     PhonologyRepresentation,
     SchemeRepresentation,
 )
 from ..core.primitives.directives import SchemeDirective
-from ..core.registered_pattern_tuples import RegisteredPatternTupleWithInvalidMasks
 
 if TYPE_CHECKING:
     from ..core.models.specs import PhonologyData, SchemeData
@@ -99,8 +99,8 @@ def load_scheme(
         invalid_pattern_tuples,
     ) = scheme_data.to_tuple()
 
-    intermediate_registrants = RegisteredPatternTupleWithInvalidMasks()
-    intermediate_registrants.load(
+    intermediate_indexer = Indexer()
+    intermediate_indexer.load(
         intermediate_pattern_tuples,
         directions,
         {
@@ -109,8 +109,8 @@ def load_scheme(
         },
     )
 
-    registrants = RegisteredPatternTupleWithInvalidMasks()
-    registrants.load(
+    indexer = Indexer()
+    indexer.load(
         pattern_tuples,
         directions,
         {
@@ -118,10 +118,10 @@ def load_scheme(
             SchemeDirective.REVERSE,
         },
     )
-    registrants.build_invalid_masks(invalid_pattern_tuples)
+    indexer.load_invalid_patterns(invalid_pattern_tuples)
 
     canonicalizer = ClusterCanonicalizer()
-    canonicalizer.learn(registrants.charsets)
+    canonicalizer.learn(indexer.charsets)
 
     class_name = "".join(s.capitalize() for s in id.split("_"))
     cls_fields = [(f, str) for f in scheme_data.fields]
@@ -133,13 +133,13 @@ def load_scheme(
         bases=(SchemeRepresentation,),
     )
 
-    return Scheme[SchemeRepresentation](
+    return Scheme(
         id,
         cls,
         MappingProxyType(intermediate_fields),
-        intermediate_registrants,
+        intermediate_indexer,
         MappingProxyType(fields),
-        registrants,
+        indexer,
         directions,
         canonicalizer,
     )

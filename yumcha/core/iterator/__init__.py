@@ -81,16 +81,17 @@ class LanguageIterator[PhonologyRepresentationT: PhonologyRepresentation]:
         for intermediate_pattern_tuple in intermediate_pattern_tuples:
             pattern_tuple_str = "".join(intermediate_pattern_tuple)
             row = [pattern_tuple_str]
+            append_row = row.append
 
             for idx, scheme_id in enumerate(scheme_ids):
                 converted = convert_intermediate_to_scheme(
                     pattern_tuple_str, scheme_id, True, False
                 )
                 if converted:
-                    row.append(str(converted))
+                    append_row(str(converted))
                     _scheme_item_counts[idx] += 1
                 else:
-                    row.append("")
+                    append_row("")
 
             yield row
 
