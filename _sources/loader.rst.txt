@@ -1,0 +1,29 @@
+loader package
+==============
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   loader.tsv
+
+Submodules
+----------
+
+loader.exceptions module
+------------------------
+
+.. automodule:: loader.exceptions
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+Module contents
+---------------
+
+.. automodule:: loader
+   :members:
+   :show-inheritance:
+   :undoc-members:

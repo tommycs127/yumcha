@@ -1,0 +1,21 @@
+loader.tsv package
+==================
+
+Submodules
+----------
+
+loader.tsv.reader module
+------------------------
+
+.. automodule:: loader.tsv.reader
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+Module contents
+---------------
+
+.. automodule:: loader.tsv
+   :members:
+   :show-inheritance:
+   :undoc-members:
