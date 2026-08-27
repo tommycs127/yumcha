@@ -478,7 +478,7 @@ See the [tutorial on adding a custom scheme](/docs/custom-phonology-and-schemes.
 - [ ] Architecture documentation
 - [x] Tutorial on adding custom languages and schemes
 - [x] Scheme definition reference
-- [ ] API reference
+- [x] API reference
 
 ### Features & Core Engine
 
