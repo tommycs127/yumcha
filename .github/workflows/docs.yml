@@ -32,6 +32,8 @@ jobs:
           mkdir -p docs/source
 
           cat << 'EOF' > docs/source/conf.py
+          import builtins
+          from unittest.mock import MagicMock
 
           project = 'yumcha'
           copyright = '2026, yumcha'
