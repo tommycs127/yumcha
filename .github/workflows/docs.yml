@@ -28,6 +28,48 @@ jobs:
 
       - name: Generate API Documentation
         run: |
+          mkdir -p docs/source
+
+          cat << 'EOF' > docs/source/conf.py
+          import os
+          import sys
+          sys.path.insert(0, os.path.abspath('../../yumcha'))
+
+          project = 'yumcha'
+          copyright = '2026, yumcha'
+          author = 'yumcha'
+
+          extensions = [
+              'sphinx.ext.autodoc',
+              'sphinx.ext.napoleon',
+              'sphinx.ext.viewcode'
+          ]
+
+          templates_path = ['_templates']
+          exclude_patterns = []
+
+          html_theme = 'sphinx_rtd_theme'
+          html_static_path = ['_static']
+          EOF
+
+          cat << 'EOF' > docs/source/index.rst
+          Welcome to yumcha's documentation!
+          ==================================
+
+          .. toctree::
+              :maxdepth: 2
+              :caption: Contents:
+
+              modules
+
+          Indices and tables
+          ==================
+
+          * :ref:`genindex`
+          * :ref:`modindex`
+          * :ref:`search`
+          EOF
+
           sphinx-apidoc -o docs/source/ yumcha/
           sphinx-build -b html docs/source/ docs/build/html
 
