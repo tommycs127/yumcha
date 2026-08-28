@@ -400,13 +400,6 @@ The wrapper must accept a total keyword argument. Libraries such as [`tqdm`](htt
 | Yale                                                  | `chēun`      | `yale`            |                                                                                                                                                                                                     | [Yale romanization of Cantonese](https://en.wikipedia.org/wiki/Yale_romanization_of_Cantonese)                                                                                                                   |
 | Yựtyựt                                                | `cơn`        | `yutyut`          |                                                                                                                                                                                                     | [Yựtyựt (越式粵拼)](https://www.omniglot.com/chinese/yutyu.htm)                                                                                                                                                  |
 
-## ⚙️ How it works
-
-> [!CAUTION]
-> This section is outdated due to recent updates and will be updated soon.
-
-Please refer to the [How it works](/docs/how-it-works.md) documentation.
-
 ## ⚠️ Limitations
 
 Yumcha currently has limitations at several different levels.
@@ -440,6 +433,9 @@ For example, S. L. Wong Romanization uses `eu` for `[yː]`, making `[ɛːu̯]` u
 Some supported schemes are still incomplete. Their individual limitations are noted in the supported-schemes table above and in their scheme definitions.
 
 ## ⚙️ How it works
+
+> [!CAUTION]
+> This section is outdated due to recent updates and will be updated soon.
 
 At a high level, Yumcha separates linguistic data from conversion logic.
 
