@@ -487,7 +487,7 @@ See the [tutorial on adding a custom scheme](/docs/custom-phonology-and-schemes.
 #### Cantonese
 
 ![Cantonese Phonology Progress](https://img.shields.io/badge/Phonology%20file-OK-green)
-![Cantonese Progress](<https://img.shields.io/badge/Schemes-14%2F17_(82%25)-gold>)
+![Cantonese Progress](<https://img.shields.io/badge/Schemes-14%2F17_(82%25)-yellowgreen>)
 
 - [x] Braille
 - [x] Cantonese Hangul (T. S. Wong Scheme)
