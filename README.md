@@ -1,11 +1,10 @@
 # 🍵 Yumcha
 
-[![Status](https://img.shields.io/badge/status-Alpha_Development-red)](#)
-[![Python](https://img.shields.io/badge/python-3.12%2B-blue)](https://www.python.org/downloads/release/python-3120/)
+![Status](https://img.shields.io/badge/status-Alpha_Development-red)
+[![Python](https://img.shields.io/badge/python-3.12%2B-blue?logo=python&logoColor=white)](https://www.python.org/downloads/release/python-3120/)
 [![Documentation](https://img.shields.io/badge/docs-Sphinx-blue?logo=sphinx&logoColor=white)](https://tommycs127.github.io/yumcha/)
-[![License](https://img.shields.io/badge/license-Apache_2.0-green)](LICENSE)
-[![Type](https://img.shields.io/badge/type-Transliteration_Engine-informational)](#)
-[![Made in](https://img.shields.io/badge/made_in-Hong_Kong-cc3399)](#)
+[![License](https://img.shields.io/badge/license-Apache_2.0-green?logo=apache&logoColor=white)](LICENSE)
+![Made in](https://img.shields.io/badge/made_in-Hong_Kong-CC3399)
 
 > [!CAUTION]
 > This project is in its **early stages** and undergoing active development. The API and functionality are **highly unstable** and subject to breaking changes without notice. Outputs are **not guaranteed to be correct** and manual verification is advised. **Use at your own risk.**
