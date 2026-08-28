@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from dataclasses import make_dataclass
+from dataclasses import InitVar, make_dataclass
 from types import MappingProxyType
 from typing import TYPE_CHECKING
 
@@ -124,7 +124,11 @@ def load_scheme(
     canonicalizer.learn(indexer.charsets)
 
     class_name = "".join(s.capitalize() for s in id.split("_"))
-    cls_fields = [(f, str) for f in scheme_data.fields]
+
+    cls_fields = [
+        (f, InitVar[str], "") if f.startswith("_") else (f, str)
+        for f in scheme_data.fields
+    ]
 
     cls: type[SchemeRepresentation] = make_dataclass(
         cls_name=class_name,
