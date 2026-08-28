@@ -7,11 +7,13 @@ source and target phonological pattern tuples.
 from __future__ import annotations
 
 from dataclasses import dataclass
+from functools import cached_property
 from typing import TYPE_CHECKING
+
+from ..primitives.directives import SchemeDirective
 
 if TYPE_CHECKING:
     from ..indexer import Indexer
-    from ..primitives.directives import SchemeDirective
     from ..primitives.pattern_tuple import PatternTuple
 
 
@@ -36,3 +38,14 @@ class Solution:
     selected_indexes: tuple[int, ...]
     selected_mask: int
     directions: tuple[SchemeDirective, ...]
+
+    @cached_property
+    def is_validatable(self) -> bool:
+        """Indicates whether all rule directions in the solution are bidirectional.
+
+        Returns:
+            True if every directive in `directions` is `SchemeDirective.BIDIRECTIONAL`,
+            False otherwise.
+        """
+        directions = self.directions
+        return len(directions) == directions.count(SchemeDirective.BIDIRECTIONAL)

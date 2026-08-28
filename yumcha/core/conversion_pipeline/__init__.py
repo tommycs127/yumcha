@@ -239,7 +239,7 @@ class ConversionPipeline[PhonologyRepresentationT: PhonologyRepresentation]:
         """Executes conversion pipeline between phonology and scheme representations.
 
         Handles solving input pattern tuples, instantiating target representation dataclasses,
-        and running phonotactic and roundtrip consistency checks.
+        and running roundtrip consistency checks.
 
         Args:
             source: Raw string input to transform.
@@ -249,6 +249,7 @@ class ConversionPipeline[PhonologyRepresentationT: PhonologyRepresentation]:
             inverse_solve_fn: Function used during roundtrip verification to solve back.
             inverse_cls_fn: Resolver function returning the source representation class.
             validate: Whether to validate phonotactics and roundtrip integrity.
+                This argument is ignored if the solution is not validatable.
             strict: If True, raises exceptions on errors; if False, returns None.
 
         Returns:
@@ -257,8 +258,6 @@ class ConversionPipeline[PhonologyRepresentationT: PhonologyRepresentation]:
 
         Raises:
             NoMatchError: If `solve_fn` returns no solution and `strict=True`.
-            PhonologicalError: If input violates phonotactic rules and `strict=True`.
-            NotSupportedError: If roundtrip verification fails and `strict=True`.
         """
         scheme = self._language.schemes[scheme_id]
         solution = self._solve_or_raise(solve_fn, source, scheme, strict)
@@ -267,7 +266,7 @@ class ConversionPipeline[PhonologyRepresentationT: PhonologyRepresentation]:
 
         representation = target_cls_fn(scheme)(*solution.target_pattern_tuple)
 
-        if validate:
+        if solution.is_validatable and validate:
             is_valid = self._validator.validate(
                 source,
                 scheme,

@@ -122,7 +122,7 @@ class Language[PhonologyRepresentationT: PhonologyRepresentation]:
             scheme: `Scheme` instance to validate against the active phonology.
 
         Raises:
-            ValueError: If phonemes required by phonology are missing in the scheme,
+            SchemeError: If phonemes required by phonology are missing in the scheme,
                 or if redundant phonemes are present in the scheme.
         """
         phonology_directive_maps = self.phonology.phonology_directive_maps
@@ -242,8 +242,6 @@ class Language[PhonologyRepresentationT: PhonologyRepresentation]:
 
         Raises:
             ValueError: If no valid solver solution exists and `strict=True`.
-            PhonologicalError: If the input violates phonotactic rules and `strict=True`.
-            NotSupportedError: If roundtrip validation fails and `strict=True`.
             KeyError: If `scheme_id` is not registered, or if `solver_id` is not in
                 `self._solvers`.
         """
@@ -300,8 +298,6 @@ class Language[PhonologyRepresentationT: PhonologyRepresentation]:
 
         Raises:
             ValueError: If no valid solver solution exists and `strict=True`.
-            PhonologicalError: If the input violates phonotactic rules and `strict=True`.
-            NotSupportedError: If roundtrip validation fails and `strict=True`.
             KeyError: If `scheme_id` is not registered, or if `solver_id` is not in
                 `self._solvers`.
         """
@@ -360,8 +356,6 @@ class Language[PhonologyRepresentationT: PhonologyRepresentation]:
 
         Raises:
             ValueError: If no valid solver solution exists and `strict=True`.
-            PhonologicalError: If the input violates phonotactic rules and `strict=True`.
-            NotSupportedError: If roundtrip validation fails and `strict=True`.
             KeyError: If `from_scheme_id` or `to_scheme_id` is not registered.
         """
 
