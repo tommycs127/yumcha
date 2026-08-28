@@ -6,6 +6,14 @@ yumcha.loader.tsv.parsers namespace
 Submodules
 ----------
 
+yumcha.loader.tsv.parsers.models module
+---------------------------------------
+
+.. automodule:: yumcha.loader.tsv.parsers.models
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
 yumcha.loader.tsv.parsers.phonology module
 ------------------------------------------
 

@@ -89,7 +89,7 @@
     <span class="n">PhonologyRepresentation</span><span class="p">,</span>
     <span class="n">SchemeRepresentation</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">..core.primitives.directives</span><span class="w"> </span><span class="kn">import</span> <span class="n">SchemeDirective</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">FROM_INTERMEDIATE</span><span class="p">,</span> <span class="n">FROM_SCHEME</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">..core.models.specs</span><span class="w"> </span><span class="kn">import</span> <span class="n">PhonologyData</span><span class="p">,</span> <span class="n">SchemeData</span>
@@ -174,6 +174,7 @@
         <span class="n">directions</span><span class="p">,</span>
         <span class="n">intermediate_fields</span><span class="p">,</span>
         <span class="n">intermediate_pattern_tuples</span><span class="p">,</span>
+        <span class="n">invalid_intermediate_pattern_tuples</span><span class="p">,</span>
         <span class="n">fields</span><span class="p">,</span>
         <span class="n">pattern_tuples</span><span class="p">,</span>
         <span class="n">invalid_pattern_tuples</span><span class="p">,</span>
@@ -183,20 +184,15 @@
     <span class="n">intermediate_indexer</span><span class="o">.</span><span class="n">load</span><span class="p">(</span>
         <span class="n">intermediate_pattern_tuples</span><span class="p">,</span>
         <span class="n">directions</span><span class="p">,</span>
-        <span class="p">{</span>
-            <span class="n">SchemeDirective</span><span class="o">.</span><span class="n">BIDIRECTIONAL</span><span class="p">,</span>
-            <span class="n">SchemeDirective</span><span class="o">.</span><span class="n">FORWARD</span><span class="p">,</span>
-        <span class="p">},</span>
+        <span class="n">FROM_INTERMEDIATE</span><span class="p">,</span>
     <span class="p">)</span>
+    <span class="n">intermediate_indexer</span><span class="o">.</span><span class="n">load_invalid_patterns</span><span class="p">(</span><span class="n">invalid_intermediate_pattern_tuples</span><span class="p">)</span>
 
     <span class="n">indexer</span> <span class="o">=</span> <span class="n">Indexer</span><span class="p">()</span>
     <span class="n">indexer</span><span class="o">.</span><span class="n">load</span><span class="p">(</span>
         <span class="n">pattern_tuples</span><span class="p">,</span>
         <span class="n">directions</span><span class="p">,</span>
-        <span class="p">{</span>
-            <span class="n">SchemeDirective</span><span class="o">.</span><span class="n">BIDIRECTIONAL</span><span class="p">,</span>
-            <span class="n">SchemeDirective</span><span class="o">.</span><span class="n">REVERSE</span><span class="p">,</span>
-        <span class="p">},</span>
+        <span class="n">FROM_SCHEME</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">indexer</span><span class="o">.</span><span class="n">load_invalid_patterns</span><span class="p">(</span><span class="n">invalid_pattern_tuples</span><span class="p">)</span>
 

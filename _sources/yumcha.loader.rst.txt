@@ -22,6 +22,14 @@ yumcha.loader.exceptions module
    :show-inheritance:
    :undoc-members:
 
+yumcha.loader.models module
+---------------------------
+
+.. automodule:: yumcha.loader.models
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
 Module contents
 ---------------
 

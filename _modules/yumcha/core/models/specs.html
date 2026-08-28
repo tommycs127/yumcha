@@ -143,6 +143,7 @@
 <span class="sd">        directions: Tuple of row directives across data rows.</span>
 <span class="sd">        intermediate_fields: Map of intermediate field names to sets of field index positions.</span>
 <span class="sd">        intermediate_pattern_tuples: Collection of parsed intermediate pattern pattern tuples per row.</span>
+<span class="sd">        invalid_pattern_tuples: Collection of intermediate pattern tuples representing invalid feature patterns.</span>
 <span class="sd">        fields: Map of scheme field names to sets of field index positions.</span>
 <span class="sd">        pattern_tuples: Collection of parsed scheme pattern pattern tuples per row.</span>
 <span class="sd">        invalid_pattern_tuples: Collection of pattern tuples representing invalid feature patterns.</span>
@@ -152,6 +153,7 @@
     <span class="n">directions</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">SchemeDirective</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
     <span class="n">intermediate_fields</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">frozenset</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span>
     <span class="n">intermediate_pattern_tuples</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">PatternTuple</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+    <span class="n">invalid_intermediate_pattern_tuples</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">PatternTuple</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
     <span class="n">fields</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">frozenset</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span>
     <span class="n">pattern_tuples</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">PatternTuple</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
     <span class="n">invalid_pattern_tuples</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">PatternTuple</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
@@ -165,6 +167,7 @@
         <span class="nb">tuple</span><span class="p">[</span><span class="n">SchemeDirective</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span>
         <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">frozenset</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span>
         <span class="nb">tuple</span><span class="p">[</span><span class="n">PatternTuple</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span>
+        <span class="nb">tuple</span><span class="p">[</span><span class="n">PatternTuple</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span>
         <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">frozenset</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span>
         <span class="nb">tuple</span><span class="p">[</span><span class="n">PatternTuple</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span>
         <span class="nb">tuple</span><span class="p">[</span><span class="n">PatternTuple</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span>
@@ -175,6 +178,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">directions</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">intermediate_fields</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">intermediate_pattern_tuples</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">invalid_intermediate_pattern_tuples</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">pattern_tuples</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">invalid_pattern_tuples</span><span class="p">,</span>

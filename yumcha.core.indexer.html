@@ -101,7 +101,7 @@
 with type aliases for pattern bitmasks used during constraint compilation.</p>
 <dl class="py type">
 <dt class="sig sig-object py" id="yumcha.core.indexer.models.PatternIndexes">
-<span class="property"><span class="k"><span class="pre">type</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">yumcha.core.indexer.models.</span></span><span class="sig-name descname"><span class="pre">PatternIndexes</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">dict[&lt;MagicMock</span> <span class="pre">id='140145747311264'&gt;,</span> <span class="pre">set[int]]</span></span><a class="headerlink" href="#yumcha.core.indexer.models.PatternIndexes" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">type</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">yumcha.core.indexer.models.</span></span><span class="sig-name descname"><span class="pre">PatternIndexes</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">dict[&lt;MagicMock</span> <span class="pre">id='139954638882720'&gt;,</span> <span class="pre">set[int]]</span></span><a class="headerlink" href="#yumcha.core.indexer.models.PatternIndexes" title="Link to this definition"></a></dt>
 <dd><p>Mapping from a pattern token to a mutable set of invalid pattern tuple indices.</p>
 </dd></dl>
 
@@ -113,7 +113,7 @@ with type aliases for pattern bitmasks used during constraint compilation.</p>
 
 <dl class="py type">
 <dt class="sig sig-object py" id="yumcha.core.indexer.models.PatternMasks">
-<span class="property"><span class="k"><span class="pre">type</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">yumcha.core.indexer.models.</span></span><span class="sig-name descname"><span class="pre">PatternMasks</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">dict[&lt;MagicMock</span> <span class="pre">id='140145747311264'&gt;,</span> <span class="pre">int]</span></span><a class="headerlink" href="#yumcha.core.indexer.models.PatternMasks" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">type</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">yumcha.core.indexer.models.</span></span><span class="sig-name descname"><span class="pre">PatternMasks</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">dict[&lt;MagicMock</span> <span class="pre">id='139954638882720'&gt;,</span> <span class="pre">int]</span></span><a class="headerlink" href="#yumcha.core.indexer.models.PatternMasks" title="Link to this definition"></a></dt>
 <dd><p>Mapping from a pattern to a bitmask representing pattern tuple indices.</p>
 </dd></dl>
 
@@ -204,7 +204,7 @@ for each field position to accelerate pattern matching against valid operational
 
 <dl class="py method">
 <dt class="sig sig-object py" id="yumcha.core.indexer.Indexer.load">
-<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pattern_sequences</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allowed_directions</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yumcha/core/indexer.html#Indexer.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.core.indexer.Indexer.load" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pattern_sequences</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allowed_directions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yumcha/core/indexer.html#Indexer.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.core.indexer.Indexer.load" title="Link to this definition"></a></dt>
 <dd><p>Loads, sorts, compiles bitmasks, and extracts charsets for pattern sequences.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -212,22 +212,29 @@ for each field position to accelerate pattern matching against valid operational
 <li><p><strong>pattern_sequences</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> | <code class="xref py py-data docutils literal notranslate"><span class="pre">EllipsisType</span></code>]]</span>) – Sequences of pattern elements representing constraint rules.</p></li>
 <li><p><strong>directions</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.directives.SchemeDirective" title="yumcha.core.primitives.directives.SchemeDirective"><code class="xref py py-class docutils literal notranslate"><span class="pre">SchemeDirective</span></code></a>]</span>) – Conversion directives corresponding to each pattern sequence.</p></li>
 <li><p><strong>allowed_directions</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">set</span></code>[<a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.directives.SchemeDirective" title="yumcha.core.primitives.directives.SchemeDirective"><code class="xref py py-class docutils literal notranslate"><span class="pre">SchemeDirective</span></code></a>]</span>) – Set of directives permitted during bitmask compilation.</p></li>
+<li><p><strong>reset</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>) – Whether to reset internal state before loading new sequences.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>ValueError</strong> – If <cite>pattern_sequences</cite> is empty, lengths mismatch <cite>directions</cite>,
     sequence slot lengths vary, or all sequences contain wildcards at any single position.</p>
 </dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="yumcha.core.indexer.Indexer.load_invalid_patterns">
-<span class="sig-name descname"><span class="pre">load_invalid_patterns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">invalid_pattern_sequences</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yumcha/core/indexer.html#Indexer.load_invalid_patterns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.core.indexer.Indexer.load_invalid_patterns" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">load_invalid_patterns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">invalid_pattern_sequences</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yumcha/core/indexer.html#Indexer.load_invalid_patterns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yumcha.core.indexer.Indexer.load_invalid_patterns" title="Link to this definition"></a></dt>
 <dd><p>Loads, registers, and compiles bitmask filters for invalid pattern sequences.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>invalid_pattern_sequences</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> | <code class="xref py py-data docutils literal notranslate"><span class="pre">EllipsisType</span></code>]]</span>) – Sequences of prohibited pattern combinations.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>invalid_pattern_sequences</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> | <code class="xref py py-data docutils literal notranslate"><span class="pre">EllipsisType</span></code>]]</span>) – Sequences of prohibited pattern combinations.</p></li>
+<li><p><strong>reset</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>) – Whether to reset internal state before loading new sequences.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>ValueError</strong> – If an invalid tuple contradicts all valid tuples or is already

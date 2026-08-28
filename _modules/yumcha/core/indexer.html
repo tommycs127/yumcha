@@ -269,13 +269,15 @@
         <span class="n">pattern_sequences</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Pattern</span><span class="p">]],</span>
         <span class="n">directions</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">SchemeDirective</span><span class="p">],</span>
         <span class="n">allowed_directions</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="n">SchemeDirective</span><span class="p">],</span>
-    <span class="p">):</span>
+        <span class="n">reset</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">"""Loads, sorts, compiles bitmasks, and extracts charsets for pattern sequences.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            pattern_sequences: Sequences of pattern elements representing constraint rules.</span>
 <span class="sd">            directions: Conversion directives corresponding to each pattern sequence.</span>
 <span class="sd">            allowed_directions: Set of directives permitted during bitmask compilation.</span>
+<span class="sd">            reset: Whether to reset internal state before loading new sequences.</span>
 
 <span class="sd">        Raises:</span>
 <span class="sd">            ValueError: If `pattern_sequences` is empty, lengths mismatch `directions`,</span>
@@ -284,7 +286,9 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="n">pattern_sequences</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"at least one pattern tuple is required"</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_reset</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">reset</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_reset</span><span class="p">()</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">_register</span><span class="p">(</span><span class="n">pattern_sequences</span><span class="p">,</span> <span class="n">directions</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_sort_and_rank_indexes_by_weight</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_compile</span><span class="p">(</span><span class="n">allowed_directions</span><span class="p">)</span>
@@ -344,9 +348,9 @@
 
             <span class="n">append_pattern_tuple</span><span class="p">(</span><span class="n">PatternTuple</span><span class="p">(</span><span class="n">sequence</span><span class="p">))</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_pattern_tuples</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">pattern_tuples</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_pattern_tuples_frozenset</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">(</span><span class="n">pattern_tuples</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_directions</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">directions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pattern_tuples</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">pattern_tuples</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pattern_tuples_frozenset</span> <span class="o">|=</span> <span class="nb">frozenset</span><span class="p">(</span><span class="n">pattern_tuples</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_directions</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">directions</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_sort_and_rank_indexes_by_weight</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">"""Sorts pattern tuple indices by weight in descending order and assigns rank positions."""</span>
@@ -437,17 +441,21 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">load_invalid_patterns</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">invalid_pattern_sequences</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Pattern</span><span class="p">]],</span>
+        <span class="n">reset</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">"""Loads, registers, and compiles bitmask filters for invalid pattern sequences.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            invalid_pattern_sequences: Sequences of prohibited pattern combinations.</span>
+<span class="sd">            reset: Whether to reset internal state before loading new sequences.</span>
 
 <span class="sd">        Raises:</span>
 <span class="sd">            ValueError: If an invalid tuple contradicts all valid tuples or is already</span>
 <span class="sd">                registered as a valid pattern tuple.</span>
 <span class="sd">        """</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_reset_validation_data</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">reset</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_reset_validation_data</span><span class="p">()</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">_register_validation_data</span><span class="p">(</span><span class="n">invalid_pattern_sequences</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_compile_validation_data</span><span class="p">()</span></div>
 
@@ -461,10 +469,10 @@
 <span class="sd">        Args:</span>
 <span class="sd">            invalid_pattern_sequences: Sequences of prohibited pattern combinations to register.</span>
 <span class="sd">        """</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_invalid_pattern_tuples</span><span class="p">[:]</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_invalid_pattern_tuples</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
             <span class="n">PatternTuple</span><span class="p">(</span><span class="n">invalid_pattern_sequence</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">invalid_pattern_sequence</span> <span class="ow">in</span> <span class="n">invalid_pattern_sequences</span>
-        <span class="p">]</span>
+        <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_compile_validation_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">"""Compiles conflict bitmasks and field index mappings for invalid pattern tuples.</span>
