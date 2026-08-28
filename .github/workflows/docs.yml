@@ -36,7 +36,7 @@ jobs:
           from unittest.mock import MagicMock
 
           project = 'yumcha'
-          copyright = '2026, yumcha'
+          copyright = '2026, tommycs127'
           author = 'tommycs127'
 
           extensions = [
