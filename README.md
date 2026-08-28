@@ -139,7 +139,7 @@ cantonese.add_scheme(my_scheme)
 ```
 
 > [!NOTE]
-> Custom schemes must conform to the language's underlying phonology. Otherwise, Yumcha will raise an exception when the scheme is added. Consult the `Language.phonology` property or the language's source files for the required phonemes and their underlying constraints. For bundled data, see the language's `phonology.tsv` in the [data directory](/yumcha/data).
+> Custom schemes must conform to the language's underlying phonology. Otherwise, Yumcha will raise an exception when the scheme is added. Consult the `Language.phonology` property or the language's source files for the required phonemes and their underlying constraints. For bundled data, see the language's `phonology.tsv` in the [`/yumcha/data`](/yumcha/data) directory.
 
 ## 📚 Working with representations
 
@@ -377,7 +377,7 @@ The wrapper must accept a total keyword argument. Libraries such as [`tqdm`](htt
 > [!NOTE]
 > Supported scheme definitions strive to remain faithful to their original designs, but some features and edge cases are not yet implemented.
 >
-> Pre-generated syllable tables are available in the [`/syllable_tables`](/docs/syllable_tables) directory. These tables are produced by `Exporter.export()` and can be useful for reviewing scheme coverage.
+> Pre-generated syllable tables are available in the [`/docs/syllable_tables`](/docs/syllable_tables) directory. These tables are produced by `Exporter.export()` and can be useful for reviewing scheme coverage.
 >
 > If you spot an error or discrepancy, please [open an issue](https://github.com/tommycs127/yumcha/issues/new). Any help is welcome and appreciated!
 
