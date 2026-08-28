@@ -14,7 +14,7 @@ from ..core.models.representation import (
     PhonologyRepresentation,
     SchemeRepresentation,
 )
-from ..core.primitives.directives import SchemeDirective
+from .models import FROM_INTERMEDIATE, FROM_SCHEME
 
 if TYPE_CHECKING:
     from ..core.models.specs import PhonologyData, SchemeData
@@ -94,6 +94,7 @@ def load_scheme(
         directions,
         intermediate_fields,
         intermediate_pattern_tuples,
+        invalid_intermediate_pattern_tuples,
         fields,
         pattern_tuples,
         invalid_pattern_tuples,
@@ -103,20 +104,15 @@ def load_scheme(
     intermediate_indexer.load(
         intermediate_pattern_tuples,
         directions,
-        {
-            SchemeDirective.BIDIRECTIONAL,
-            SchemeDirective.FORWARD,
-        },
+        FROM_INTERMEDIATE,
     )
+    intermediate_indexer.load_invalid_patterns(invalid_intermediate_pattern_tuples)
 
     indexer = Indexer()
     indexer.load(
         pattern_tuples,
         directions,
-        {
-            SchemeDirective.BIDIRECTIONAL,
-            SchemeDirective.REVERSE,
-        },
+        FROM_SCHEME,
     )
     indexer.load_invalid_patterns(invalid_pattern_tuples)
 

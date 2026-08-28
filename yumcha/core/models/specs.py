@@ -60,6 +60,7 @@ class SchemeData:
         directions: Tuple of row directives across data rows.
         intermediate_fields: Map of intermediate field names to sets of field index positions.
         intermediate_pattern_tuples: Collection of parsed intermediate pattern pattern tuples per row.
+        invalid_pattern_tuples: Collection of intermediate pattern tuples representing invalid feature patterns.
         fields: Map of scheme field names to sets of field index positions.
         pattern_tuples: Collection of parsed scheme pattern pattern tuples per row.
         invalid_pattern_tuples: Collection of pattern tuples representing invalid feature patterns.
@@ -69,6 +70,7 @@ class SchemeData:
     directions: tuple[SchemeDirective, ...]
     intermediate_fields: dict[str, frozenset[int]]
     intermediate_pattern_tuples: tuple[PatternTuple, ...]
+    invalid_intermediate_pattern_tuples: tuple[PatternTuple, ...]
     fields: dict[str, frozenset[int]]
     pattern_tuples: tuple[PatternTuple, ...]
     invalid_pattern_tuples: tuple[PatternTuple, ...]
@@ -80,6 +82,7 @@ class SchemeData:
         tuple[SchemeDirective, ...],
         dict[str, frozenset[int]],
         tuple[PatternTuple, ...],
+        tuple[PatternTuple, ...],
         dict[str, frozenset[int]],
         tuple[PatternTuple, ...],
         tuple[PatternTuple, ...],
@@ -90,6 +93,7 @@ class SchemeData:
             self.directions,
             self.intermediate_fields,
             self.intermediate_pattern_tuples,
+            self.invalid_intermediate_pattern_tuples,
             self.fields,
             self.pattern_tuples,
             self.invalid_pattern_tuples,

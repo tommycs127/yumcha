@@ -11,6 +11,7 @@ from ....core.models.specs import SchemeData
 from ....core.primitives.pattern_tuple import PatternTuple
 from ...primitives.directives import SchemeRowDirective
 from ...utils.text import parse_data_cell
+from .models import CHECK_INTERMEDIATE, CHECK_SCHEME
 
 if TYPE_CHECKING:
     from ....core.primitives.directives import SchemeDirective
@@ -68,8 +69,9 @@ def parse(
     (
         directions,
         intermediate_pattern_tuples,
-        pattern_tuples,
-        invalid_pattern_tuples,
+        scheme_pattern_tuples,
+        invalid_intermediate_pattern_tuples,
+        invalid_scheme_pattern_tuples,
     ) = _parse_data(data, headers_split_index, len(headers), fields)
 
     return SchemeData(
@@ -77,9 +79,10 @@ def parse(
         directions,
         intermediate_fields,
         intermediate_pattern_tuples,
+        invalid_intermediate_pattern_tuples,
         fields,
-        pattern_tuples,
-        invalid_pattern_tuples,
+        scheme_pattern_tuples,
+        invalid_scheme_pattern_tuples,
     )
 
 
@@ -213,28 +216,30 @@ def _validate_mapping(
 def _parse_data(
     data: list[list[str]],
     headers_split_index: int,
-    expected_columns_len: int,
+    total_columns_length: int,
     scheme_fields: dict[str, frozenset[int]],
 ) -> tuple[
     tuple[SchemeDirective, ...],  # parsed_directions
     tuple[PatternTuple, ...],  # parsed_intermediate_pattern_tuples
-    tuple[PatternTuple, ...],  # parsed_pattern_tuples
-    tuple[PatternTuple, ...],  # parsed_invalid_pattern_tuples
+    tuple[PatternTuple, ...],  # parsed_scheme_pattern_tuples
+    tuple[PatternTuple, ...],  # parsed_invalid_intermediate_pattern_tuples
+    tuple[PatternTuple, ...],  # parsed_invalid_scheme_pattern_tuples
 ]:
     """Parses TSV data rows into directives and tuple sequences.
 
     Args:
         data: List of raw TSV row cell lists (excluding headers).
         headers_split_index: Column index where scheme definitions begin.
-        expected_columns_len: Total expected columns per row.
+        total_columns_length: Total expected columns per row.
         scheme_fields: Field mapping specification from intermediate to scheme slots.
 
     Returns:
         A tuple containing:
             - `parsed_directions`: Tuple of row directive direction flags.
             - `parsed_intermediate_pattern_tuples`: Parsed intermediate pattern tuples.
-            - `parsed_pattern_tuples`: Parsed scheme pattern tuples.
-            - `parsed_invalid_pattern_tuples`: Parsed invalid scheme pattern tuples.
+            - `parsed_scheme_pattern_tuples`: Parsed scheme pattern tuples.
+            - `parsed_invalid_intermediate_pattern_tuples`: Parsed invalid intermediate pattern tuples.
+            - `parsed_invalid_scheme_pattern_tuples`: Parsed invalid scheme pattern tuples.
 
     Raises:
         ValueError: If row lengths differ from expectations or if duplicate entries conflict
@@ -243,56 +248,65 @@ def _parse_data(
     """
     parsed_directions: list[SchemeDirective] = []
     parsed_intermediate_pattern_tuples: list[PatternTuple] = []
-    parsed_pattern_tuples: list[PatternTuple] = []
-    parsed_invalid_pattern_tuples: list[PatternTuple] = []
+    parsed_scheme_pattern_tuples: list[PatternTuple] = []
+    parsed_invalid_intermediate_pattern_tuples: list[PatternTuple] = []
+    parsed_invalid_scheme_pattern_tuples: list[PatternTuple] = []
 
     seen_intermediate_pattern_tuples: set[tuple[Pattern, ...]] = set()
     seen_pattern_tuples: set[tuple[Pattern, ...]] = set()
-    seen_invalid_pattern_tuples: set[tuple[Pattern, ...]] = set()
+    seen_invalid_intermediate_pattern_tuples: set[tuple[Pattern, ...]] = set()
+    seen_invalid_scheme_pattern_tuples: set[tuple[Pattern, ...]] = set()
 
-    CHECK_INTERMEDIATE = {
-        SchemeRowDirective.BIDIRECTIONAL,
-        SchemeRowDirective.FORWARD,
-    }
-    CHECK_SCHEME = {
-        SchemeRowDirective.BIDIRECTIONAL,
-        SchemeRowDirective.REVERSE,
-    }
+    REQUIRED_COLUMNS_LENGTHS = {headers_split_index, total_columns_length}
 
-    for line_no, row in enumerate(data, start=2):
-        if len(row) != expected_columns_len:
+    for line_number, row in enumerate(data, start=2):
+        columns_length = len(row)
+
+        if columns_length == 0:
+            continue
+
+        if columns_length not in REQUIRED_COLUMNS_LENGTHS:
             raise ValueError(
-                f"malformed data at line {line_no}: "
-                + f"expecting columns length of {expected_columns_len}, got {len(row)}"
+                f"malformed data at line {line_number}: "
+                + "expecting columns length of "
+                + f"{headers_split_index} or {total_columns_length}, "
+                + f"got {len(row)}"
             )
 
         row_directive = SchemeRowDirective(row[0].strip())
-
         if row_directive is SchemeRowDirective.COMMENT:
             continue
 
         row_intermediate = tuple(map(parse_data_cell, row[1:headers_split_index]))
         row_scheme = tuple(map(parse_data_cell, row[headers_split_index:]))
+        has_intermediate_only = columns_length == headers_split_index
+
+        if row_directive is SchemeRowDirective.INVALID and has_intermediate_only:
+            seen_invalid_intermediate_pattern_tuples.add(row_intermediate)
+            parsed_invalid_intermediate_pattern_tuples.append(
+                PatternTuple(row_intermediate)
+            )
+            continue
 
         try:
             _validate_mapping(row_intermediate, row_scheme, scheme_fields)
         except TypeError as te:
-            raise TypeError(f"malformed data at line {line_no}: {te}") from te
+            raise TypeError(f"malformed data at line {line_number}: {te}") from te
 
         if row_directive is SchemeRowDirective.INVALID:
-            if row_scheme in seen_invalid_pattern_tuples:
+            if row_scheme in seen_invalid_scheme_pattern_tuples:
                 raise ValueError(
-                    f"conflict at line {line_no}: "
+                    f"conflict at line {line_number}: "
                     + f"duplicated invalid scheme tuple {row_scheme!r}"
                 )
-            seen_invalid_pattern_tuples.add(row_scheme)
-            parsed_invalid_pattern_tuples.append(PatternTuple(row_scheme))
+            seen_invalid_scheme_pattern_tuples.add(row_scheme)
+            parsed_invalid_scheme_pattern_tuples.append(PatternTuple(row_scheme))
             continue
 
         if row_directive in CHECK_INTERMEDIATE:
             if row_intermediate in seen_intermediate_pattern_tuples:
                 raise ValueError(
-                    f"conflict at line {line_no}: "
+                    f"conflict at line {line_number}: "
                     + f"duplicated intermediate tuple {row_intermediate!r}"
                 )
             seen_intermediate_pattern_tuples.add(row_intermediate)
@@ -300,19 +314,20 @@ def _parse_data(
         if row_directive in CHECK_SCHEME:
             if row_scheme in seen_pattern_tuples:
                 raise ValueError(
-                    f"conflict at line {line_no}: duplicated scheme tuple {row_scheme!r}"
+                    f"conflict at line {line_number}: duplicated scheme tuple {row_scheme!r}"
                 )
             seen_pattern_tuples.add(row_scheme)
 
         parsed_directions.append(row_directive.to_core_directive())
         parsed_intermediate_pattern_tuples.append(PatternTuple(row_intermediate))
-        parsed_pattern_tuples.append(PatternTuple(row_scheme))
+        parsed_scheme_pattern_tuples.append(PatternTuple(row_scheme))
 
     return (
         tuple(parsed_directions),
         tuple(parsed_intermediate_pattern_tuples),
-        tuple(parsed_pattern_tuples),
-        tuple(parsed_invalid_pattern_tuples),
+        tuple(parsed_scheme_pattern_tuples),
+        tuple(parsed_invalid_intermediate_pattern_tuples),
+        tuple(parsed_invalid_scheme_pattern_tuples),
     )
 
 

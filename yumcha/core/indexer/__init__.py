@@ -190,13 +190,15 @@ class Indexer:
         pattern_sequences: Sequence[Sequence[Pattern]],
         directions: Sequence[SchemeDirective],
         allowed_directions: set[SchemeDirective],
-    ):
+        reset: bool = False,
+    ) -> None:
         """Loads, sorts, compiles bitmasks, and extracts charsets for pattern sequences.
 
         Args:
             pattern_sequences: Sequences of pattern elements representing constraint rules.
             directions: Conversion directives corresponding to each pattern sequence.
             allowed_directions: Set of directives permitted during bitmask compilation.
+            reset: Whether to reset internal state before loading new sequences.
 
         Raises:
             ValueError: If `pattern_sequences` is empty, lengths mismatch `directions`,
@@ -205,7 +207,9 @@ class Indexer:
         if not pattern_sequences:
             raise ValueError("at least one pattern tuple is required")
 
-        self._reset()
+        if reset:
+            self._reset()
+
         self._register(pattern_sequences, directions)
         self._sort_and_rank_indexes_by_weight()
         self._compile(allowed_directions)
@@ -264,9 +268,9 @@ class Indexer:
 
             append_pattern_tuple(PatternTuple(sequence))
 
-        self._pattern_tuples[:] = pattern_tuples
-        self._pattern_tuples_frozenset = frozenset(pattern_tuples)
-        self._directions[:] = directions
+        self._pattern_tuples.extend(pattern_tuples)
+        self._pattern_tuples_frozenset |= frozenset(pattern_tuples)
+        self._directions.extend(directions)
 
     def _sort_and_rank_indexes_by_weight(self) -> None:
         """Sorts pattern tuple indices by weight in descending order and assigns rank positions."""
@@ -355,17 +359,21 @@ class Indexer:
     def load_invalid_patterns(
         self,
         invalid_pattern_sequences: Sequence[Sequence[Pattern]],
+        reset: bool = False,
     ):
         """Loads, registers, and compiles bitmask filters for invalid pattern sequences.
 
         Args:
             invalid_pattern_sequences: Sequences of prohibited pattern combinations.
+            reset: Whether to reset internal state before loading new sequences.
 
         Raises:
             ValueError: If an invalid tuple contradicts all valid tuples or is already
                 registered as a valid pattern tuple.
         """
-        self._reset_validation_data()
+        if reset:
+            self._reset_validation_data()
+
         self._register_validation_data(invalid_pattern_sequences)
         self._compile_validation_data()
 
@@ -378,10 +386,10 @@ class Indexer:
         Args:
             invalid_pattern_sequences: Sequences of prohibited pattern combinations to register.
         """
-        self._invalid_pattern_tuples[:] = [
+        self._invalid_pattern_tuples.extend(
             PatternTuple(invalid_pattern_sequence)
             for invalid_pattern_sequence in invalid_pattern_sequences
-        ]
+        )
 
     def _compile_validation_data(self) -> None:
         """Compiles conflict bitmasks and field index mappings for invalid pattern tuples.
