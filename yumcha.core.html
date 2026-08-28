@@ -272,6 +272,7 @@
 <li class="toctree-l4"><a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.solution.Solution.selected_mask"><code class="docutils literal notranslate"><span class="pre">Solution.selected_mask</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.solution.Solution.directions"><code class="docutils literal notranslate"><span class="pre">Solution.directions</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="yumcha.core.models.html#id0"><code class="docutils literal notranslate"><span class="pre">Solution.directions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.solution.Solution.is_validatable"><code class="docutils literal notranslate"><span class="pre">Solution.is_validatable</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="yumcha.core.models.html#id1"><code class="docutils literal notranslate"><span class="pre">Solution.selected_indexes</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="yumcha.core.models.html#id2"><code class="docutils literal notranslate"><span class="pre">Solution.selected_mask</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="yumcha.core.models.html#id3"><code class="docutils literal notranslate"><span class="pre">Solution.source_indexer</span></code></a></li>
@@ -608,8 +609,6 @@ if <cite>strict=False</cite> and conversion/validation fails.</p>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
 <li><p><strong>ValueError</strong> – If no valid solver solution exists and <cite>strict=True</cite>.</p></li>
-<li><p><strong>PhonologicalError</strong> – If the input violates phonotactic rules and <cite>strict=True</cite>.</p></li>
-<li><p><strong>NotSupportedError</strong> – If roundtrip validation fails and <cite>strict=True</cite>.</p></li>
 <li><p><strong>KeyError</strong> – If <cite>scheme_id</cite> is not registered, or if <cite>solver_id</cite> is not in
     <cite>self._solvers</cite>.</p></li>
 </ul>
@@ -646,8 +645,6 @@ if <cite>strict=False</cite> and conversion/validation fails.</p>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
 <li><p><strong>ValueError</strong> – If no valid solver solution exists and <cite>strict=True</cite>.</p></li>
-<li><p><strong>PhonologicalError</strong> – If the input violates phonotactic rules and <cite>strict=True</cite>.</p></li>
-<li><p><strong>NotSupportedError</strong> – If roundtrip validation fails and <cite>strict=True</cite>.</p></li>
 <li><p><strong>KeyError</strong> – If <cite>scheme_id</cite> is not registered, or if <cite>solver_id</cite> is not in
     <cite>self._solvers</cite>.</p></li>
 </ul>
@@ -687,8 +684,6 @@ if <cite>strict=False</cite> and conversion/validation fails.</p>
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>ValueError</strong> – If no valid solver solution exists and <cite>strict=True</cite>.</p></li>
-<li><p><strong>PhonologicalError</strong> – If the input violates phonotactic rules and <cite>strict=True</cite>.</p></li>
-<li><p><strong>NotSupportedError</strong> – If roundtrip validation fails and <cite>strict=True</cite>.</p></li>
 <li><p><strong>KeyError</strong> – If <cite>from_scheme_id</cite> or <cite>to_scheme_id</cite> is not registered.</p></li>
 </ul>
 </dd>
@@ -815,7 +810,7 @@ if <cite>strict=False</cite> and conversion/validation fails.</p>
 <dd class="field-odd"><p><strong>scheme</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="yumcha.core.facades.html#yumcha.core.facades.scheme.Scheme" title="yumcha.core.facades.scheme.Scheme"><code class="xref py py-class docutils literal notranslate"><span class="pre">Scheme</span></code></a>[<a class="reference internal" href="yumcha.core.models.html#yumcha.core.models.representation.SchemeRepresentation" title="yumcha.core.models.representation.SchemeRepresentation"><code class="xref py py-class docutils literal notranslate"><span class="pre">SchemeRepresentation</span></code></a>]</span>) – <cite>Scheme</cite> instance to validate against the active phonology.</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>ValueError</strong> – If phonemes required by phonology are missing in the scheme,
+<dd class="field-even"><p><a class="reference internal" href="#yumcha.core.exceptions.SchemeError" title="yumcha.core.exceptions.SchemeError"><strong>SchemeError</strong></a> – If phonemes required by phonology are missing in the scheme,
     or if redundant phonemes are present in the scheme.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>

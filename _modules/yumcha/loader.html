@@ -77,7 +77,7 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_dataclass</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">InitVar</span><span class="p">,</span> <span class="n">make_dataclass</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">types</span><span class="w"> </span><span class="kn">import</span> <span class="n">MappingProxyType</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
 
@@ -204,7 +204,11 @@
     <span class="n">canonicalizer</span><span class="o">.</span><span class="n">learn</span><span class="p">(</span><span class="n">indexer</span><span class="o">.</span><span class="n">charsets</span><span class="p">)</span>
 
     <span class="n">class_name</span> <span class="o">=</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">id</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"_"</span><span class="p">))</span>
-    <span class="n">cls_fields</span> <span class="o">=</span> <span class="p">[(</span><span class="n">f</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">scheme_data</span><span class="o">.</span><span class="n">fields</span><span class="p">]</span>
+
+    <span class="n">cls_fields</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">InitVar</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="s2">""</span><span class="p">)</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"_"</span><span class="p">)</span> <span class="k">else</span> <span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">scheme_data</span><span class="o">.</span><span class="n">fields</span>
+    <span class="p">]</span>
 
     <span class="bp">cls</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">SchemeRepresentation</span><span class="p">]</span> <span class="o">=</span> <span class="n">make_dataclass</span><span class="p">(</span>
         <span class="n">cls_name</span><span class="o">=</span><span class="n">class_name</span><span class="p">,</span>

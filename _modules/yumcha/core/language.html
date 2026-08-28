@@ -204,7 +204,7 @@
 <span class="sd">            scheme: `Scheme` instance to validate against the active phonology.</span>
 
 <span class="sd">        Raises:</span>
-<span class="sd">            ValueError: If phonemes required by phonology are missing in the scheme,</span>
+<span class="sd">            SchemeError: If phonemes required by phonology are missing in the scheme,</span>
 <span class="sd">                or if redundant phonemes are present in the scheme.</span>
 <span class="sd">        """</span>
         <span class="n">phonology_directive_maps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">phonology</span><span class="o">.</span><span class="n">phonology_directive_maps</span>
@@ -336,8 +336,6 @@
 
 <span class="sd">        Raises:</span>
 <span class="sd">            ValueError: If no valid solver solution exists and `strict=True`.</span>
-<span class="sd">            PhonologicalError: If the input violates phonotactic rules and `strict=True`.</span>
-<span class="sd">            NotSupportedError: If roundtrip validation fails and `strict=True`.</span>
 <span class="sd">            KeyError: If `scheme_id` is not registered, or if `solver_id` is not in</span>
 <span class="sd">                `self._solvers`.</span>
 <span class="sd">        """</span>
@@ -397,8 +395,6 @@
 
 <span class="sd">        Raises:</span>
 <span class="sd">            ValueError: If no valid solver solution exists and `strict=True`.</span>
-<span class="sd">            PhonologicalError: If the input violates phonotactic rules and `strict=True`.</span>
-<span class="sd">            NotSupportedError: If roundtrip validation fails and `strict=True`.</span>
 <span class="sd">            KeyError: If `scheme_id` is not registered, or if `solver_id` is not in</span>
 <span class="sd">                `self._solvers`.</span>
 <span class="sd">        """</span>
@@ -460,8 +456,6 @@
 
 <span class="sd">        Raises:</span>
 <span class="sd">            ValueError: If no valid solver solution exists and `strict=True`.</span>
-<span class="sd">            PhonologicalError: If the input violates phonotactic rules and `strict=True`.</span>
-<span class="sd">            NotSupportedError: If roundtrip validation fails and `strict=True`.</span>
 <span class="sd">            KeyError: If `from_scheme_id` or `to_scheme_id` is not registered.</span>
 <span class="sd">        """</span>
 

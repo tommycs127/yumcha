@@ -82,11 +82,13 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">cached_property</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..primitives.directives</span><span class="w"> </span><span class="kn">import</span> <span class="n">SchemeDirective</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">..indexer</span><span class="w"> </span><span class="kn">import</span> <span class="n">Indexer</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">..primitives.directives</span><span class="w"> </span><span class="kn">import</span> <span class="n">SchemeDirective</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">..primitives.pattern_tuple</span><span class="w"> </span><span class="kn">import</span> <span class="n">PatternTuple</span>
 
 
@@ -112,7 +114,18 @@
     <span class="n">target_pattern_tuple</span><span class="p">:</span> <span class="n">PatternTuple</span>
     <span class="n">selected_indexes</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
     <span class="n">selected_mask</span><span class="p">:</span> <span class="nb">int</span>
-    <span class="n">directions</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">SchemeDirective</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span></div>
+    <span class="n">directions</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">SchemeDirective</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_validatable</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Indicates whether all rule directions in the solution are bidirectional.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            True if every directive in `directions` is `SchemeDirective.BIDIRECTIONAL`,</span>
+<span class="sd">            False otherwise.</span>
+<span class="sd">        """</span>
+        <span class="n">directions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">directions</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">directions</span><span class="p">)</span> <span class="o">==</span> <span class="n">directions</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">SchemeDirective</span><span class="o">.</span><span class="n">BIDIRECTIONAL</span><span class="p">)</span></div>
 
 </pre></div>
 
