@@ -62,7 +62,7 @@ class Indexer:
         self._non_directional_pattern_masks_by_fields: list[PatternMasksView] = []
         self._non_directional_pattern_masks_by_fields_view: SequenceProxy[
             PatternMasksView
-        ] = SequenceProxy(self._pattern_masks_by_fields)
+        ] = SequenceProxy(self._non_directional_pattern_masks_by_fields)
 
         self._charsets: list[frozenset[str]] = []
         self._charsets_view: SequenceProxy[frozenset[str]] = SequenceProxy(
