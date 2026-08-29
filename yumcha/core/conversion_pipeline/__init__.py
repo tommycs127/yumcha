@@ -266,7 +266,7 @@ class ConversionPipeline[PhonologyRepresentationT: PhonologyRepresentation]:
 
         representation = target_cls_fn(scheme)(*solution.target_pattern_tuple)
 
-        if solution.is_validatable and validate:
+        if validate:
             is_valid = self._validator.validate(
                 source,
                 scheme,

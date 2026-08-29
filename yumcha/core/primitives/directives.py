@@ -32,10 +32,14 @@ class SchemeDirective(Enum):
         BIDIRECTIONAL: Mapping applies in both directions (`=`).
         FORWARD: Mapping applies only from Intermediate to Scheme (`>`).
         REVERSE: Mapping applies only from Scheme to Intermediate (`<`).
-        INVALID: Marks a row as explicitly invalid (`x`).
+        INVALID_FORWARD: Marks the Intermediate side of a row as explicitly invalid (`x>`).
+            The Scheme side is not processed, but serves as a reference for why the row exists.
+        INVALID_REVERSE: Marks the Scheme side of a row as explicitly invalid (`x<`).
+            The Intermediate side is not processed, but serves as a reference for why the row exists.
     """
 
     BIDIRECTIONAL = "="
     FORWARD = ">"
     REVERSE = "<"
-    INVALID = "x"
+    INVALID_FORWARD = "x>"
+    INVALID_REVERSE = "x<"

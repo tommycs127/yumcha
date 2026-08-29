@@ -74,7 +74,7 @@ def load_language(
                 scheme = load_scheme_from_tsv(scheme_resource)
             except OSError as e:
                 raise ReadError(scheme_resource.name, e) from e
-            except ValueError as e:
+            except (ValueError, TypeError) as e:
                 raise ParseError(scheme_resource.name, e) from e
 
             language.add_scheme(scheme)

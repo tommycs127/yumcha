@@ -59,6 +59,11 @@ class Indexer:
             SequenceProxy(self._pattern_masks_by_fields)
         )
 
+        self._non_directional_pattern_masks_by_fields: list[PatternMasksView] = []
+        self._non_directional_pattern_masks_by_fields_view: SequenceProxy[
+            PatternMasksView
+        ] = SequenceProxy(self._pattern_masks_by_fields)
+
         self._charsets: list[frozenset[str]] = []
         self._charsets_view: SequenceProxy[frozenset[str]] = SequenceProxy(
             self._charsets
@@ -126,12 +131,26 @@ class Indexer:
 
     @property
     def pattern_masks_by_fields(self) -> SequenceProxy[PatternMasksView]:
-        """Gets compiled pattern-to-bitmask mappings per field position.
+        """Gets directional pattern-to-bitmask mappings per field position.
 
         Returns:
             SequenceProxy of read-only pattern-to-bitmask mappings for each field.
         """
         return self._pattern_masks_by_fields_view
+
+    @property
+    def non_directional_pattern_masks_by_fields(
+        self,
+    ) -> SequenceProxy[PatternMasksView]:
+        """Gets non-directional pattern-to-bitmask mappings per field position.
+
+        Unlike `pattern_masks_by_fields`, these mappings ignore rule transitivity
+        and treat pattern pairs symmetrically.
+
+        Returns:
+            SequenceProxy of read-only pattern-to-bitmask mappings for each field.
+        """
+        return self._non_directional_pattern_masks_by_fields_view
 
     @property
     def charsets(self) -> SequenceProxy[frozenset[str]]:
@@ -312,41 +331,50 @@ class Indexer:
         pattern_masks_by_fields: list[PatternMasks] = [
             {} for _ in range(pattern_tuple_length)
         ]
+        non_directional_pattern_masks_by_fields: list[PatternMasks] = [
+            {} for _ in range(pattern_tuple_length)
+        ]
 
         for idx, pattern_tuple in enumerate(pattern_tuples):
-            if directions[idx] not in allowed_directions:
-                continue
-
             bit = 1 << idx
+            matches_direction = directions[idx] in allowed_directions
 
             for pattern_idx, pattern in enumerate(pattern_tuple):
-                pattern_masks = pattern_masks_by_fields[pattern_idx]
-                if pattern in pattern_masks:
-                    pattern_masks[pattern] |= bit
-                else:
-                    pattern_masks[pattern] = bit
+                non_dir_masks = non_directional_pattern_masks_by_fields[pattern_idx]
+                non_dir_masks[pattern] = non_dir_masks.get(pattern, 0) | bit
+
+                if matches_direction:
+                    dir_masks = pattern_masks_by_fields[pattern_idx]
+                    dir_masks[pattern] = dir_masks.get(pattern, 0) | bit
 
         full_mask = (1 << len(pattern_tuples)) - 1
         _ellipsis = ELLIPSIS
 
-        for idx, pattern_masks in enumerate(pattern_masks_by_fields):
-            if _ellipsis not in pattern_masks:
-                continue
+        def _apply_wildcards(masks_by_fields: list[PatternMasks]) -> None:
+            for idx, pattern_masks in enumerate(masks_by_fields):
+                if _ellipsis not in pattern_masks:
+                    continue
 
-            wildcard_mask = pattern_masks[_ellipsis]
+                wildcard_mask = pattern_masks[_ellipsis]
 
-            if wildcard_mask == full_mask:
-                raise ValueError(
-                    f"all pattern tuples contain a wildcard at index {idx}"
-                )
+                if wildcard_mask == full_mask:
+                    raise ValueError(
+                        f"all pattern tuples contain a wildcard at index {idx}"
+                    )
 
-            if wildcard_mask:
-                for pattern in pattern_masks:
-                    if pattern is not _ellipsis:
-                        pattern_masks[pattern] |= wildcard_mask
+                if wildcard_mask:
+                    for pattern in pattern_masks:
+                        if pattern is not _ellipsis:
+                            pattern_masks[pattern] |= wildcard_mask
+
+        _apply_wildcards(pattern_masks_by_fields)
+        _apply_wildcards(non_directional_pattern_masks_by_fields)
 
         self._pattern_masks_by_fields[:] = (
-            MappingProxyType(pattern_masks) for pattern_masks in pattern_masks_by_fields
+            MappingProxyType(pm) for pm in pattern_masks_by_fields
+        )
+        self._non_directional_pattern_masks_by_fields[:] = (
+            MappingProxyType(pm) for pm in non_directional_pattern_masks_by_fields
         )
 
     def _extract_explicit_charsets(self) -> None:
@@ -398,7 +426,9 @@ class Indexer:
             ValueError: If an invalid tuple invalidates all registered tuples (full mask conflict)
                 or was already registered as a valid pattern tuple.
         """
-        pattern_masks_by_fields = self._pattern_masks_by_fields
+        non_directional_pattern_masks_by_fields = (
+            self._non_directional_pattern_masks_by_fields
+        )
         pattern_tuples_frozenset = self._pattern_tuples_frozenset
         invalid_pattern_tuples = self._invalid_pattern_tuples
 
@@ -419,7 +449,7 @@ class Indexer:
                 if pattern is _ellipsis:
                     continue
 
-                pattern_masks = pattern_masks_by_fields[pattern_idx]
+                pattern_masks = non_directional_pattern_masks_by_fields[pattern_idx]
                 if invalid_pattern_mask:
                     if pattern not in pattern_masks:
                         invalid_pattern_mask = 0

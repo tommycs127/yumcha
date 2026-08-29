@@ -257,47 +257,51 @@ def _parse_data(
     seen_invalid_intermediate_pattern_tuples: set[tuple[Pattern, ...]] = set()
     seen_invalid_scheme_pattern_tuples: set[tuple[Pattern, ...]] = set()
 
-    REQUIRED_COLUMNS_LENGTHS = {headers_split_index, total_columns_length}
-
     for line_number, row in enumerate(data, start=2):
         columns_length = len(row)
 
         if columns_length == 0:
             continue
 
-        if columns_length not in REQUIRED_COLUMNS_LENGTHS:
+        if columns_length != total_columns_length:
             raise ValueError(
                 f"malformed data at line {line_number}: "
-                + "expecting columns length of "
-                + f"{headers_split_index} or {total_columns_length}, "
+                + f"expecting columns length of {total_columns_length}, "
                 + f"got {len(row)}"
             )
 
         row_directive = SchemeRowDirective(row[0].strip())
+
         if row_directive is SchemeRowDirective.COMMENT:
             continue
 
         row_intermediate = tuple(map(parse_data_cell, row[1:headers_split_index]))
         row_scheme = tuple(map(parse_data_cell, row[headers_split_index:]))
-        has_intermediate_only = columns_length == headers_split_index
-
-        if row_directive is SchemeRowDirective.INVALID and has_intermediate_only:
-            seen_invalid_intermediate_pattern_tuples.add(row_intermediate)
-            parsed_invalid_intermediate_pattern_tuples.append(
-                PatternTuple(row_intermediate)
-            )
-            continue
 
         try:
             _validate_mapping(row_intermediate, row_scheme, scheme_fields)
         except TypeError as te:
             raise TypeError(f"malformed data at line {line_number}: {te}") from te
 
-        if row_directive is SchemeRowDirective.INVALID:
+        if row_directive is SchemeRowDirective.INVALID_FORWARD:
+            if row_intermediate in seen_invalid_intermediate_pattern_tuples:
+                raise ValueError(
+                    f"conflict at line {line_number}: "
+                    + "duplicated intermediate side of "
+                    + f"invalid scheme tuple {row_intermediate!r}"
+                )
+            seen_invalid_intermediate_pattern_tuples.add(row_intermediate)
+            parsed_invalid_intermediate_pattern_tuples.append(
+                PatternTuple(row_intermediate)
+            )
+            continue
+
+        if row_directive is SchemeRowDirective.INVALID_REVERSE:
             if row_scheme in seen_invalid_scheme_pattern_tuples:
                 raise ValueError(
                     f"conflict at line {line_number}: "
-                    + f"duplicated invalid scheme tuple {row_scheme!r}"
+                    + "duplicated scheme side of "
+                    + f"invalid scheme tuple {row_scheme!r}"
                 )
             seen_invalid_scheme_pattern_tuples.add(row_scheme)
             parsed_invalid_scheme_pattern_tuples.append(PatternTuple(row_scheme))

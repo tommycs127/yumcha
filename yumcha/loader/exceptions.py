@@ -25,8 +25,8 @@ class LoaderError(Exception):
             path: The file path or traversable resource where the failure occurred.
             cause: An optional exception instance representing the root cause of the error.
         """
-        self.path = path
-        self.cause = cause
+        self.path: str | Traversable = path
+        self.cause: Exception | None = cause
 
         filename = path.name if isinstance(path, Traversable) else str(path)
         message = f"failed to {self.verb} file {filename!r}"
