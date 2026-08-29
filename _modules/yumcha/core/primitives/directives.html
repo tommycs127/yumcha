@@ -112,13 +112,17 @@
 <span class="sd">        BIDIRECTIONAL: Mapping applies in both directions (`=`).</span>
 <span class="sd">        FORWARD: Mapping applies only from Intermediate to Scheme (`&gt;`).</span>
 <span class="sd">        REVERSE: Mapping applies only from Scheme to Intermediate (`&lt;`).</span>
-<span class="sd">        INVALID: Marks a row as explicitly invalid (`x`).</span>
+<span class="sd">        INVALID_FORWARD: Marks the Intermediate side of a row as explicitly invalid (`x&gt;`).</span>
+<span class="sd">            The Scheme side is not processed, but serves as a reference for why the row exists.</span>
+<span class="sd">        INVALID_REVERSE: Marks the Scheme side of a row as explicitly invalid (`x&lt;`).</span>
+<span class="sd">            The Intermediate side is not processed, but serves as a reference for why the row exists.</span>
 <span class="sd">    """</span>
 
     <span class="n">BIDIRECTIONAL</span> <span class="o">=</span> <span class="s2">"="</span>
     <span class="n">FORWARD</span> <span class="o">=</span> <span class="s2">"&gt;"</span>
     <span class="n">REVERSE</span> <span class="o">=</span> <span class="s2">"&lt;"</span>
-    <span class="n">INVALID</span> <span class="o">=</span> <span class="s2">"x"</span></div>
+    <span class="n">INVALID_FORWARD</span> <span class="o">=</span> <span class="s2">"x&gt;"</span>
+    <span class="n">INVALID_REVERSE</span> <span class="o">=</span> <span class="s2">"x&lt;"</span></div>
 
 </pre></div>
 

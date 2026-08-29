@@ -169,9 +169,17 @@ directional mapping rules between intermediate and scheme representations.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="yumcha.core.primitives.directives.SchemeDirective.INVALID">
-<span class="sig-name descname"><span class="pre">INVALID</span></span><a class="headerlink" href="#yumcha.core.primitives.directives.SchemeDirective.INVALID" title="Link to this definition"></a></dt>
-<dd><p>Marks a row as explicitly invalid (<cite>x</cite>).</p>
+<dt class="sig sig-object py" id="yumcha.core.primitives.directives.SchemeDirective.INVALID_FORWARD">
+<span class="sig-name descname"><span class="pre">INVALID_FORWARD</span></span><a class="headerlink" href="#yumcha.core.primitives.directives.SchemeDirective.INVALID_FORWARD" title="Link to this definition"></a></dt>
+<dd><p>Marks the Intermediate side of a row as explicitly invalid (<cite>x&gt;</cite>).
+The Scheme side is not processed, but serves as a reference for why the row exists.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="yumcha.core.primitives.directives.SchemeDirective.INVALID_REVERSE">
+<span class="sig-name descname"><span class="pre">INVALID_REVERSE</span></span><a class="headerlink" href="#yumcha.core.primitives.directives.SchemeDirective.INVALID_REVERSE" title="Link to this definition"></a></dt>
+<dd><p>Marks the Scheme side of a row as explicitly invalid (<cite>x&lt;</cite>).
+The Intermediate side is not processed, but serves as a reference for why the row exists.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -186,12 +194,17 @@ directional mapping rules between intermediate and scheme representations.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id5">
-<span class="sig-name descname"><span class="pre">INVALID</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'x'</span></span><a class="headerlink" href="#id5" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">INVALID_FORWARD</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'x&gt;'</span></span><a class="headerlink" href="#id5" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id6">
-<span class="sig-name descname"><span class="pre">REVERSE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'&lt;'</span></span><a class="headerlink" href="#id6" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">INVALID_REVERSE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'x&lt;'</span></span><a class="headerlink" href="#id6" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id7">
+<span class="sig-name descname"><span class="pre">REVERSE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'&lt;'</span></span><a class="headerlink" href="#id7" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -316,8 +329,8 @@ with wildcards (<cite>…</cite>).</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id7">
-<span class="sig-name descname"><span class="pre">full_mask</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></span><a class="headerlink" href="#id7" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id8">
+<span class="sig-name descname"><span class="pre">full_mask</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></span><a class="headerlink" href="#id8" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -357,8 +370,8 @@ are retained in the output; all other slots become wildcards (<cite>…</cite>).
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id8">
-<span class="sig-name descname"><span class="pre">mask</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></span><a class="headerlink" href="#id8" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id9">
+<span class="sig-name descname"><span class="pre">mask</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></span><a class="headerlink" href="#id9" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -458,8 +471,8 @@ Pass <cite>None</cite> to skip normalization.</p></li>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id9">
-<span class="sig-name descname"><span class="pre">weight</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></span><a class="headerlink" href="#id9" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id10">
+<span class="sig-name descname"><span class="pre">weight</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></span><a class="headerlink" href="#id10" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">

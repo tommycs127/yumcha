@@ -337,47 +337,51 @@
     <span class="n">seen_invalid_intermediate_pattern_tuples</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">Pattern</span><span class="p">,</span> <span class="o">...</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
     <span class="n">seen_invalid_scheme_pattern_tuples</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">Pattern</span><span class="p">,</span> <span class="o">...</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
 
-    <span class="n">REQUIRED_COLUMNS_LENGTHS</span> <span class="o">=</span> <span class="p">{</span><span class="n">headers_split_index</span><span class="p">,</span> <span class="n">total_columns_length</span><span class="p">}</span>
-
     <span class="k">for</span> <span class="n">line_number</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
         <span class="n">columns_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">columns_length</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">continue</span>
 
-        <span class="k">if</span> <span class="n">columns_length</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">REQUIRED_COLUMNS_LENGTHS</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">columns_length</span> <span class="o">!=</span> <span class="n">total_columns_length</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">"malformed data at line </span><span class="si">{</span><span class="n">line_number</span><span class="si">}</span><span class="s2">: "</span>
-                <span class="o">+</span> <span class="s2">"expecting columns length of "</span>
-                <span class="o">+</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">headers_split_index</span><span class="si">}</span><span class="s2"> or </span><span class="si">{</span><span class="n">total_columns_length</span><span class="si">}</span><span class="s2">, "</span>
+                <span class="o">+</span> <span class="sa">f</span><span class="s2">"expecting columns length of </span><span class="si">{</span><span class="n">total_columns_length</span><span class="si">}</span><span class="s2">, "</span>
                 <span class="o">+</span> <span class="sa">f</span><span class="s2">"got </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">row</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
             <span class="p">)</span>
 
         <span class="n">row_directive</span> <span class="o">=</span> <span class="n">SchemeRowDirective</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+
         <span class="k">if</span> <span class="n">row_directive</span> <span class="ow">is</span> <span class="n">SchemeRowDirective</span><span class="o">.</span><span class="n">COMMENT</span><span class="p">:</span>
             <span class="k">continue</span>
 
         <span class="n">row_intermediate</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">parse_data_cell</span><span class="p">,</span> <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="n">headers_split_index</span><span class="p">]))</span>
         <span class="n">row_scheme</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">parse_data_cell</span><span class="p">,</span> <span class="n">row</span><span class="p">[</span><span class="n">headers_split_index</span><span class="p">:]))</span>
-        <span class="n">has_intermediate_only</span> <span class="o">=</span> <span class="n">columns_length</span> <span class="o">==</span> <span class="n">headers_split_index</span>
-
-        <span class="k">if</span> <span class="n">row_directive</span> <span class="ow">is</span> <span class="n">SchemeRowDirective</span><span class="o">.</span><span class="n">INVALID</span> <span class="ow">and</span> <span class="n">has_intermediate_only</span><span class="p">:</span>
-            <span class="n">seen_invalid_intermediate_pattern_tuples</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">row_intermediate</span><span class="p">)</span>
-            <span class="n">parsed_invalid_intermediate_pattern_tuples</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                <span class="n">PatternTuple</span><span class="p">(</span><span class="n">row_intermediate</span><span class="p">)</span>
-            <span class="p">)</span>
-            <span class="k">continue</span>
 
         <span class="k">try</span><span class="p">:</span>
             <span class="n">_validate_mapping</span><span class="p">(</span><span class="n">row_intermediate</span><span class="p">,</span> <span class="n">row_scheme</span><span class="p">,</span> <span class="n">scheme_fields</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">te</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"malformed data at line </span><span class="si">{</span><span class="n">line_number</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">te</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">te</span>
 
-        <span class="k">if</span> <span class="n">row_directive</span> <span class="ow">is</span> <span class="n">SchemeRowDirective</span><span class="o">.</span><span class="n">INVALID</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">row_directive</span> <span class="ow">is</span> <span class="n">SchemeRowDirective</span><span class="o">.</span><span class="n">INVALID_FORWARD</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">row_intermediate</span> <span class="ow">in</span> <span class="n">seen_invalid_intermediate_pattern_tuples</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">"conflict at line </span><span class="si">{</span><span class="n">line_number</span><span class="si">}</span><span class="s2">: "</span>
+                    <span class="o">+</span> <span class="s2">"duplicated intermediate side of "</span>
+                    <span class="o">+</span> <span class="sa">f</span><span class="s2">"invalid scheme tuple </span><span class="si">{</span><span class="n">row_intermediate</span><span class="si">!r}</span><span class="s2">"</span>
+                <span class="p">)</span>
+            <span class="n">seen_invalid_intermediate_pattern_tuples</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">row_intermediate</span><span class="p">)</span>
+            <span class="n">parsed_invalid_intermediate_pattern_tuples</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">PatternTuple</span><span class="p">(</span><span class="n">row_intermediate</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="k">continue</span>
+
+        <span class="k">if</span> <span class="n">row_directive</span> <span class="ow">is</span> <span class="n">SchemeRowDirective</span><span class="o">.</span><span class="n">INVALID_REVERSE</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">row_scheme</span> <span class="ow">in</span> <span class="n">seen_invalid_scheme_pattern_tuples</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                     <span class="sa">f</span><span class="s2">"conflict at line </span><span class="si">{</span><span class="n">line_number</span><span class="si">}</span><span class="s2">: "</span>
-                    <span class="o">+</span> <span class="sa">f</span><span class="s2">"duplicated invalid scheme tuple </span><span class="si">{</span><span class="n">row_scheme</span><span class="si">!r}</span><span class="s2">"</span>
+                    <span class="o">+</span> <span class="s2">"duplicated scheme side of "</span>
+                    <span class="o">+</span> <span class="sa">f</span><span class="s2">"invalid scheme tuple </span><span class="si">{</span><span class="n">row_scheme</span><span class="si">!r}</span><span class="s2">"</span>
                 <span class="p">)</span>
             <span class="n">seen_invalid_scheme_pattern_tuples</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">row_scheme</span><span class="p">)</span>
             <span class="n">parsed_invalid_scheme_pattern_tuples</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PatternTuple</span><span class="p">(</span><span class="n">row_scheme</span><span class="p">))</span>

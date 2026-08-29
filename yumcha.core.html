@@ -222,6 +222,7 @@
 <li class="toctree-l4"><a class="reference internal" href="yumcha.core.indexer.html#yumcha.core.indexer.Indexer.invalid_pattern_tuples"><code class="docutils literal notranslate"><span class="pre">Indexer.invalid_pattern_tuples</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="yumcha.core.indexer.html#yumcha.core.indexer.Indexer.load"><code class="docutils literal notranslate"><span class="pre">Indexer.load()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="yumcha.core.indexer.html#yumcha.core.indexer.Indexer.load_invalid_patterns"><code class="docutils literal notranslate"><span class="pre">Indexer.load_invalid_patterns()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.indexer.html#yumcha.core.indexer.Indexer.non_directional_pattern_masks_by_fields"><code class="docutils literal notranslate"><span class="pre">Indexer.non_directional_pattern_masks_by_fields</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="yumcha.core.indexer.html#yumcha.core.indexer.Indexer.pattern_masks_by_fields"><code class="docutils literal notranslate"><span class="pre">Indexer.pattern_masks_by_fields</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="yumcha.core.indexer.html#yumcha.core.indexer.Indexer.pattern_tuple_length"><code class="docutils literal notranslate"><span class="pre">Indexer.pattern_tuple_length</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="yumcha.core.indexer.html#yumcha.core.indexer.Indexer.pattern_tuples"><code class="docutils literal notranslate"><span class="pre">Indexer.pattern_tuples</span></code></a></li>
@@ -339,11 +340,13 @@
 <li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.directives.SchemeDirective.BIDIRECTIONAL"><code class="docutils literal notranslate"><span class="pre">SchemeDirective.BIDIRECTIONAL</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.directives.SchemeDirective.FORWARD"><code class="docutils literal notranslate"><span class="pre">SchemeDirective.FORWARD</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.directives.SchemeDirective.REVERSE"><code class="docutils literal notranslate"><span class="pre">SchemeDirective.REVERSE</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.directives.SchemeDirective.INVALID"><code class="docutils literal notranslate"><span class="pre">SchemeDirective.INVALID</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.directives.SchemeDirective.INVALID_FORWARD"><code class="docutils literal notranslate"><span class="pre">SchemeDirective.INVALID_FORWARD</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.directives.SchemeDirective.INVALID_REVERSE"><code class="docutils literal notranslate"><span class="pre">SchemeDirective.INVALID_REVERSE</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#id3"><code class="docutils literal notranslate"><span class="pre">SchemeDirective.BIDIRECTIONAL</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#id4"><code class="docutils literal notranslate"><span class="pre">SchemeDirective.FORWARD</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#id5"><code class="docutils literal notranslate"><span class="pre">SchemeDirective.INVALID</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#id6"><code class="docutils literal notranslate"><span class="pre">SchemeDirective.REVERSE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#id5"><code class="docutils literal notranslate"><span class="pre">SchemeDirective.INVALID_FORWARD</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#id6"><code class="docutils literal notranslate"><span class="pre">SchemeDirective.INVALID_REVERSE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#id7"><code class="docutils literal notranslate"><span class="pre">SchemeDirective.REVERSE</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -361,16 +364,16 @@
 <li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.pattern_tuple.PatternTuple.full_mask"><code class="docutils literal notranslate"><span class="pre">PatternTuple.full_mask</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.pattern_tuple.PatternTuple.difference"><code class="docutils literal notranslate"><span class="pre">PatternTuple.difference()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.pattern_tuple.PatternTuple.filter"><code class="docutils literal notranslate"><span class="pre">PatternTuple.filter()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#id7"><code class="docutils literal notranslate"><span class="pre">PatternTuple.full_mask</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#id8"><code class="docutils literal notranslate"><span class="pre">PatternTuple.full_mask</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.pattern_tuple.PatternTuple.intersection"><code class="docutils literal notranslate"><span class="pre">PatternTuple.intersection()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.pattern_tuple.PatternTuple.is_complete"><code class="docutils literal notranslate"><span class="pre">PatternTuple.is_complete()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#id8"><code class="docutils literal notranslate"><span class="pre">PatternTuple.mask</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#id9"><code class="docutils literal notranslate"><span class="pre">PatternTuple.mask</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.pattern_tuple.PatternTuple.satisfies"><code class="docutils literal notranslate"><span class="pre">PatternTuple.satisfies()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.pattern_tuple.PatternTuple.separate"><code class="docutils literal notranslate"><span class="pre">PatternTuple.separate()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.pattern_tuple.PatternTuple.to_debug_msg"><code class="docutils literal notranslate"><span class="pre">PatternTuple.to_debug_msg()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.pattern_tuple.PatternTuple.to_string"><code class="docutils literal notranslate"><span class="pre">PatternTuple.to_string()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.pattern_tuple.PatternTuple.union"><code class="docutils literal notranslate"><span class="pre">PatternTuple.union()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#id9"><code class="docutils literal notranslate"><span class="pre">PatternTuple.weight</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#id10"><code class="docutils literal notranslate"><span class="pre">PatternTuple.weight</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="yumcha.core.primitives.html#yumcha.core.primitives.pattern_tuple.PatternTuple.wildcards"><code class="docutils literal notranslate"><span class="pre">PatternTuple.wildcards()</span></code></a></li>
 </ul>
 </li>

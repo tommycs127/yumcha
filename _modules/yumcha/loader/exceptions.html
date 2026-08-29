@@ -103,8 +103,8 @@
 <span class="sd">            path: The file path or traversable resource where the failure occurred.</span>
 <span class="sd">            cause: An optional exception instance representing the root cause of the error.</span>
 <span class="sd">        """</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">path</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cause</span> <span class="o">=</span> <span class="n">cause</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Traversable</span> <span class="o">=</span> <span class="n">path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cause</span><span class="p">:</span> <span class="ne">Exception</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">cause</span>
 
         <span class="n">filename</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">name</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">Traversable</span><span class="p">)</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
         <span class="n">message</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"failed to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">verb</span><span class="si">}</span><span class="s2"> file </span><span class="si">{</span><span class="n">filename</span><span class="si">!r}</span><span class="s2">"</span>

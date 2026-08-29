@@ -136,6 +136,11 @@
             <span class="n">SequenceProxy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_pattern_masks_by_fields</span><span class="p">)</span>
         <span class="p">)</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">_non_directional_pattern_masks_by_fields</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">PatternMasksView</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_non_directional_pattern_masks_by_fields_view</span><span class="p">:</span> <span class="n">SequenceProxy</span><span class="p">[</span>
+            <span class="n">PatternMasksView</span>
+        <span class="p">]</span> <span class="o">=</span> <span class="n">SequenceProxy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_pattern_masks_by_fields</span><span class="p">)</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">_charsets</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">frozenset</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_charsets_view</span><span class="p">:</span> <span class="n">SequenceProxy</span><span class="p">[</span><span class="nb">frozenset</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="n">SequenceProxy</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_charsets</span>
@@ -203,12 +208,26 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">pattern_masks_by_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SequenceProxy</span><span class="p">[</span><span class="n">PatternMasksView</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">"""Gets compiled pattern-to-bitmask mappings per field position.</span>
+<span class="w">        </span><span class="sd">"""Gets directional pattern-to-bitmask mappings per field position.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            SequenceProxy of read-only pattern-to-bitmask mappings for each field.</span>
 <span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pattern_masks_by_fields_view</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">non_directional_pattern_masks_by_fields</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SequenceProxy</span><span class="p">[</span><span class="n">PatternMasksView</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Gets non-directional pattern-to-bitmask mappings per field position.</span>
+
+<span class="sd">        Unlike `pattern_masks_by_fields`, these mappings ignore rule transitivity</span>
+<span class="sd">        and treat pattern pairs symmetrically.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            SequenceProxy of read-only pattern-to-bitmask mappings for each field.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_non_directional_pattern_masks_by_fields_view</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">charsets</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SequenceProxy</span><span class="p">[</span><span class="nb">frozenset</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
@@ -392,41 +411,50 @@
         <span class="n">pattern_masks_by_fields</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">PatternMasks</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
             <span class="p">{}</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">pattern_tuple_length</span><span class="p">)</span>
         <span class="p">]</span>
+        <span class="n">non_directional_pattern_masks_by_fields</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">PatternMasks</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">{}</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">pattern_tuple_length</span><span class="p">)</span>
+        <span class="p">]</span>
 
         <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">pattern_tuple</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">pattern_tuples</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">directions</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">allowed_directions</span><span class="p">:</span>
-                <span class="k">continue</span>
-
             <span class="n">bit</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">idx</span>
+            <span class="n">matches_direction</span> <span class="o">=</span> <span class="n">directions</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="ow">in</span> <span class="n">allowed_directions</span>
 
             <span class="k">for</span> <span class="n">pattern_idx</span><span class="p">,</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">pattern_tuple</span><span class="p">):</span>
-                <span class="n">pattern_masks</span> <span class="o">=</span> <span class="n">pattern_masks_by_fields</span><span class="p">[</span><span class="n">pattern_idx</span><span class="p">]</span>
-                <span class="k">if</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">pattern_masks</span><span class="p">:</span>
-                    <span class="n">pattern_masks</span><span class="p">[</span><span class="n">pattern</span><span class="p">]</span> <span class="o">|=</span> <span class="n">bit</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">pattern_masks</span><span class="p">[</span><span class="n">pattern</span><span class="p">]</span> <span class="o">=</span> <span class="n">bit</span>
+                <span class="n">non_dir_masks</span> <span class="o">=</span> <span class="n">non_directional_pattern_masks_by_fields</span><span class="p">[</span><span class="n">pattern_idx</span><span class="p">]</span>
+                <span class="n">non_dir_masks</span><span class="p">[</span><span class="n">pattern</span><span class="p">]</span> <span class="o">=</span> <span class="n">non_dir_masks</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">|</span> <span class="n">bit</span>
+
+                <span class="k">if</span> <span class="n">matches_direction</span><span class="p">:</span>
+                    <span class="n">dir_masks</span> <span class="o">=</span> <span class="n">pattern_masks_by_fields</span><span class="p">[</span><span class="n">pattern_idx</span><span class="p">]</span>
+                    <span class="n">dir_masks</span><span class="p">[</span><span class="n">pattern</span><span class="p">]</span> <span class="o">=</span> <span class="n">dir_masks</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">|</span> <span class="n">bit</span>
 
         <span class="n">full_mask</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">pattern_tuples</span><span class="p">))</span> <span class="o">-</span> <span class="mi">1</span>
         <span class="n">_ellipsis</span> <span class="o">=</span> <span class="n">ELLIPSIS</span>
 
-        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">pattern_masks</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">pattern_masks_by_fields</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">_ellipsis</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">pattern_masks</span><span class="p">:</span>
-                <span class="k">continue</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">_apply_wildcards</span><span class="p">(</span><span class="n">masks_by_fields</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">PatternMasks</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">pattern_masks</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">masks_by_fields</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">_ellipsis</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">pattern_masks</span><span class="p">:</span>
+                    <span class="k">continue</span>
 
-            <span class="n">wildcard_mask</span> <span class="o">=</span> <span class="n">pattern_masks</span><span class="p">[</span><span class="n">_ellipsis</span><span class="p">]</span>
+                <span class="n">wildcard_mask</span> <span class="o">=</span> <span class="n">pattern_masks</span><span class="p">[</span><span class="n">_ellipsis</span><span class="p">]</span>
 
-            <span class="k">if</span> <span class="n">wildcard_mask</span> <span class="o">==</span> <span class="n">full_mask</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">"all pattern tuples contain a wildcard at index </span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">"</span>
-                <span class="p">)</span>
+                <span class="k">if</span> <span class="n">wildcard_mask</span> <span class="o">==</span> <span class="n">full_mask</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">"all pattern tuples contain a wildcard at index </span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">"</span>
+                    <span class="p">)</span>
 
-            <span class="k">if</span> <span class="n">wildcard_mask</span><span class="p">:</span>
-                <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">pattern_masks</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">pattern</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_ellipsis</span><span class="p">:</span>
-                        <span class="n">pattern_masks</span><span class="p">[</span><span class="n">pattern</span><span class="p">]</span> <span class="o">|=</span> <span class="n">wildcard_mask</span>
+                <span class="k">if</span> <span class="n">wildcard_mask</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">pattern_masks</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">pattern</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_ellipsis</span><span class="p">:</span>
+                            <span class="n">pattern_masks</span><span class="p">[</span><span class="n">pattern</span><span class="p">]</span> <span class="o">|=</span> <span class="n">wildcard_mask</span>
+
+        <span class="n">_apply_wildcards</span><span class="p">(</span><span class="n">pattern_masks_by_fields</span><span class="p">)</span>
+        <span class="n">_apply_wildcards</span><span class="p">(</span><span class="n">non_directional_pattern_masks_by_fields</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_pattern_masks_by_fields</span><span class="p">[:]</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">MappingProxyType</span><span class="p">(</span><span class="n">pattern_masks</span><span class="p">)</span> <span class="k">for</span> <span class="n">pattern_masks</span> <span class="ow">in</span> <span class="n">pattern_masks_by_fields</span>
+            <span class="n">MappingProxyType</span><span class="p">(</span><span class="n">pm</span><span class="p">)</span> <span class="k">for</span> <span class="n">pm</span> <span class="ow">in</span> <span class="n">pattern_masks_by_fields</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_non_directional_pattern_masks_by_fields</span><span class="p">[:]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">MappingProxyType</span><span class="p">(</span><span class="n">pm</span><span class="p">)</span> <span class="k">for</span> <span class="n">pm</span> <span class="ow">in</span> <span class="n">non_directional_pattern_masks_by_fields</span>
         <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_extract_explicit_charsets</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -481,7 +509,9 @@
 <span class="sd">            ValueError: If an invalid tuple invalidates all registered tuples (full mask conflict)</span>
 <span class="sd">                or was already registered as a valid pattern tuple.</span>
 <span class="sd">        """</span>
-        <span class="n">pattern_masks_by_fields</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pattern_masks_by_fields</span>
+        <span class="n">non_directional_pattern_masks_by_fields</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_non_directional_pattern_masks_by_fields</span>
+        <span class="p">)</span>
         <span class="n">pattern_tuples_frozenset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pattern_tuples_frozenset</span>
         <span class="n">invalid_pattern_tuples</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_invalid_pattern_tuples</span>
 
@@ -502,7 +532,7 @@
                 <span class="k">if</span> <span class="n">pattern</span> <span class="ow">is</span> <span class="n">_ellipsis</span><span class="p">:</span>
                     <span class="k">continue</span>
 
-                <span class="n">pattern_masks</span> <span class="o">=</span> <span class="n">pattern_masks_by_fields</span><span class="p">[</span><span class="n">pattern_idx</span><span class="p">]</span>
+                <span class="n">pattern_masks</span> <span class="o">=</span> <span class="n">non_directional_pattern_masks_by_fields</span><span class="p">[</span><span class="n">pattern_idx</span><span class="p">]</span>
                 <span class="k">if</span> <span class="n">invalid_pattern_mask</span><span class="p">:</span>
                     <span class="k">if</span> <span class="n">pattern</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">pattern_masks</span><span class="p">:</span>
                         <span class="n">invalid_pattern_mask</span> <span class="o">=</span> <span class="mi">0</span>
