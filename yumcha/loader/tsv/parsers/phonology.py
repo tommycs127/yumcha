@@ -1,17 +1,12 @@
 """Parser for compiling phonology specifications from raw TSV header and data rows."""
 
-from __future__ import annotations
-
 from collections import Counter
-from typing import TYPE_CHECKING
 
 from ....core.models.specs import PhonologyData
+from ....core.primitives.directives import PhonologyDirective, PhonologyDirectiveMap
 from ....core.primitives.pattern_tuple import PatternTuple
-from ...primitives.directives import PhonologyRowDirective
+from ...utils.format import format_list
 from ...utils.text import parse_data_cell
-
-if TYPE_CHECKING:
-    from ....core.primitives.directives import PhonologyDirectiveMap
 
 
 def parse(
@@ -108,17 +103,29 @@ def _parse_data(
     ]
     invalid_pattern_tuples: list[PatternTuple] = []
 
-    for line_no, row in enumerate(data, start=2):
-        if len(row) != expected_columns_len:
+    for line_number, row in enumerate(data, start=2):
+        if (columns_length := len(row)) == 0:
+            continue
+
+        if (first_column := row[0]).startswith("#"):
+            continue
+
+        if first_column not in PhonologyDirective:
+            values = list(PhonologyDirective._value2member_map_)
             raise ValueError(
-                f"malformed data at line {line_no}: "
-                + f"expecting columns length of {expected_columns_len}, got {len(row)}"
+                f"malformed data at line {line_number}: "
+                + f"expected {format_list(values)}, "
+                + f"got {first_column!r}"
             )
 
-        row_directive = PhonologyRowDirective(row[0].strip())
+        if columns_length != expected_columns_len:
+            raise ValueError(
+                f"malformed data at line {line_number}: "
+                + f"expected columns length of {expected_columns_len}, "
+                + f"got {len(row)}"
+            )
 
-        if row_directive is PhonologyRowDirective.COMMENT:
-            continue
+        row_directive = PhonologyDirective(first_column)
 
         parsed_cells = (
             (idx, parsed_cell)
@@ -126,7 +133,7 @@ def _parse_data(
             if (parsed_cell := cell.strip()) != "..."
         )
 
-        if row_directive is PhonologyRowDirective.INVALID:
+        if row_directive is PhonologyDirective.INVALID:
             invalid_pattern_tuple = PatternTuple(map(parse_data_cell, row[1:]))
             invalid_pattern_tuples.append(invalid_pattern_tuple)
         else:
@@ -134,13 +141,11 @@ def _parse_data(
 
             if row_intermediate is None:
                 raise ValueError(
-                    f"invalid data at line {line_no}: expecting one non-ellipsis string"
+                    f"invalid data at line {line_number}: expected one non-ellipsis string"
                 )
 
             row_field_idx, row_char = row_intermediate
             charsets[row_field_idx].add(row_char)
-            phonology_directive_maps[row_field_idx][row_char] = (
-                row_directive.to_core_directive()
-            )
+            phonology_directive_maps[row_field_idx][row_char] = row_directive
 
     return charsets, phonology_directive_maps, invalid_pattern_tuples

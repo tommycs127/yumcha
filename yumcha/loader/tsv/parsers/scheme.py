@@ -8,13 +8,13 @@ from types import EllipsisType
 from typing import TYPE_CHECKING
 
 from ....core.models.specs import SchemeData
+from ....core.primitives.directives import SchemeDirective
 from ....core.primitives.pattern_tuple import PatternTuple
-from ...primitives.directives import SchemeRowDirective
+from ...utils.format import format_list
 from ...utils.text import parse_data_cell
 from .models import CHECK_INTERMEDIATE, CHECK_SCHEME
 
 if TYPE_CHECKING:
-    from ....core.primitives.directives import SchemeDirective
     from ....core.primitives.pattern import Pattern
     from ...primitives.pre_pattern_tuple import PrePatternTuple
 
@@ -209,7 +209,7 @@ def _validate_mapping(
             exp_name = expected_type.__name__
             raise TypeError(
                 f"index {idx} of intermediate tuple {row_intermediate!r}: "
-                + f"expecting {exp_name}, got {got_type}"
+                + f"expected {exp_name}, got {got_type}"
             )
 
 
@@ -258,23 +258,28 @@ def _parse_data(
     seen_invalid_scheme_pattern_tuples: set[tuple[Pattern, ...]] = set()
 
     for line_number, row in enumerate(data, start=2):
-        columns_length = len(row)
-
-        if columns_length == 0:
+        if (columns_length := len(row)) == 0:
             continue
+
+        if (first_column := row[0]).startswith("#"):
+            continue
+
+        if first_column not in SchemeDirective:
+            values = list(SchemeDirective._value2member_map_)
+            raise ValueError(
+                f"malformed data at line {line_number}: "
+                + f"expected {format_list(values)}, "
+                + f"got {first_column!r}"
+            )
 
         if columns_length != total_columns_length:
             raise ValueError(
                 f"malformed data at line {line_number}: "
-                + f"expecting columns length of {total_columns_length}, "
+                + f"expected columns length of {total_columns_length}, "
                 + f"got {len(row)}"
             )
 
-        row_directive = SchemeRowDirective(row[0].strip())
-
-        if row_directive is SchemeRowDirective.COMMENT:
-            continue
-
+        row_directive = SchemeDirective(first_column)
         row_intermediate = tuple(map(parse_data_cell, row[1:headers_split_index]))
         row_scheme = tuple(map(parse_data_cell, row[headers_split_index:]))
 
@@ -283,7 +288,7 @@ def _parse_data(
         except TypeError as te:
             raise TypeError(f"malformed data at line {line_number}: {te}") from te
 
-        if row_directive is SchemeRowDirective.INVALID_FORWARD:
+        if row_directive is SchemeDirective.INVALID_FORWARD:
             if row_intermediate in seen_invalid_intermediate_pattern_tuples:
                 raise ValueError(
                     f"conflict at line {line_number}: "
@@ -296,7 +301,7 @@ def _parse_data(
             )
             continue
 
-        if row_directive is SchemeRowDirective.INVALID_REVERSE:
+        if row_directive is SchemeDirective.INVALID_REVERSE:
             if row_scheme in seen_invalid_scheme_pattern_tuples:
                 raise ValueError(
                     f"conflict at line {line_number}: "
@@ -322,7 +327,7 @@ def _parse_data(
                 )
             seen_pattern_tuples.add(row_scheme)
 
-        parsed_directions.append(row_directive.to_core_directive())
+        parsed_directions.append(row_directive)
         parsed_intermediate_pattern_tuples.append(PatternTuple(row_intermediate))
         parsed_scheme_pattern_tuples.append(PatternTuple(row_scheme))
 

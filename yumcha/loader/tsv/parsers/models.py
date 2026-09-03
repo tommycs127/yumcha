@@ -1,11 +1,11 @@
-from ...primitives.directives import SchemeRowDirective
+from ....core.primitives.directives import SchemeDirective
 
-CHECK_INTERMEDIATE: set[SchemeRowDirective] = {
-    SchemeRowDirective.BIDIRECTIONAL,
-    SchemeRowDirective.FORWARD,
+CHECK_INTERMEDIATE: set[SchemeDirective] = {
+    SchemeDirective.BIDIRECTIONAL,
+    SchemeDirective.FORWARD,
 }
 
-CHECK_SCHEME: set[SchemeRowDirective] = {
-    SchemeRowDirective.BIDIRECTIONAL,
-    SchemeRowDirective.REVERSE,
+CHECK_SCHEME: set[SchemeDirective] = {
+    SchemeDirective.BIDIRECTIONAL,
+    SchemeDirective.REVERSE,
 }
