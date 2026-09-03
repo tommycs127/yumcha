@@ -87,7 +87,8 @@
 
 <span class="sd">    Returns:</span>
 <span class="sd">        A formatted string with quoted items separated by commas and the</span>
-<span class="sd">        specified conjunction, or an empty string if `items` is empty."""</span>
+<span class="sd">        specified conjunction, or an empty string if `items` is empty.</span>
+<span class="sd">    """</span>
     <span class="n">quoted</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">quote</span><span class="si">}{</span><span class="n">item</span><span class="si">}{</span><span class="n">quote</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">quoted</span><span class="p">:</span>
