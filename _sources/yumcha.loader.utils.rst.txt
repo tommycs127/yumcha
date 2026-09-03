@@ -6,6 +6,14 @@ yumcha.loader.utils namespace
 Submodules
 ----------
 
+yumcha.loader.utils.format module
+---------------------------------
+
+.. automodule:: yumcha.loader.utils.format
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
 yumcha.loader.utils.text module
 -------------------------------
 

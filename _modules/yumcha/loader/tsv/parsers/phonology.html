@@ -77,18 +77,13 @@
   <h1>Source code for yumcha.loader.tsv.parsers.phonology</h1><div class="highlight"><pre>
 <span></span><span class="sd">"""Parser for compiling phonology specifications from raw TSV header and data rows."""</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
-
 <span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">Counter</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">....core.models.specs</span><span class="w"> </span><span class="kn">import</span> <span class="n">PhonologyData</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">....core.primitives.directives</span><span class="w"> </span><span class="kn">import</span> <span class="n">PhonologyDirective</span><span class="p">,</span> <span class="n">PhonologyDirectiveMap</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">....core.primitives.pattern_tuple</span><span class="w"> </span><span class="kn">import</span> <span class="n">PatternTuple</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">...primitives.directives</span><span class="w"> </span><span class="kn">import</span> <span class="n">PhonologyRowDirective</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">...utils.format</span><span class="w"> </span><span class="kn">import</span> <span class="n">format_list</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">...utils.text</span><span class="w"> </span><span class="kn">import</span> <span class="n">parse_data_cell</span>
-
-<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">....core.primitives.directives</span><span class="w"> </span><span class="kn">import</span> <span class="n">PhonologyDirectiveMap</span>
 
 
 <div class="viewcode-block" id="parse">
@@ -188,17 +183,29 @@
     <span class="p">]</span>
     <span class="n">invalid_pattern_tuples</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">PatternTuple</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 
-    <span class="k">for</span> <span class="n">line_no</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">row</span><span class="p">)</span> <span class="o">!=</span> <span class="n">expected_columns_len</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">line_number</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">columns_length</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">row</span><span class="p">))</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">first_column</span> <span class="o">:=</span> <span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"#"</span><span class="p">):</span>
+            <span class="k">continue</span>
+
+        <span class="k">if</span> <span class="n">first_column</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">PhonologyDirective</span><span class="p">:</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">PhonologyDirective</span><span class="o">.</span><span class="n">_value2member_map_</span><span class="p">)</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">"malformed data at line </span><span class="si">{</span><span class="n">line_no</span><span class="si">}</span><span class="s2">: "</span>
-                <span class="o">+</span> <span class="sa">f</span><span class="s2">"expecting columns length of </span><span class="si">{</span><span class="n">expected_columns_len</span><span class="si">}</span><span class="s2">, got </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">row</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
+                <span class="sa">f</span><span class="s2">"malformed data at line </span><span class="si">{</span><span class="n">line_number</span><span class="si">}</span><span class="s2">: "</span>
+                <span class="o">+</span> <span class="sa">f</span><span class="s2">"expected </span><span class="si">{</span><span class="n">format_list</span><span class="p">(</span><span class="n">values</span><span class="p">)</span><span class="si">}</span><span class="s2">, "</span>
+                <span class="o">+</span> <span class="sa">f</span><span class="s2">"got </span><span class="si">{</span><span class="n">first_column</span><span class="si">!r}</span><span class="s2">"</span>
             <span class="p">)</span>
 
-        <span class="n">row_directive</span> <span class="o">=</span> <span class="n">PhonologyRowDirective</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+        <span class="k">if</span> <span class="n">columns_length</span> <span class="o">!=</span> <span class="n">expected_columns_len</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"malformed data at line </span><span class="si">{</span><span class="n">line_number</span><span class="si">}</span><span class="s2">: "</span>
+                <span class="o">+</span> <span class="sa">f</span><span class="s2">"expected columns length of </span><span class="si">{</span><span class="n">expected_columns_len</span><span class="si">}</span><span class="s2">, "</span>
+                <span class="o">+</span> <span class="sa">f</span><span class="s2">"got </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">row</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
+            <span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">row_directive</span> <span class="ow">is</span> <span class="n">PhonologyRowDirective</span><span class="o">.</span><span class="n">COMMENT</span><span class="p">:</span>
-            <span class="k">continue</span>
+        <span class="n">row_directive</span> <span class="o">=</span> <span class="n">PhonologyDirective</span><span class="p">(</span><span class="n">first_column</span><span class="p">)</span>
 
         <span class="n">parsed_cells</span> <span class="o">=</span> <span class="p">(</span>
             <span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">parsed_cell</span><span class="p">)</span>
@@ -206,7 +213,7 @@
             <span class="k">if</span> <span class="p">(</span><span class="n">parsed_cell</span> <span class="o">:=</span> <span class="n">cell</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span> <span class="o">!=</span> <span class="s2">"..."</span>
         <span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">row_directive</span> <span class="ow">is</span> <span class="n">PhonologyRowDirective</span><span class="o">.</span><span class="n">INVALID</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">row_directive</span> <span class="ow">is</span> <span class="n">PhonologyDirective</span><span class="o">.</span><span class="n">INVALID</span><span class="p">:</span>
             <span class="n">invalid_pattern_tuple</span> <span class="o">=</span> <span class="n">PatternTuple</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">parse_data_cell</span><span class="p">,</span> <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))</span>
             <span class="n">invalid_pattern_tuples</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">invalid_pattern_tuple</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -214,14 +221,12 @@
 
             <span class="k">if</span> <span class="n">row_intermediate</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">"invalid data at line </span><span class="si">{</span><span class="n">line_no</span><span class="si">}</span><span class="s2">: expecting one non-ellipsis string"</span>
+                    <span class="sa">f</span><span class="s2">"invalid data at line </span><span class="si">{</span><span class="n">line_number</span><span class="si">}</span><span class="s2">: expected one non-ellipsis string"</span>
                 <span class="p">)</span>
 
             <span class="n">row_field_idx</span><span class="p">,</span> <span class="n">row_char</span> <span class="o">=</span> <span class="n">row_intermediate</span>
             <span class="n">charsets</span><span class="p">[</span><span class="n">row_field_idx</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">row_char</span><span class="p">)</span>
-            <span class="n">phonology_directive_maps</span><span class="p">[</span><span class="n">row_field_idx</span><span class="p">][</span><span class="n">row_char</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">row_directive</span><span class="o">.</span><span class="n">to_core_directive</span><span class="p">()</span>
-            <span class="p">)</span>
+            <span class="n">phonology_directive_maps</span><span class="p">[</span><span class="n">row_field_idx</span><span class="p">][</span><span class="n">row_char</span><span class="p">]</span> <span class="o">=</span> <span class="n">row_directive</span>
 
     <span class="k">return</span> <span class="n">charsets</span><span class="p">,</span> <span class="n">phonology_directive_maps</span><span class="p">,</span> <span class="n">invalid_pattern_tuples</span>
 </pre></div>

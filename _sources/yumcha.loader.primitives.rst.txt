@@ -6,14 +6,6 @@ yumcha.loader.primitives namespace
 Submodules
 ----------
 
-yumcha.loader.primitives.directives module
-------------------------------------------
-
-.. automodule:: yumcha.loader.primitives.directives
-   :members:
-   :show-inheritance:
-   :undoc-members:
-
 yumcha.loader.primitives.pre\_pattern\_tuple module
 ---------------------------------------------------
 
