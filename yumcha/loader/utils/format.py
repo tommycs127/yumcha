@@ -9,7 +9,8 @@ def format_list(items: list[str], conjunction: str = "or", quote: str = '"') -> 
 
     Returns:
         A formatted string with quoted items separated by commas and the
-        specified conjunction, or an empty string if `items` is empty."""
+        specified conjunction, or an empty string if `items` is empty.
+    """
     quoted = [f"{quote}{item}{quote}" for item in items]
 
     if not quoted:
